@@ -1,0 +1,6 @@
+Step 001: 
+Create project
+    ng new alquimia --style=scss --routing
+Git
+    git remote add origin https://github.com/HUGO-BENDER/Alquimia.git
+    git push -u origin master   
