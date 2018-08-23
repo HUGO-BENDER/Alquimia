@@ -1,0 +1,68 @@
+.example-icon {
+    padding: 0 14px;
+  }
+  
+  .example-spacer {
+    flex: 1 1 auto;
+    text-align: center;
+    padding-left: 80px;
+  }
+  
+  .contenedor-logo{
+    position: absolute;
+    top: 15px;
+    height: 60px;
+    width: 60px;
+    z-index: 100;
+  }
+  
+  .logo-lado-izq {
+    fill: #0273d4;
+  }
+  
+  .logo-lado-der {
+    fill: #0143a3;
+  }
+  .logo-fondo-letra {
+  fill: #fff;
+  }
+  
+  .alq-in {
+  animation: alq-fadeinApp 1s ease;
+  }
+  
+  .alq-hover:hover {
+  animation: alq-icon-on-over 1s ease;
+  }
+  
+  .toolbar-inline{
+  display: inline-block;
+  }
+
+  .toolbar-user-img{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  }
+    
+  @keyframes alq-icon-on-over {
+  from {
+      opacity: 0;
+      transform: rotateY(180deg);
+  }
+  to {
+      opacity: 1;
+      transform: rotateY(360deg);
+  }
+  }
+  
+  @keyframes alq-fadeinApp {
+  from {
+      opacity: 0;
+      transform: rotateY(180deg);
+  }
+  to {
+      opacity: 1;
+      transform: rotateY(360deg);
+  }
+  }

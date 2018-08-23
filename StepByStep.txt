@@ -4,3 +4,16 @@ Create project
 Git
     git remote add origin https://github.com/HUGO-BENDER/Alquimia.git
     git push -u origin master   
+
+Step 002:
+Add Material:
+    npm install --save @angular/material @angular/cdk @angular/animations hammerjs
+    src/main.ts:  import 'hammerjs';
+    import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+    ng g module components/AppMaterial
+    Include a theme 
+
+Add ToolBar
+    ng g component components/tool-bar
+    add logo, title, btnLogin, btnMenu
