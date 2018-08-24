@@ -1,0 +1,27 @@
+{
+	"About": {
+		"Title": "Nosaltres"
+	},
+	"App": {
+		"Languages": {
+			"Catalan": "Catalá",
+			"English": "Anglès",
+			"French": "Francès",
+			"Spanish": "Espanyol"
+		},
+		"Select_lang": "Seleccionar idioma",
+		"Title": "Alquímia"
+	},
+	"Contact": {
+		"Title": "Contacti amb nosaltres"
+	},
+	"Home": {
+		"Title": "Inici"
+	},
+	"User": {
+		"Title": "Usuari"
+	},
+	"pag404": {
+		"Title": "404"
+	}
+}
