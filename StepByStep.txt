@@ -25,3 +25,14 @@ Multilanguage
     ng generate class i18n/MissingTranslation  
     Create files .json 
     changes all texts to {{ "keyText" | translate }}
+
+Step 004:
+Routes
+    ng g module comp/pageRouting
+    ng g c components/pageHome
+    ng g c components/pageAbout
+    ng g c components/pageNotFound
+    ng g c components/pageGame
+    const routes: Routes = [  { path: '', component: PageHomeComponent }, etc
+    add routerLink="/xxx  in app-tool-bar
+    
