@@ -14,17 +14,21 @@
         <mat-icon matListIcon>translate</mat-icon>
         {{ "App.Select_lang"| translate }}
       </button>
-      <button mat-menu-item>
+      <button mat-menu-item routerLink="/home" routerLinkActive="active" [class.activated]="currentUrl == '/' || currentUrl == '/home'">
         <mat-icon matListIcon>home</mat-icon>
-        <a matLine routerLink="/home"> {{ "Home.Title"| translate }} </a>
+        {{ "Home.Title"| translate }} 
       </button>
-      <button mat-menu-item>
+      <button mat-menu-item routerLink="/game" routerLinkActive="active" [class.activated]="currentUrl == '/game'">
         <mat-icon matListIcon>casino</mat-icon>
-        <a matLine routerLink="/casino"> {{ "Shoten"| translate }} </a>
+         {{ "Game.Title"| translate }} 
+      </button>
+      <button mat-menu-item routerLink="/about" routerLinkActive="active" [class.activated]="currentUrl == '/about'">
+        <mat-icon matListIcon>persons</mat-icon>
+        {{ "About.Title"| translate }} 
       </button>
       <button mat-menu-item (click)="logout()">
         <mat-icon matListIcon>exit_to_app</mat-icon>
-        <a matLine>Exit</a>
+        {{ "App.Exit"| translate }}
       </button>
 
 

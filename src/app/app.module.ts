@@ -15,6 +15,10 @@ import { MissingTranslation } from './i18n/missing-translation';
 // --componentes
 import { AppComponent } from './app.component';
 import { AppToolBarComponent } from './components/app-tool-bar/app-tool-bar.component';
+import { PageHomeComponent } from './components/page-home/page-home.component';
+import { PageAboutComponent } from './components/page-about/page-about.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { PageGameComponent } from './components/page-game/page-game.component';
 
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, 'src/app/i18n', '.json');
@@ -23,7 +27,11 @@ export function createTranslateLoader(http: Http) {
 @NgModule({
   declarations: [
     AppComponent,
-    AppToolBarComponent
+    AppToolBarComponent,
+    PageHomeComponent,
+    PageAboutComponent,
+    PageNotFoundComponent,
+    PageGameComponent
   ],
   imports: [
     BrowserModule,
