@@ -10,7 +10,8 @@
 			"Spanish": "Espagnol"
 		},
 		"Select_lang": "Sélectionnez la langue",
-		"Title": "Alchimie"
+		"Title": "Alchimie",
+		"Exit": "Sortir"
 	},
 	"Contact": {
 		"Title": "Contactez nous"
@@ -23,5 +24,8 @@
 	},
 	"pag404": {
 		"Title": "404"
+	},
+	"Game": {
+		"Title": "Jeu"
 	}
 }
