@@ -14,15 +14,15 @@
         <mat-icon matListIcon>translate</mat-icon>
         {{ "App.Select_lang"| translate }}
       </button>
-      <button mat-menu-item routerLink="/home" routerLinkActive="active" [class.activated]="currentUrl == '/' || currentUrl == '/home'">
+      <button mat-menu-item routerLink="/home" [class.activated]="currentUrl == '/' || currentUrl == '/home'">
         <mat-icon matListIcon>home</mat-icon>
         {{ "Home.Title"| translate }} 
       </button>
-      <button mat-menu-item routerLink="/game" routerLinkActive="active" [class.activated]="currentUrl == '/game'">
+      <button mat-menu-item routerLink="/game" [class.activated]="currentUrl == '/game'">
         <mat-icon matListIcon>casino</mat-icon>
          {{ "Game.Title"| translate }} 
       </button>
-      <button mat-menu-item routerLink="/about" routerLinkActive="active" [class.activated]="currentUrl == '/about'">
+      <button mat-menu-item routerLink="/about" [class.activated]="currentUrl == '/about'">
         <mat-icon matListIcon>persons</mat-icon>
         {{ "About.Title"| translate }} 
       </button>
