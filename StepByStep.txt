@@ -17,3 +17,11 @@ Add Material:
 Add ToolBar
     ng g component components/tool-bar
     add logo, title, btnLogin, btnMenu
+
+Step 003:
+Multilanguage
+    npm install ng2-translate --save  
+    npm install --save rxjs-compat   'angular6 tiene que trabajar con el ultimo rxjs
+    ng generate class i18n/MissingTranslation  
+    Create files .json 
+    changes all texts to {{ "keyText" | translate }}

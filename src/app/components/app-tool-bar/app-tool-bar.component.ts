@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from 'ng2-translate';
 
 @Component({
   selector: 'app-tool-bar',
@@ -7,17 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppToolBarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private translate: TranslateService) {
+
+   }
 
   ngOnInit() {
   }
 
+  changeLanguage(lang) {
+      this.translate.use(lang);
+  }
+
   openDialogLogin(): void {
     alert('Login');
-  };
+  }
 
   logout() {
-    if (confirm("Está seguro de querer abandonar la aplicación")) {
+    if (confirm('"Está seguro de querer abandonar la aplicación')) {
       alert('Adios');
     }
   }

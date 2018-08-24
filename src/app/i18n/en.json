@@ -1,0 +1,27 @@
+{
+	"About": {
+		"Title": "About"
+	},
+	"App": {
+		"Languages": {
+			"Catalan": "Catalán",
+			"English": "English",
+			"French": "French",
+			"Spanish": "Spanish"
+		},
+		"Select_lang": "Select language",
+		"Title": "Alchemy"
+	},
+	"Contact": {
+		"Title": "Contact us"
+	},
+	"Home": {
+		"Title": "Home"
+	},
+	"User": {
+		"Title": "User"
+	},
+	"pag404": {
+		"Title": "404"
+	}
+}

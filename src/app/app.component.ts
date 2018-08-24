@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {TranslateService} from 'ng2-translate';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'alquimia';
+
+  constructor(private translate: TranslateService) {
+    translate.addLangs(['en', 'fr', 'ca', 'es']);
+    translate.setDefaultLang('es');
+
+    const browserLang = translate.getBrowserLang();
+    translate.use(browserLang.match(/en|fr|ca|es/) ? browserLang : 'en');
+  }
+
 }

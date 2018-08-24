@@ -17,7 +17,7 @@
       </svg>
     </div>
 
-    <span class="example-spacer"> Alquimia </span>
+    <span class="example-spacer"> {{ "App.Title"| translate }} </span>
 
     <span class="example-spacer"></span>
     <div *ngIf="user | async; let user; else loguearse;">
@@ -33,18 +33,29 @@
       </button>
     </ng-template>
 
-    <button mat-icon-button [matMenuTriggerFor]="appMenu">
+    <button mat-icon-button [matMenuTriggerFor]="rootMenu">
       <mat-icon>more_vert</mat-icon>
     </button>
-    <mat-menu #appMenu="matMenu" [overlapTrigger]="false">
+    <mat-menu #rootMenu="matMenu" [overlapTrigger]="false">
+        <mat-menu #subMenu="matMenu">
+            <button mat-menu-item (click)="changeLanguage('en')">{{ 'App.Languages.English' | translate }}</button>
+            <button mat-menu-item (click)="changeLanguage('es')">{{ 'App.Languages.Spanish' | translate }}</button>
+            <button mat-menu-item (click)="changeLanguage('ca')">{{ 'App.Languages.Catalan' | translate }}</button>
+            <button mat-menu-item (click)="changeLanguage('fr')">{{ 'App.Languages.French' | translate }}</button>
+          </mat-menu>
+        <button mat-menu-item [matMenuTriggerFor]="subMenu">
+            <mat-icon matListIcon>translate</mat-icon>
+            {{ "App.Select_lang"| translate }}
+        </button>
+
       <mat-nav-list>
         <mat-list-item >
           <mat-icon matListIcon>home</mat-icon>
-          <a matLine routerLink="/home">home</a>
+          <a matLine routerLink="/home"> {{ "Home.Title"| translate }} </a>
         </mat-list-item>
         <mat-list-item >
           <mat-icon matListIcon>casino</mat-icon>
-          <a matLine routerLink="/casino">game</a>
+          <a matLine routerLink="/casino"> {{ "Shoten"| translate }} </a>
         </mat-list-item>
         <mat-list-item >
           <mat-icon matListIcon>exit_to_app</mat-icon>
