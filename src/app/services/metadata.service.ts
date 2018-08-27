@@ -12,19 +12,9 @@ export class MetadataService {
 
   constructor(private afs: AngularFirestore) {
     this.staticData = afs.collection('Metadata').doc<Metadata>('AboutData').valueChanges();
-
-
-
-
   }
 
   getMetadata() {
-
-    return this.staticData;
+    return this.afs.collection('Metadata').doc('AboutData').ref.get();
   }
-
-
-
-
-
 }

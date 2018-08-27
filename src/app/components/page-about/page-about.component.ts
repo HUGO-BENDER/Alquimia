@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Metadata } from   '../../model/metadata';
+import { Metadata } from '../../model/metadata';
 import { MetadataService } from '../../services/metadata.service';
 
 
@@ -10,17 +10,17 @@ import { MetadataService } from '../../services/metadata.service';
 })
 export class PageAboutComponent implements OnInit {
 
-  info: Metadata;
+  info: any;
 
-  constructor(private dataservice: MetadataService) { 
+  constructor(private dataservice: MetadataService) {
     if ( this.info == null) {
-      this.info = { name: null , year: null};
+      this.info = { name: null , year: null, author: null, version:null};
     }
   }
 
   ngOnInit() {
-    this.dataservice.getMetadata().subscribe(data => {
-      this.info = data;
+    this.dataservice.getMetadata().then(doc => {
+      this.info = doc.data();
     });
   }
 

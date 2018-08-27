@@ -1,4 +1,6 @@
 export interface Metadata {
-    name: string,
-    year: number
+    author: string;
+    name: string;
+    year: number;
+    version: string;
 }
