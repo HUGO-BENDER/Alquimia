@@ -8,3 +8,9 @@ html , body {
     background:rgb(0, 0, 0);
 }
 
+// -- Fix flex router
+router-outlet + * {
+    flex:1 1 auto;
+    display:flex;
+    width: 100%;
+  }

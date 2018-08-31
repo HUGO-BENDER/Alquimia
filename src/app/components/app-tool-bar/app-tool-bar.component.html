@@ -1,38 +1,25 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <button mat-icon-button [matMenuTriggerFor]="rootMenu">
-      <mat-icon>menu</mat-icon>
+    <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="toggleAppSidenav()">
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
     </button>
-    <mat-menu #subMenu="matMenu">
+
+
+    <button mat-icon-button [matMenuTriggerFor]="rootMenu" matTooltip="{{ 'App.Select_lang'| translate }}">
+      <mat-icon>translate</mat-icon>
+    </button>
+    <mat-menu #rootMenu="matMenu">
+      <h6 matSubheader >  {{ 'App.Select_lang'| translate }} </h6>
       <button mat-menu-item (click)="changeLanguage('en')">{{ 'App.Languages.English' | translate }}</button>
       <button mat-menu-item (click)="changeLanguage('es')">{{ 'App.Languages.Spanish' | translate }}</button>
       <button mat-menu-item (click)="changeLanguage('ca')">{{ 'App.Languages.Catalan' | translate }}</button>
       <button mat-menu-item (click)="changeLanguage('fr')">{{ 'App.Languages.French' | translate }}</button>
     </mat-menu>
-    <mat-menu #rootMenu="matMenu" [overlapTrigger]="false">
-      <button mat-menu-item [matMenuTriggerFor]="subMenu">
-        <mat-icon matListIcon>translate</mat-icon>
-        {{ "App.Select_lang"| translate }}
-      </button>
-      <button mat-menu-item routerLink="/home" [class.activated]="currentUrl == '/' || currentUrl == '/home'">
-        <mat-icon matListIcon>home</mat-icon>
-        {{ "Home.Title"| translate }} 
-      </button>
-      <button mat-menu-item routerLink="/game" [class.activated]="currentUrl == '/game'">
-        <mat-icon matListIcon>casino</mat-icon>
-         {{ "Game.Title"| translate }} 
-      </button>
-      <button mat-menu-item routerLink="/about" [class.activated]="currentUrl == '/about'">
-        <mat-icon matListIcon>persons</mat-icon>
-        {{ "About.Title"| translate }} 
-      </button>
-      <button mat-menu-item (click)="logout()">
+
+    <!-- <button mat-menu-item (click)="logout()">
         <mat-icon matListIcon>exit_to_app</mat-icon>
         {{ "App.Exit"| translate }}
-      </button>
-
-
-    </mat-menu>
+      </button> -->
 
     <div *ngIf="user | async; let user; else loguearse;">
       <h2 class="toolbar-inline">{{user.displayName}}</h2>
