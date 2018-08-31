@@ -1,6 +1,15 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <button mat-icon-button [matMenuTriggerFor]="rootMenu">
+      <button
+      type="button"
+      aria-label="Toggle sidenav"
+      mat-icon-button
+      (click)= "toggleAppSidenav()">
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+
+
+    <!-- <button mat-icon-button [matMenuTriggerFor]="rootMenu">
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #subMenu="matMenu">
@@ -14,25 +23,16 @@
         <mat-icon matListIcon>translate</mat-icon>
         {{ "App.Select_lang"| translate }}
       </button>
-      <button mat-menu-item routerLink="/home" [class.activated]="currentUrl == '/' || currentUrl == '/home'">
-        <mat-icon matListIcon>home</mat-icon>
-        {{ "Home.Title"| translate }} 
-      </button>
-      <button mat-menu-item routerLink="/game" [class.activated]="currentUrl == '/game'">
-        <mat-icon matListIcon>casino</mat-icon>
-         {{ "Game.Title"| translate }} 
-      </button>
-      <button mat-menu-item routerLink="/about" [class.activated]="currentUrl == '/about'">
-        <mat-icon matListIcon>persons</mat-icon>
-        {{ "About.Title"| translate }} 
-      </button>
+
+
+
       <button mat-menu-item (click)="logout()">
         <mat-icon matListIcon>exit_to_app</mat-icon>
         {{ "App.Exit"| translate }}
       </button>
 
 
-    </mat-menu>
+    </mat-menu> -->
 
     <div *ngIf="user | async; let user; else loguearse;">
       <h2 class="toolbar-inline">{{user.displayName}}</h2>

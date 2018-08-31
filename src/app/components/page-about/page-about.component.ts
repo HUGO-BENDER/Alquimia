@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Metadata } from '../../model/metadata';
-import { MetadataService } from '../../services/metadata.service';
-
 
 @Component({
   selector: 'app-page-about',
@@ -10,18 +7,10 @@ import { MetadataService } from '../../services/metadata.service';
 })
 export class PageAboutComponent implements OnInit {
 
-  info: any;
-
-  constructor(private dataservice: MetadataService) {
-    if ( this.info == null) {
-      this.info = { name: null , year: null, author: null, version:null};
-    }
+  constructor() {
   }
 
   ngOnInit() {
-    this.dataservice.getMetadata().then(doc => {
-      this.info = doc.data();
-    });
   }
 
 }

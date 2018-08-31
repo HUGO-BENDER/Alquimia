@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from 'ng2-translate';
-import { Router, NavigationEnd } from '@angular/router';
+import { SidenavService } from '../../services/sidenav.service' ;
 
 @Component({
   selector: 'app-tool-bar',
@@ -10,12 +10,7 @@ import { Router, NavigationEnd } from '@angular/router';
 export class AppToolBarComponent implements OnInit {
   currentUrl: string;
 
-  constructor(private translate: TranslateService, private router: Router) {
-    router.events.subscribe((_: NavigationEnd) => {
-      if(_.url){
-      this.currentUrl = _.url
-      }
-    });
+  constructor(private translate: TranslateService, private sidenavService: SidenavService) {
   }
 
   ngOnInit() {
@@ -34,5 +29,10 @@ export class AppToolBarComponent implements OnInit {
       alert('Adios');
     }
   }
+
+  toggleAppSidenav() {
+    this.sidenavService.toggle();
+  }
+
 
 }
