@@ -27,7 +27,7 @@
       <app-tool-bar></app-tool-bar>
     </header>
     <router-outlet class="router-outlet"></router-outlet>
-    <footer>
+    <footer  *ngIf="currentUrl != '/game'">
       <app-footer></app-footer>
     </footer>
 
