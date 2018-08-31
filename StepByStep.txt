@@ -42,3 +42,7 @@ Firebase
     npm install firebase angularfire2 --save
     ng generate service service/Metadata
 
+Step 006:
+Layout
+    add toolbar, footer, sidenav.
+    pageHome add Hero and card list
