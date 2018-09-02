@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from 'ng2-translate';
-import { SidenavService } from '../../services/sidenav.service' ;
+import { SidenavService } from '../../services/sidenav.service';
+import { MatDialog, MatDialogRef } from '@angular/material';
+import { AppLoginComponent } from "./../app-login/app-login.component";
+import { AngularFireAuth } from 'angularfire2/auth';
+import { FirebaseUIModule } from 'firebaseui-angular';
+import { Observable } from 'rxjs/Observable';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'app-tool-bar',
@@ -9,11 +15,16 @@ import { SidenavService } from '../../services/sidenav.service' ;
 })
 export class AppToolBarComponent implements OnInit {
   currentUrl: string;
+  user: Observable<firebase.User>;
+  dialogRef: MatDialogRef<AppLoginComponent>;
 
-  constructor(private translate: TranslateService, private sidenavService: SidenavService) {
+  constructor(private translate: TranslateService, private sidenavService: SidenavService,
+              public dialog: MatDialog, public au: AngularFireAuth) {
   }
 
   ngOnInit() {
+    this.au.authState.subscribe(this.firebaseAuthChangeListener);
+    this.user = this.au.authState;
   }
 
   changeLanguage(lang) {
@@ -21,12 +32,20 @@ export class AppToolBarComponent implements OnInit {
   }
 
   openDialogLogin(): void {
-    alert('Login');
+    this.dialogRef = this.dialog.open(AppLoginComponent);
+  };
+
+  private firebaseAuthChangeListener(response) {
+    if (response) {
+      console.log('Logged in :) ');
+    } else {
+      console.log('Logged out :(');
+    }
   }
 
   logout() {
     if (confirm('"Está seguro de querer abandonar la aplicación')) {
-      alert('Adios');
+      this.au.auth.signOut();
     }
   }
 

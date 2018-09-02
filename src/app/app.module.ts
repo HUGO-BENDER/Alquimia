@@ -11,10 +11,14 @@ import { AppMaterialModule } from './components/app-material/app-material.module
 // --Translate
 import { TranslateModule, TranslateLoader, TranslateStaticLoader, MissingTranslationHandler } from 'ng2-translate';
 import { MissingTranslation } from './i18n/missing-translation';
+
 // --Firebase
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
-//import { AngularFireAuthModule } from 'angularfire2/auth';
+
+// --Firebase UI
+import { AuthMethods, AuthProvider, AuthProviderWithCustomConfig, FirebaseUIAuthConfig, FirebaseUIModule, CredentialHelper } from 'firebaseui-angular';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
 // --Services
 import { MetadataService } from './services/metadata.service';
@@ -29,10 +33,39 @@ import { PageAboutComponent } from './components/page-about/page-about.component
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { PageGameComponent } from './components/page-game/page-game.component';
 import { AppFooterComponent } from './components/app-footer/app-footer.component';
+import { AppLoginComponent } from './components/app-login/app-login.component';
+import { PagePolicyPrivacyComponent } from './components/page-policy-privacy/page-policy-privacy.component';
+import { PageServiceConditionsComponent } from './components/page-service-conditions/page-service-conditions.component';
 
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, 'src/app/i18n', '.json');
 }
+
+const facebookCustomConfig: AuthProviderWithCustomConfig = {
+  provider: AuthProvider.Facebook,
+  customConfig: {
+    scopes: [
+      'public_profile',
+      'email'
+    ],
+    customParameters: {
+      // Forces password re-entry.
+      auth_type: 'reauthenticate'
+    }
+  }
+};
+const firebaseUiAuthConfig: FirebaseUIAuthConfig = {
+  providers: [
+    AuthProvider.Google,
+    facebookCustomConfig,
+    // AuthProvider.Twitter,
+    // AuthProvider.Github,
+    AuthProvider.Password
+  ],
+  method: AuthMethods.Popup,
+  tos: '<your-tos-link>',
+  credentialHelper: CredentialHelper.None
+};
 
 @NgModule({
   declarations: [
@@ -42,7 +75,10 @@ export function createTranslateLoader(http: Http) {
     PageAboutComponent,
     PageNotFoundComponent,
     PageGameComponent,
-    AppFooterComponent
+    AppFooterComponent,
+    AppLoginComponent,
+    PagePolicyPrivacyComponent,
+    PageServiceConditionsComponent
   ],
   imports: [
     BrowserModule,
@@ -51,12 +87,16 @@ export function createTranslateLoader(http: Http) {
     AppMaterialModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
-    // AngularFireAuthModule,
+    AngularFireAuthModule,
+    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     TranslateModule.forRoot({
       provide: TranslateLoader,
       useFactory: (createTranslateLoader),
       deps: [Http]
     })
+  ],
+  entryComponents: [
+    AppLoginComponent
   ],
   providers:  [ MetadataService, SidenavService,
     { provide: MissingTranslationHandler, useClass: MissingTranslation}
