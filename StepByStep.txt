@@ -59,3 +59,5 @@ FirebaseUI
     follow github.com/RaphaelJenni/FirebaseUI-Angular
     Enabled acces in Firebase Project
     Add page-policy-privacy page-policy-service
+Fix deploy
+    move de i18n to folder assets

@@ -17,8 +17,9 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 // --Firebase UI
-import { AuthMethods, AuthProvider, AuthProviderWithCustomConfig, FirebaseUIAuthConfig, FirebaseUIModule, CredentialHelper } from 'firebaseui-angular';
+import { FirebaseUIModule } from 'firebaseui-angular';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { firebaseUiAuthConfig } from '../environments/environment';
 
 // --Services
 import { MetadataService } from './services/metadata.service';
@@ -37,35 +38,11 @@ import { AppLoginComponent } from './components/app-login/app-login.component';
 import { PagePolicyPrivacyComponent } from './components/page-policy-privacy/page-policy-privacy.component';
 import { PageServiceConditionsComponent } from './components/page-service-conditions/page-service-conditions.component';
 
+
 export function createTranslateLoader(http: Http) {
-  return new TranslateStaticLoader(http, 'src/app/i18n', '.json');
+  return new TranslateStaticLoader(http, 'assets/i18n', '.json');
 }
 
-const facebookCustomConfig: AuthProviderWithCustomConfig = {
-  provider: AuthProvider.Facebook,
-  customConfig: {
-    scopes: [
-      'public_profile',
-      'email'
-    ],
-    customParameters: {
-      // Forces password re-entry.
-      auth_type: 'reauthenticate'
-    }
-  }
-};
-const firebaseUiAuthConfig: FirebaseUIAuthConfig = {
-  providers: [
-    AuthProvider.Google,
-    facebookCustomConfig,
-    // AuthProvider.Twitter,
-    // AuthProvider.Github,
-    AuthProvider.Password
-  ],
-  method: AuthMethods.Popup,
-  tos: '<your-tos-link>',
-  credentialHelper: CredentialHelper.None
-};
 
 @NgModule({
   declarations: [

@@ -23,7 +23,7 @@ export class AppToolBarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.au.authState.subscribe(this.firebaseAuthChangeListener);
+    //this.au.authState.subscribe(this.firebaseAuthChangeListener);
     this.user = this.au.authState;
   }
 
@@ -35,13 +35,13 @@ export class AppToolBarComponent implements OnInit {
     this.dialogRef = this.dialog.open(AppLoginComponent);
   };
 
-  private firebaseAuthChangeListener(response) {
-    if (response) {
-      console.log('Logged in :) ');
-    } else {
-      console.log('Logged out :(');
-    }
-  }
+  // private firebaseAuthChangeListener(response) {
+  //   if (response) {
+  //     console.log('Logged in :) ');
+  //   } else {
+  //     console.log('Logged out :(');
+  //   }
+  // }
 
   logout() {
     if (confirm('"Está seguro de querer abandonar la aplicación')) {
