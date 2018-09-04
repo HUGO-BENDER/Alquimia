@@ -19,7 +19,6 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 // --Firebase UI
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { AngularFireAuthModule } from 'angularfire2/auth';
-import { firebaseUiAuthConfig } from '../environments/environment';
 
 // --Services
 import { MetadataService } from './services/metadata.service';
