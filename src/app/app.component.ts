@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { TranslateService } from 'ng2-translate';
-import { SidenavService } from './services/sidenav.service';
+import { SidenavService } from './services/components/sidenav.service';
 import { MatSidenav } from '@angular/material';
 import { Router, NavigationEnd } from '@angular/router';
 

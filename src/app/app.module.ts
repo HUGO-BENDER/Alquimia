@@ -21,8 +21,8 @@ import { FirebaseUIModule } from 'firebaseui-angular';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
 // --Services
-import { MetadataService } from './services/metadata.service';
-import { SidenavService } from './services/sidenav.service';
+import { MetadataService } from './services/firestore/metadata.service';
+import { SidenavService } from './services/components/sidenav.service';
 
 // --componentes
 import { AppComponent } from './app.component';
@@ -64,7 +64,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     },
     firebase.auth.EmailAuthProvider.PROVIDER_ID
     // -- Importante! estudiar lo usuario anonimo
-    //firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+    // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
   ],
   tosUrl: '/serviceconditions',
   privacyPolicyUrl: '/policyprivacy',

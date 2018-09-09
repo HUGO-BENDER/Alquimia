@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Metadata } from '../../model/metadata';
-import { MetadataService } from '../../services/metadata.service';
+import { MetadataService } from '../../services/firestore/metadata.service';
 
 
 @Component({

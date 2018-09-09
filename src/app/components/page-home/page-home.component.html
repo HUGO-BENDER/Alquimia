@@ -7,6 +7,35 @@
   </div>
   <div class="grid-container">
     <mat-grid-list cols="2" rowHeight="350px">
+
+      <mat-grid-tile [colspan]="2" [rowspan]="1">
+        <mat-card class="dashboard-card">
+          <mat-card-header>
+            <mat-card-title>
+              xRooms game
+              <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before">
+                <button mat-menu-item (click)="createRoomGame()">xCreate new game</button>
+              </mat-menu>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="dashboard-card-content">
+            <div>Card Content Here</div>
+
+            <div *ngFor="let room of roomgames">
+              {{room.id}}
+              {{room.data.dateCreation}}
+              {{room.data.state}}
+            </div>
+
+
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+
+
       <mat-grid-tile *ngFor="let card of cards" [colspan]="card.cols" [rowspan]="card.rows">
         <mat-card class="dashboard-card">
           <mat-card-header>

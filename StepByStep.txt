@@ -61,3 +61,8 @@ FirebaseUI
     Add page-policy-privacy page-policy-service
 Fix deploy
     move de i18n to folder assets
+
+Step 008
+    ng g interface model/roomgame
+    ng g service services/firestore/roomgame
+    
