@@ -24,10 +24,10 @@
           <mat-card-content class="dashboard-card-content">
             <div>Card Content Here</div>
 
-            <div *ngFor="let room of roomgames">
+            <div *ngFor="let room of roomgames | async">
               {{room.id}}
-              {{room.data.dateCreation}}
-              {{room.data.state}}
+              {{room.dateCreation}}
+              {{room.state}}
             </div>
 
 

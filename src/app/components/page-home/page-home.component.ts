@@ -20,22 +20,38 @@ export class PageHomeComponent implements OnInit {
     { title: 'Card 4', cols: 1, rows: 1 }
   ];
 
-  roomgames: Array<any>;
+  roomgames: Observable<Roomgame[]>;
   user: Observable<firebase.User>;
 
   constructor(public au: AngularFireAuth, private afsGameRooms: RoomgameService) { }
 
   ngOnInit() {
     this.user = this.au.authState;
-    this.afsGameRooms.getRoomgames().subscribe((snapshot) => {
-      this.roomgames = [];
-      snapshot.forEach((oData: any) => {
-        this.roomgames.push({
-          id: oData.payload.doc.id,
-          data: oData.payload.doc.data()
+
+    this.roomgames = this.afsGameRooms.getRoomgames().map(
+      actions => {
+        return actions.map(action => {
+          const data = action.payload.doc.data() as Roomgame;
+          const id = action.payload.doc.id;
+          return { id, ...data };
         });
-      });
-    });
+      }
+    );
+
+
+
+    // this.afsGameRooms.getRoomgames().subscribe((snapshot) => {
+    //   this.roomgames = [];
+    //   snapshot.forEach((oData: any) => {
+    //     this.roomgames.push({
+    //       id: oData.payload.doc.id,
+    //       data: oData.payload.doc.data()
+    //     });
+    //   });
+    // });
+
+
+
   }
 
   createRoomGame() {
