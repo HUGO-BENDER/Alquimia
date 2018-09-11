@@ -21,12 +21,19 @@ export class PageHomeComponent implements OnInit {
   ];
 
   roomgames: Observable<Roomgame[]>;
-  user: Observable<firebase.User>;
+  userlogined: firebase.User;
 
   constructor(public au: AngularFireAuth, private afsGameRooms: RoomgameService) { }
 
   ngOnInit() {
-    this.user = this.au.authState;
+
+    this.au.authState.subscribe(user => {
+      if (user) {
+        this.userlogined = user;
+      } else {
+        this.userlogined = null;
+      }
+    });
 
     this.roomgames = this.afsGameRooms.getRoomgames().map(
       actions => {
@@ -38,31 +45,15 @@ export class PageHomeComponent implements OnInit {
       }
     );
 
-
-
-    // this.afsGameRooms.getRoomgames().subscribe((snapshot) => {
-    //   this.roomgames = [];
-    //   snapshot.forEach((oData: any) => {
-    //     this.roomgames.push({
-    //       id: oData.payload.doc.id,
-    //       data: oData.payload.doc.data()
-    //     });
-    //   });
-    // });
-
-
-
   }
 
   createRoomGame() {
-    alert('creamos un nuevo juego');
-
-
+    if (this.userlogined) {
     const newRoomGame: Roomgame = {
       gameId: 'shottem',
       dateCreation: firebase.firestore.FieldValue.serverTimestamp(),
       state: gamestate.OPEN,
-      creator: { uid: 'xx', displayName: 'ccccccc'}
+      creator: { uid: this.userlogined.uid, displayName: this.userlogined.displayName }
     };
 
     this.afsGameRooms.createRoomGame(newRoomGame)
@@ -72,6 +63,10 @@ export class PageHomeComponent implements OnInit {
       .catch(function (error) {
         console.error('Error adding document: ', error);
       });
+    } else {
+      alert('no se puede crear un juego sin estar loginado');
+    }
+
   }
 
 

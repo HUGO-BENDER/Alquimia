@@ -22,15 +22,27 @@
             </mat-card-title>
           </mat-card-header>
           <mat-card-content class="dashboard-card-content">
-            <div>Card Content Here</div>
-
-            <div *ngFor="let room of roomgames | async">
-              {{room.id}}
-              {{room.dateCreation}}
-              {{room.state}}
-            </div>
-
-
+            <mat-accordion class="example-headers-align">
+              <mat-expansion-panel *ngFor="let room of roomgames | async">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    GAME NAME
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <span>
+                      <mat-icon>account_circle</mat-icon> {{room.creator.displayName}}
+                    </span>
+                    {{room.dateCreation.toDate() | date : 'medium' }}
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                Id: {{room.id}}
+                state: {{room.state}}
+                <mat-action-row>
+                  <button mat-button color="warn" (click)="deleteRoomgame()">Delete</button>
+                  <button mat-button color="primary" (click)="enterRoomgame()">Join</button>
+                </mat-action-row>
+              </mat-expansion-panel>
+            </mat-accordion>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
