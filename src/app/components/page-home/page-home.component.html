@@ -26,7 +26,7 @@
               <mat-expansion-panel *ngFor="let room of roomgames | async">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                    GAME NAME
+                    {{room.gameId}}
                   </mat-panel-title>
                   <mat-panel-description>
                     <span>
@@ -38,8 +38,8 @@
                 Id: {{room.id}}
                 state: {{room.state}}
                 <mat-action-row>
-                  <button mat-button color="warn" (click)="deleteRoomgame()">Delete</button>
-                  <button mat-button color="primary" (click)="enterRoomgame()">Join</button>
+                  <button mat-button *ngIf="canDelete(room)" color="warn" (click)="deleteRoomgame(room)">Delete</button>
+                  <button mat-button [disabled]="!canJoin(room)" color="primary" (click)="joinTheRoomgame(room)">Join</button>
                 </mat-action-row>
               </mat-expansion-panel>
             </mat-accordion>

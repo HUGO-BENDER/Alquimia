@@ -21,7 +21,12 @@ export class RoomgameService {
     return this.afs.collection('RoomGame').snapshotChanges();
   }
 
-
+  deleteRoomgame(room: Roomgame): any {
+    alert('deleteRoomgame -Method not implemented.');
+  }
+  joinTheRoomgame(room: Roomgame): any {
+    alert('joinTheRoomgame -Method not implemented.');
+  }
 
 
 

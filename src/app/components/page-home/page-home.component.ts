@@ -49,29 +49,50 @@ export class PageHomeComponent implements OnInit {
 
   createRoomGame() {
     if (this.userlogined) {
-    const newRoomGame: Roomgame = {
-      gameId: 'shottem',
-      dateCreation: firebase.firestore.FieldValue.serverTimestamp(),
-      state: gamestate.OPEN,
-      creator: { uid: this.userlogined.uid, displayName: this.userlogined.displayName }
-    };
-
-    this.afsGameRooms.createRoomGame(newRoomGame)
-      .then(function (docRef) {
-        console.log('Document written with ID: ', docRef.id);
-      })
-      .catch(function (error) {
-        console.error('Error adding document: ', error);
-      });
+      const newRoomGame: Roomgame = {
+        gameId: 'shottem',
+        dateCreation: firebase.firestore.FieldValue.serverTimestamp(),
+        state: gamestate.OPEN,
+        creator: { uid: this.userlogined.uid, displayName: this.userlogined.displayName }
+      };
+      this.afsGameRooms.createRoomGame(newRoomGame)
+        .then(function (docRef) {
+          console.log('Document written with ID: ', docRef.id);
+        })
+        .catch(function (error) {
+          console.error('Error adding document: ', error);
+        });
     } else {
-      alert('no se puede crear un juego sin estar loginado');
+      alert('No se puede ejecutar esta acción sin estar loginado');
     }
-
   }
 
+  canDelete(room: Roomgame): boolean {
+    return true;
+  }
 
+  deleteRoomgame(room: Roomgame) {
+    this.afsGameRooms.deleteRoomgame(room);
+  }
 
+  canJoin(room: Roomgame): boolean {
+    return true;
+  }
 
+  joinTheRoomgame(room: Roomgame) {
+    if (this.userlogined) {
+      this.afsGameRooms.joinTheRoomgame(room)
+        // .then(function (docRef) {
+        //   console.log('Document written with ID: ', docRef.id);
+        // })
+        // .catch(function (error) {
+        //   console.error('Error adding document: ', error);
+        // })
+        ;
+    } else {
+      alert('No se puede ejecutar esta acción sin estar loginado');
+    }
+  }
 
 
 
