@@ -72,7 +72,13 @@ export class PageHomeComponent implements OnInit {
   }
 
   deleteRoomgame(room: Roomgame) {
-    this.afsGameRooms.deleteRoomgame(room);
+    this.afsGameRooms.deleteRoomgame(room)
+        .then(function () {
+          console.log('Delete document with ID: ', room.id);
+        })
+        .catch(function (error) {
+          console.error('Error adding document: ', error);
+        });
   }
 
   canJoin(room: Roomgame): boolean {
@@ -81,13 +87,13 @@ export class PageHomeComponent implements OnInit {
 
   joinTheRoomgame(room: Roomgame) {
     if (this.userlogined) {
-      this.afsGameRooms.joinTheRoomgame(room)
-        // .then(function (docRef) {
-        //   console.log('Document written with ID: ', docRef.id);
-        // })
-        // .catch(function (error) {
-        //   console.error('Error adding document: ', error);
-        // })
+      this.afsGameRooms.joinTheRoomgame(room, this.userlogined)
+        .then(function (docRef) {
+          console.log('Game state: ', docRef.state);
+        })
+        .catch(function (error) {
+          console.error('Error adding document: ', error);
+        })
         ;
     } else {
       alert('No se puede ejecutar esta acción sin estar loginado');
