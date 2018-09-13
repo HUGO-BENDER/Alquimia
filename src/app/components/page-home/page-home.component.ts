@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import { RoomgameService } from '../../services/firestore/roomgame.service';
@@ -22,8 +23,9 @@ export class PageHomeComponent implements OnInit {
 
   roomgames: Observable<Roomgame[]>;
   userlogined: firebase.User;
+  snackBarVerticalPositionTop: MatSnackBarVerticalPosition = 'top';
 
-  constructor(public au: AngularFireAuth, private afsGameRooms: RoomgameService) { }
+  constructor(public au: AngularFireAuth, private afsGameRooms: RoomgameService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
 
@@ -63,7 +65,10 @@ export class PageHomeComponent implements OnInit {
           console.error('Error adding document: ', error);
         });
     } else {
-      alert('No se puede ejecutar esta acción sin estar loginado');
+      this.snackBar.open('No se puede ejecutar esta acción sin estar loginado', 'x', {
+        duration: 5000,
+        verticalPosition: this.snackBarVerticalPositionTop
+      });
     }
   }
 
