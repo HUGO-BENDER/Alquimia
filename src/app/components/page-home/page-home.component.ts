@@ -46,7 +46,6 @@ export class PageHomeComponent implements OnInit {
         });
       }
     );
-
   }
 
   createRoomGame() {
@@ -65,28 +64,37 @@ export class PageHomeComponent implements OnInit {
           console.error('Error adding document: ', error);
         });
     } else {
-      this.snackBar.open('No se puede ejecutar esta acción sin estar loginado', 'x', {
-        duration: 5000,
-        verticalPosition: this.snackBarVerticalPositionTop
-      });
+      this.openSnackBar('xNo se puede ejecutar esta acción sin estar loginado');
     }
   }
 
   canDelete(room: Roomgame): boolean {
-    return true;
+    if (this.userlogined) {
+      if (room.creator.uid === this.userlogined.uid) {
+        return true;
+      }
+    }
+    return false;
   }
 
   deleteRoomgame(room: Roomgame) {
     this.afsGameRooms.deleteRoomgame(room)
-        .then(function () {
-          console.log('Delete document with ID: ', room.id);
-        })
-        .catch(function (error) {
-          console.error('Error adding document: ', error);
-        });
+      .then(function () {
+        this.openSnackBar('xGame delete.');
+      })
+      .catch(function (error) {
+        this.openSnackBar('xError deleting game.');
+      });
   }
 
   canJoin(room: Roomgame): boolean {
+    if (this.userlogined) {
+      if (room.creator.uid !== this.userlogined.uid) {
+        return true;
+      }
+      return false;
+    }
+    // -- Si no está loginado queremos que intente unirse para invitarlo
     return true;
   }
 
@@ -94,18 +102,25 @@ export class PageHomeComponent implements OnInit {
     if (this.userlogined) {
       this.afsGameRooms.joinTheRoomgame(room, this.userlogined)
         .then(function (docRef) {
-          console.log('Game state: ', docRef.state);
+          this.openSnackBar('xheyy ya puedes empezar a jugar');
+          console.log('joinTheRoomgame Game state: ' + docRef.state);
         })
         .catch(function (error) {
-          console.error('Error adding document: ', error);
+          this.openSnackBar('xError :-(');
+          console.error('Error editing document: ', error);
         })
         ;
     } else {
-      alert('No se puede ejecutar esta acción sin estar loginado');
+      this.openSnackBar('xNo se puede ejecutar esta acción sin estar loginado');
     }
   }
 
-
+  openSnackBar(mensaje: string): any {
+    this.snackBar.open(mensaje, 'xClose', {
+      duration: 5000,
+      verticalPosition: this.snackBarVerticalPositionTop
+    });
+  }
 
 
 }
