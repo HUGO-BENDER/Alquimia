@@ -6,7 +6,6 @@ import { RoomgameService } from '../../services/firestore/roomgame.service';
 import { Roomgame, gamestate } from '../../model/roomgame';
 import * as firebase from 'firebase';
 
-
 @Component({
   selector: 'app-page-home',
   templateUrl: './page-home.component.html',
@@ -101,19 +100,24 @@ export class PageHomeComponent implements OnInit {
   joinTheRoomgame(room: Roomgame) {
     if (this.userlogined) {
       this.afsGameRooms.joinTheRoomgame(room, this.userlogined)
-        .then(function (docRef) {
-          this.openSnackBar('xheyy ya puedes empezar a jugar');
-          console.log('joinTheRoomgame Game state: ' + docRef.state);
-        })
+        .then( this.checkIfRoomReady(room) )
         .catch(function (error) {
-          this.openSnackBar('xError :-(');
           console.error('Error editing document: ', error);
-        })
-        ;
+        });
     } else {
       this.openSnackBar('xNo se puede ejecutar esta acción sin estar loginado');
     }
   }
+
+  checkIfRoomReady(room: Roomgame) {
+    this.openSnackBar('xHeeeeyyy ' + room.opponent.displayName  + ' te has unido al juego');
+    // Conditions for start the game. Simple. There are only 2 players.
+    // Then... go. Start the game
+    this.afsGameRooms.createGameFromThisRoom(room);
+
+
+  }
+
 
   openSnackBar(mensaje: string): any {
     this.snackBar.open(mensaje, 'xClose', {
@@ -121,6 +125,5 @@ export class PageHomeComponent implements OnInit {
       verticalPosition: this.snackBarVerticalPositionTop
     });
   }
-
 
 }
