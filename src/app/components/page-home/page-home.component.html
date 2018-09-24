@@ -12,7 +12,7 @@
         <mat-card class="dashboard-card">
           <mat-card-header>
             <mat-card-title>
-              xRooms game
+              xGames
               <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
                 <mat-icon>more_vert</mat-icon>
               </button>
@@ -22,7 +22,7 @@
             </mat-card-title>
           </mat-card-header>
           <mat-card-content class="dashboard-card-content">
-            <mat-accordion class="example-headers-align">
+            <!-- <mat-accordion class="example-headers-align">
               <mat-expansion-panel *ngFor="let room of roomgames | async">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
@@ -42,10 +42,59 @@
                   <button mat-button [disabled]="!canJoin(room)" color="primary" (click)="joinTheRoomgame(room)">Join</button>
                 </mat-action-row>
               </mat-expansion-panel>
+            </mat-accordion> -->
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+
+
+      <mat-grid-tile [colspan]="1" [rowspan]="2">
+        <mat-card class="dashboard-card">
+          <mat-card-header>
+            <mat-card-title>
+              Join a game
+              <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+                <mat-icon>add_circle</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before">
+                <button mat-menu-item (click)="createRecruitment('Chinker')">xCreate new Chinker</button>
+                <button mat-menu-item (click)="createRecruitment('Chinker')">xCreate new Chinker</button>
+                <button mat-menu-item (click)="createRecruitment('Chinker')">xCreate new Chinker</button>
+              </mat-menu>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="dashboard-card-content">
+            <mat-accordion class="example-headers-align">
+              <mat-expansion-panel *ngFor="let recruitment of recruitments | async">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{recruitment.gameId}}
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    {{recruitment.dateCreation.toDate() | date : 'medium' }}
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <span>
+                  <mat-icon>account_circle</mat-icon> {{recruitment.creator.displayName}}
+                </span>
+                Id: {{recruitment.id}}
+                state: {{recruitment.state}}
+                <mat-action-row>
+                  <button mat-button *ngIf="canDelete(recruitment)" color="warn" (click)="deleteRecruitment(recruitment)">Delete</button>
+                  <button mat-button [disabled]="!canJoin(recruitment)" color="primary" (click)="joinRecruitment(recruitment)">Join</button>
+                </mat-action-row>
+              </mat-expansion-panel>
             </mat-accordion>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
+
+
+
+
+
+
+
 
 
       <mat-grid-tile *ngFor="let card of cards" [colspan]="card.cols" [rowspan]="card.rows">

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
-import { RoomgameService } from '../../services/firestore/roomgame.service';
-import { Roomgame, gamestate } from '../../model/roomgame';
+import { RecruitmentService } from '../../services/firestore/Recruitment.service';
+import { Recruitment, recruitmentState, InfoPlayer } from '../../model/recruitment';
 import * as firebase from 'firebase';
 
 @Component({
@@ -15,16 +15,16 @@ export class PageHomeComponent implements OnInit {
 
   cards = [
     // { title: 'Card 1', cols: 2, rows: 1 },
-    { title: 'Card 2', cols: 1, rows: 1 },
-    { title: 'Card 3', cols: 1, rows: 2 },
+    // { title: 'Card 2', cols: 1, rows: 2 },
+    { title: 'Card 3', cols: 1, rows: 1 },
     { title: 'Card 4', cols: 1, rows: 1 }
   ];
 
-  roomgames: Observable<Roomgame[]>;
+  recruitments: Observable<Recruitment[]>;
   userlogined: firebase.User;
   snackBarVerticalPositionTop: MatSnackBarVerticalPosition = 'top';
 
-  constructor(public au: AngularFireAuth, private afsGameRooms: RoomgameService, public snackBar: MatSnackBar) { }
+  constructor(public au: AngularFireAuth, private afsRecruitments: RecruitmentService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
 
@@ -36,26 +36,34 @@ export class PageHomeComponent implements OnInit {
       }
     });
 
-    this.roomgames = this.afsGameRooms.getRoomgames().map(
+    this.recruitments = this.afsRecruitments.getRecruitments().map(
       actions => {
         return actions.map(action => {
-          const data = action.payload.doc.data() as Roomgame;
+          const data = action.payload.doc.data() as Recruitment;
           const id = action.payload.doc.id;
+          console.log('volvimos ');
           return { id, ...data };
         });
       }
     );
   }
 
-  createRoomGame() {
+  createRecruitment(idGame: string) {
     if (this.userlogined) {
-      const newRoomGame: Roomgame = {
-        gameId: 'shottem',
+      const player1: InfoPlayer = { uid: this.userlogined.uid, displayName: this.userlogined.displayName };
+      const arrayPlayers: Array<InfoPlayer> = [];
+      arrayPlayers.push(player1);
+
+      const newRecruitment: Recruitment = {
+        gameId: idGame,
         dateCreation: firebase.firestore.FieldValue.serverTimestamp(),
-        state: gamestate.OPEN,
-        creator: { uid: this.userlogined.uid, displayName: this.userlogined.displayName }
+        state: recruitmentState.OPEN,
+        creator: player1,
+        players: arrayPlayers,
+        countPlayers: 1,
+        maxPlayers: 2
       };
-      this.afsGameRooms.createRoomGame(newRoomGame)
+      this.afsRecruitments.createRecruitment(newRecruitment)
         .then(function (docRef) {
           console.log('Document written with ID: ', docRef.id);
         })
@@ -67,7 +75,7 @@ export class PageHomeComponent implements OnInit {
     }
   }
 
-  canDelete(room: Roomgame): boolean {
+  canDelete(room: Recruitment): boolean {
     if (this.userlogined) {
       if (room.creator.uid === this.userlogined.uid) {
         return true;
@@ -76,8 +84,8 @@ export class PageHomeComponent implements OnInit {
     return false;
   }
 
-  deleteRoomgame(room: Roomgame) {
-    this.afsGameRooms.deleteRoomgame(room)
+  deleteRecruitment(room: Recruitment) {
+    this.afsRecruitments.deleteRecruitment(room)
       .then(function () {
         this.openSnackBar('xGame delete.');
       })
@@ -86,7 +94,7 @@ export class PageHomeComponent implements OnInit {
       });
   }
 
-  canJoin(room: Roomgame): boolean {
+  canJoin(room: Recruitment): boolean {
     if (this.userlogined) {
       if (room.creator.uid !== this.userlogined.uid) {
         return true;
@@ -97,9 +105,9 @@ export class PageHomeComponent implements OnInit {
     return true;
   }
 
-  joinTheRoomgame(room: Roomgame) {
+  joinRecruitment(room: Recruitment) {
     if (this.userlogined) {
-      this.afsGameRooms.joinTheRoomgame(room, this.userlogined)
+      this.afsRecruitments.joinRecruitment(room, this.userlogined)
         .then( this.checkIfRoomReady(room) )
         .catch(function (error) {
           console.error('Error editing document: ', error);
@@ -109,11 +117,11 @@ export class PageHomeComponent implements OnInit {
     }
   }
 
-  checkIfRoomReady(room: Roomgame) {
-    this.openSnackBar('xHeeeeyyy ' + room.opponent.displayName  + ' te has unido al juego');
+  checkIfRoomReady(room: Recruitment) {
+    this.openSnackBar('xHeeeeyyy ' + this.userlogined.displayName  + ' te has unido al juego');
     // Conditions for start the game. Simple. There are only 2 players.
     // Then... go. Start the game
-    this.afsGameRooms.createGameFromThisRoom(room);
+    this.afsRecruitments.createGameFromThisRoom(room);
 
 
   }

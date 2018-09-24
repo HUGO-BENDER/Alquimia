@@ -63,6 +63,9 @@ Fix deploy
     move de i18n to folder assets
 
 Step 008
-    ng g interface model/roomgame
-    ng g service services/firestore/roomgame
+    create, delete mine, join.
+    on firebase create GamesDefinitons, Recruitments 
+    ng g interface model/recruitment
+    ng g service services/firestore/recruitment
+    
     
