@@ -14,7 +14,7 @@ export interface Recruitment {
     dateCreation: any;
     state: recruitmentState;
     creator: InfoPlayer;
-    players?: Array<infoplayer>;
+    players?: Array<InfoPlayer>;
     countPlayers: number;
     maxPlayers: number;
 }
