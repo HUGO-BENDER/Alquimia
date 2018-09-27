@@ -1,11 +1,8 @@
+import { MinInfoPlayer } from '../model/player';
+
 export enum recruitmentState {
     OPEN,
     CLOSED
-}
-
-export interface InfoPlayer {
-    uid: any;
-    displayName: any;
 }
 
 export interface Recruitment {
@@ -13,8 +10,8 @@ export interface Recruitment {
     gameId: string;
     dateCreation: any;
     state: recruitmentState;
-    creator: InfoPlayer;
-    players?: Array<InfoPlayer>;
+    creator: MinInfoPlayer;
+    players?: Array<MinInfoPlayer>;
     countPlayers: number;
     maxPlayers: number;
 }

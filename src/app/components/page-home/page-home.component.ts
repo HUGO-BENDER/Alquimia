@@ -3,7 +3,8 @@ import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import { RecruitmentService } from '../../services/firestore/Recruitment.service';
-import { Recruitment, recruitmentState, InfoPlayer } from '../../model/recruitment';
+import { Recruitment, recruitmentState } from '../../model/recruitment';
+import { MinInfoPlayer } from '../../model/player';
 import * as firebase from 'firebase';
 
 @Component({
@@ -50,8 +51,8 @@ export class PageHomeComponent implements OnInit {
 
   createRecruitment(idGame: string) {
     if (this.userlogined) {
-      const player1: InfoPlayer = { uid: this.userlogined.uid, displayName: this.userlogined.displayName };
-      const arrayPlayers: Array<InfoPlayer> = [];
+      const player1: MinInfoPlayer = { uid: this.userlogined.uid, displayName: this.userlogined.displayName };
+      const arrayPlayers: Array<MinInfoPlayer> = [];
       arrayPlayers.push(player1);
 
       const newRecruitment: Recruitment = {
@@ -75,17 +76,17 @@ export class PageHomeComponent implements OnInit {
     }
   }
 
-  canDelete(room: Recruitment): boolean {
+  canDelete(r: Recruitment): boolean {
     if (this.userlogined) {
-      if (room.creator.uid === this.userlogined.uid) {
+      if (r.creator.uid === this.userlogined.uid) {
         return true;
       }
     }
     return false;
   }
 
-  deleteRecruitment(room: Recruitment) {
-    this.afsRecruitments.deleteRecruitment(room)
+  deleteRecruitment(r: Recruitment) {
+    this.afsRecruitments.deleteRecruitment(r)
       .then(function () {
         this.openSnackBar('xGame delete.');
       })
@@ -94,9 +95,9 @@ export class PageHomeComponent implements OnInit {
       });
   }
 
-  canJoin(room: Recruitment): boolean {
+  canJoin(r: Recruitment): boolean {
     if (this.userlogined) {
-      if (room.creator.uid !== this.userlogined.uid) {
+      if (r.creator.uid !== this.userlogined.uid) {
         return true;
       }
       return false;
@@ -105,10 +106,10 @@ export class PageHomeComponent implements OnInit {
     return true;
   }
 
-  joinRecruitment(room: Recruitment) {
+  joinRecruitment(r: Recruitment) {
     if (this.userlogined) {
-      this.afsRecruitments.joinRecruitment(room, this.userlogined)
-        .then( this.checkIfRoomReady(room) )
+      this.afsRecruitments.joinRecruitment(r, this.userlogined)
+        .then( this.checkIfRoomReady(r) )
         .catch(function (error) {
           console.error('Error editing document: ', error);
         });
@@ -117,11 +118,11 @@ export class PageHomeComponent implements OnInit {
     }
   }
 
-  checkIfRoomReady(room: Recruitment) {
+  checkIfRoomReady(r: Recruitment) {
     this.openSnackBar('xHeeeeyyy ' + this.userlogined.displayName  + ' te has unido al juego');
     // Conditions for start the game. Simple. There are only 2 players.
     // Then... go. Start the game
-    this.afsRecruitments.createGameFromThisRoom(room);
+    this.afsRecruitments.createGameFromThisRecruitment(r);
 
 
   }
