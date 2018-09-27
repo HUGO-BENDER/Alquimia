@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from 'ng2-translate';
-import { SidenavService } from '../../services/sidenav.service';
+import { SidenavService } from '../../services/components/sidenav.service';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { AppLoginComponent } from "./../app-login/app-login.component";
+import { AppLoginComponent } from './../app-login/app-login.component';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { FirebaseUIModule } from 'firebaseui-angular';
+// import { FirebaseUIModule } from 'firebaseui-angular';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
 
@@ -23,7 +23,7 @@ export class AppToolBarComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.au.authState.subscribe(this.firebaseAuthChangeListener);
+    // this.au.authState.subscribe(this.firebaseAuthChangeListener);
     this.user = this.au.authState;
   }
 
@@ -33,7 +33,7 @@ export class AppToolBarComponent implements OnInit {
 
   openDialogLogin(): void {
     this.dialogRef = this.dialog.open(AppLoginComponent);
-  };
+  }
 
   // private firebaseAuthChangeListener(response) {
   //   if (response) {

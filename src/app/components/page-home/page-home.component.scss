@@ -38,7 +38,7 @@
   
   .more-button {
     position: absolute;
-    top: 5px;
+    top: 15px;
     right: 10px;
   }
   
@@ -46,3 +46,12 @@
     text-align: center;
   }  
   
+  .example-headers-align .mat-expansion-panel-header-title, 
+  .example-headers-align .mat-expansion-panel-header-description {
+    flex-basis: 0;
+  }
+  
+  .example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  } 

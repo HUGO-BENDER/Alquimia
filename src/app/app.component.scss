@@ -22,3 +22,8 @@
   }
 }
 
+// easy way for change de color. not the good way
+::ng-deep .mat-simple-snackbar-action button {
+    background-color: #c00003;
+    color: white;
+    }

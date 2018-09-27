@@ -61,3 +61,11 @@ FirebaseUI
     Add page-policy-privacy page-policy-service
 Fix deploy
     move de i18n to folder assets
+
+Step 008
+    create, delete mine, join.
+    on firebase create GamesDefinitons, Recruitments 
+    ng g interface model/recruitment
+    ng g service services/firestore/recruitment
+    
+    
