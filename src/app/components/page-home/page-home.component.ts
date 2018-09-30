@@ -125,12 +125,12 @@ export class PageHomeComponent implements OnInit {
     console.log('r.state = ' + r.state);
 
 
-    this.openSnackBar('xHeeeeyyy ' + this.userlogined.displayName  + ' te has unido al juego');
+    this.openSnackBar('xHeeeeyyy ' + this.userlogined.displayName + ' te has unido al juego');
     // Conditions for start the game. Simple. There are only 2 players.
     // Then... go. Start the game
-   
 
-   // this.afsRecruitments.createGameFromThisRecruitment(r);
+
+    this.afsRecruitments.createGameFromThisRecruitment(r);
 
   }
 

@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "alquimia-160618"
+    "default": "alquimia-160618",
+    "alquimia": "alquimia-160618"
   }
 }

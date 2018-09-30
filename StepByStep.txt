@@ -52,6 +52,7 @@ Deploy
     npm install -g firebase-tools
     firebase login
     firebase init
+    (ng build) 
     firebase deploy
 FirebaseUI
     npm install firebaseui firebaseui-angular --save
