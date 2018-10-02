@@ -7,7 +7,7 @@ export enum recruitmentState {
 
 export interface Recruitment {
     id?: string;
-    gameId: string;
+    gameType: string;
     dateCreation: any;
     state: recruitmentState;
     creator: MinInfoPlayer;

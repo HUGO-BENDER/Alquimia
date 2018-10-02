@@ -1,15 +1,13 @@
-"use strict";
 // import * as functions from 'firebase-functions';
-Object.defineProperty(exports, "__esModule", { value: true });
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
 // export const helloWorld = functions.https.onRequest((request, response) => {
 //  response.send("Hello from Firebase!");
 // });
-const functions = require("firebase-functions");
-const admin = require("firebase-admin");
-admin.initializeApp(functions.config().firestore);
+const admin = require('firebase-admin');
+const functions = require('firebase-functions');
+admin.initializeApp(functions.config().firebase);
 const fdb = admin.firestore();
 // exports.addWelcomeMessages = functions.auth.user().onCreate((user) => {
 //     const pathPhoto = user.photoURL || '/images/firebase-logo.png';
@@ -23,17 +21,30 @@ exports.OnAddNewGame = functions.firestore
     .document('Games/{gameId}')
     .onCreate((newGame, context) => {
     const pathGame = '/Games/' + context.params.gameId;
+    let textoLibre = '';
     // newGame.players.forEach(p => {
     //     fdb.collection('Users').doc(p.uid).collection('Play').doc(context.params.gameId).set({
     //         name: 'aaaaaaaaaa ' + Date.now(),
     //         profilePicUrl: 'pasamos ;-)'
     //     });
     // })
-    return fdb.collection('Users').doc().set({
-        name: 'hhhheeeeeyyyyyyyy ' + Date.now(),
-        juego: newGame.data.toString(),
+    const colIdPlayers = newGame.data().Players;
+    for (const player in colIdPlayers) {
+        console.log('player en bucle : ' + player);
+        textoLibre = textoLibre + ' -- ' + player;
+    }
+    console.log('los Ids de los Players son ' + textoLibre);
+    return fdb.collection('Games').doc(context.params.gameId).collection('Players').get()
+        .then((snapshot) => {
+        snapshot.forEach((player) => {
+            textoLibre = textoLibre + ' -- ' + player.id + '=>' + player.data();
+            console.log(player.id, ' => ', player.data());
+        });
+    }).then(() => fdb.collection('Users').doc().set({
+        name: 'hhhheeeeeyyyyyyyy ' + Date.now().toLocaleString(),
+        juego: 'aca va el text ' + textoLibre,
         profilePicUrl: 'pasamos ;-)'
-    });
+    }));
     // return fdb.collection('Users').doc(user.uid).set({
     //     name: `${fullName}`,
     //     profilePicUrl: `${pathPhoto}`

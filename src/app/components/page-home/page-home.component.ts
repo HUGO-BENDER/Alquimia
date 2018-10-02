@@ -56,7 +56,7 @@ export class PageHomeComponent implements OnInit {
       arrayPlayers.push(player1);
 
       const newRecruitment: Recruitment = {
-        gameId: idGame,
+        gameType: idGame,
         dateCreation: firebase.firestore.FieldValue.serverTimestamp(),
         state: recruitmentState.OPEN,
         creator: player1,

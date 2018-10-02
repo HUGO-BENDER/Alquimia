@@ -7,9 +7,10 @@
 //  response.send("Hello from Firebase!");
 // });
 
-import functions = require('firebase-functions');
-import admin = require('firebase-admin');
-admin.initializeApp(functions.config().firestore);
+const admin = require('firebase-admin');
+const functions = require('firebase-functions');
+
+admin.initializeApp(functions.config().firebase);
 
 const fdb = admin.firestore();
 
@@ -24,11 +25,15 @@ const fdb = admin.firestore();
 //     });
 // });
 
+
+
+
 exports.OnAddNewGame = functions.firestore
     .document('Games/{gameId}')
     .onCreate((newGame, context) => {
 
         const pathGame = '/Games/' + context.params.gameId;
+        let textoLibre: string = '';
 
         // newGame.players.forEach(p => {
         //     fdb.collection('Users').doc(p.uid).collection('Play').doc(context.params.gameId).set({
@@ -37,12 +42,26 @@ exports.OnAddNewGame = functions.firestore
         //     });
         // })
 
+        const algundatocarajo = newGame.data().gameType;
+        console.log('vale, recibo datos del newgame. algundatocarajo es ', algundatocarajo, ' <= terminó');
 
-        return fdb.collection('Users').doc().set({
-            name: 'hhhheeeeeyyyyyyyy ' + Date.now(),
-            juego: newGame.data.toString(),
-            profilePicUrl: 'pasamos ;-)'
-        });
+
+        return fdb.doc(pathGame).collection('Players').get()
+            .then((snapshot) => {
+
+                snapshot.forEach((player) => {
+                    textoLibre = textoLibre + ' -- ' + player.id + '=>' + player.data();
+                    console.log( player.id , ' => ', player.data());
+
+                });
+            }).then(() =>
+                fdb.collection('Users').doc().set({
+                    name: 'hhhheeeeeyyyyyyyy ' + Date.now().toLocaleString(),
+                    juego: 'aca va el text ' + textoLibre,
+                    profilePicUrl: 'pasamos ;-)'
+                })
+            );
+
 
         // return fdb.collection('Users').doc(user.uid).set({
         //     name: `${fullName}`,

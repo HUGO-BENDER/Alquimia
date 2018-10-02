@@ -53,11 +53,12 @@ export class RecruitmentService {
 
     const NewId = this.createId();
     const newGameRef = this.afs.collection('Games').doc(NewId).ref;
-    const newGame: Game = { gameId: r.gameId };
+    const newGame: Game = { gameType: r.gameType };
     batch.set(newGameRef, newGame);
 
     r.players.forEach(p => {
-      const newGamePlayerRef = this.afs.collection('Games').doc(NewId).collection('Players').doc(p.uid).ref;
+      // tslint:disable-next-line:prefer-const
+      let newGamePlayerRef = this.afs.collection('Games').doc(NewId).collection('Players').doc(p.uid).ref;
       batch.set(newGamePlayerRef, { uid: p.uid, displayName: p.displayName });
     });
 
