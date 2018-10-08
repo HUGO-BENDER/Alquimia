@@ -30,10 +30,33 @@ const fdb = admin.firestore();
 
 exports.OnAddNewGame = functions.firestore
     .document('Games/{gameId}')
-    .onCreate((newGame, context) => {
+    .onCreate(async (newGame, context) => {
 
-        const pathGame = '/Games/' + context.params.gameId;
-        let textoLibre: string = '';
+        try {
+            const pathGame = '/Games/' + context.params.gameId;
+
+            const snapshotplayers = await fdb.doc(pathGame).collection('Players').get();
+
+            // tslint:disable-next-line:prefer-const
+            for (let player of snapshotplayers.docs) { 
+
+                console.log(player.id, ' => ', player.data());
+
+            }
+
+
+
+
+            return Promise.resolve('essssssaaaaaa');
+        }
+        catch (err) {
+            console.log('Error getting documents', err);
+            return Promise.reject(err);
+        }
+
+
+
+        // let textoLibre: string = '';
 
         // newGame.players.forEach(p => {
         //     fdb.collection('Users').doc(p.uid).collection('Play').doc(context.params.gameId).set({
@@ -42,25 +65,26 @@ exports.OnAddNewGame = functions.firestore
         //     });
         // })
 
-        const algundatocarajo = newGame.data().gameType;
-        console.log('vale, recibo datos del newgame. algundatocarajo es ', algundatocarajo, ' <= terminó');
+        // const algundatocarajo = newGame.data().gameType;
+        // console.log('vale, recibo datos del newgame. algundatocarajo es ', algundatocarajo, ' <= terminó');
 
+        // const juegoActual:
 
-        return fdb.doc(pathGame).collection('Players').get()
-            .then((snapshot) => {
+        // return fdb.doc(pathGame).collection('Players').get()
+        //     .then((snapshot) => {
 
-                snapshot.forEach((player) => {
-                    textoLibre = textoLibre + ' -- ' + player.id + '=>' + player.data();
-                    console.log( player.id , ' => ', player.data());
+        //         snapshot.forEach((player) => {
+        //             textoLibre = textoLibre + ' -- ' + player.id + '=>' + player.data();
+        //             console.log(player.id, ' => ', player.data());
 
-                });
-            }).then(() =>
-                fdb.collection('Users').doc().set({
-                    name: 'hhhheeeeeyyyyyyyy ' + Date.now().toLocaleString(),
-                    juego: 'aca va el text ' + textoLibre,
-                    profilePicUrl: 'pasamos ;-)'
-                })
-            );
+        //         });
+        //     }).then(() =>
+        //         fdb.collection('Users').doc().set({
+        //             name: 'hhhheeeeeyyyyyyyy ' + Date.now().toLocaleString(),
+        //             juego: 'aca va el text ' + textoLibre,
+        //             profilePicUrl: 'pasamos ;-)'
+        //         })
+        //     );
 
 
         // return fdb.collection('Users').doc(user.uid).set({
