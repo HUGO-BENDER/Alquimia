@@ -29,11 +29,17 @@ exports.OnAddNewGame = functions.firestore
     .document('Games/{gameId}')
     .onCreate((newGame, context) => __awaiter(this, void 0, void 0, function* () {
     try {
+        const FieldValue = require('firebase-admin').firestore.FieldValue;
         const pathGame = '/Games/' + context.params.gameId;
         const snapshotplayers = yield fdb.doc(pathGame).collection('Players').get();
         // tslint:disable-next-line:prefer-const
-        for (let player of snapshotplayers.docs) {
-            console.log(player.id, ' => ', player.data());
+        for (let p of snapshotplayers.docs) {
+            console.log('hasta acá todo bien ', p.id, ' => ', p.data());
+            console.log('context.params.gameId ', context.params.gameId);
+            const r = yield fdb.collection('Users').doc(p.id).collection('Playing').doc(context.params.gameId).set({
+                timestamp: FieldValue.serverTimestamp(),
+                name: 'Chinker'
+            });
         }
         return Promise.resolve('essssssaaaaaa');
     }
@@ -43,7 +49,7 @@ exports.OnAddNewGame = functions.firestore
     }
     // let textoLibre: string = '';
     // newGame.players.forEach(p => {
-    //     fdb.collection('Users').doc(p.uid).collection('Play').doc(context.params.gameId).set({
+    //     fdb.collection('Users').doc(p.uid).collection('Playing').doc(context.params.gameId).set({
     //         name: 'aaaaaaaaaa ' + Date.now(),
     //         profilePicUrl: 'pasamos ;-)'
     //     });
