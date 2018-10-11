@@ -64,9 +64,21 @@ Fix deploy
     move de i18n to folder assets
 
 Step 008
-    create, delete mine, join.
+    create, delete mine recruitment, join.
     on firebase create GamesDefinitons, Recruitments 
     ng g interface model/recruitment
     ng g service services/firestore/recruitment
+
+Step 009
+    Cloud functions
+    OnAddNewGame - Initicialize the Games
+    add game-id to PlayerRegistered in collection Playing
+    add collections:
+    1  Players
+    2  Deck of cards    
+    2b Player1.n : Hand of card
+    2c Card in table
+    3  Board
+
     
     

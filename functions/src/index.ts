@@ -39,17 +39,17 @@ exports.OnAddNewGame = functions.firestore
             const snapshotplayers = await fdb.doc(pathGame).collection('Players').get();
             // tslint:disable-next-line:prefer-const
             for (let p of snapshotplayers.docs) { 
-
-                console.log('hasta acá todo bien ', p.id, ' => ', p.data());
-                
-                console.log('context.params.gameId ', context.params.gameId);
-
-               const r = await fdb.collection('Users').doc(p.id).collection('Playing').doc(context.params.gameId).set({
+               const r = await fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
                     timestamp: FieldValue.serverTimestamp(),
                     name: 'Chinker'
                 });
-
             }
+
+            // -- Create collection deck of cards in temporal array
+            
+            // -- Create collection Games/{gameId}/Cards
+
+            // -- Create Board
 
 
 
