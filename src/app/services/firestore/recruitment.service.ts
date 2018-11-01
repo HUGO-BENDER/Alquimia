@@ -50,32 +50,23 @@ export class RecruitmentService {
 
   createGameFromThisRecruitment(r: Recruitment): any {
     const batch = this.afs.firestore.batch();
+
     const NewId = this.createId();
     const newGameRef = this.afs.collection('Games').doc(NewId).ref;
+    const rgRef = this.afs.collection('Recruitments').doc(r.id).ref;
+    const newGame: Game = { gameType: r.gameType };
+    batch.set(newGameRef, newGame);
 
-    const recruitRef = this.afs.collection('Recruitments').doc(r.id).ref;
-    recruitRef.get().then( doc => {
-      if (doc.exists) {
-        const newGame: Game = { gameType: r.gameType };
-        batch.set(newGameRef, newGame);
-
-        doc.data().players.forEach(p => {
-          console.log('entramos a los players del recruit !', p.uid, ' => ', p.displayName);
-          // tslint:disable-next-line:prefer-const
-          let newGamePlayerRef = this.afs.collection('Games').doc(NewId).collection('Players').doc(p.uid).ref;
-          batch.set(newGamePlayerRef, { uid: p.uid, displayName: p.displayName });
-        });
-
-        // const rgRef = this.afs.collection('Recruitments').doc(r.id).ref;
-        // batch.delete(rgRef);
-
-        batch.commit().then(res => console.log('Batch completed!'), err => console.error(err));
-      } else {
-        console.log('No such document!');
-      }
-    }).catch(function (error) {
-      console.log('Error getting document:', error);
+    r.players.forEach(p => {
+      // tslint:disable-next-line:prefer-const
+      let newGamePlayerRef = this.afs.collection('Games').doc(NewId).collection('Players').doc(p.uid).ref;
+      batch.set(newGamePlayerRef, { uid: p.uid, displayName: p.displayName });
     });
+
+    // const rgRef = this.afs.collection('Recruitments').doc(r.id).ref;
+    // batch.delete(rgRef);
+
+    batch.commit().then(res => console.log('Batch completed!'), err => console.error(err));
   }
 
   createId() {
