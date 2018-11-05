@@ -37,9 +37,8 @@ exports.OnAddNewGame = functions.firestore
         try {
             const FieldValue = require('firebase-admin').firestore.FieldValue;
             const pathGame = '/Games/' + context.params.gameId;
-            const newGame = snap.data();
+            //            const newGame = snap.data();
 
-            console.log('podemos leer newGame.gameType : ', newGame.gameType);
             // -- Fake for GetSettingGame.  2 to 4 players. 
             // -- For development only 2 players.
             const ConfigGame = {
@@ -58,7 +57,6 @@ exports.OnAddNewGame = functions.firestore
                 }
             }
 
-            console.log('ConfigGame');
             // -- Variable Game actual
             const CurrentGame = {
                 Baraja: [{
@@ -73,7 +71,17 @@ exports.OnAddNewGame = functions.firestore
                 Players: [
                     {
                         id: '',
-                        hand: []
+                        hand: [
+                            {
+                                id: 0,
+                                position: 0,
+                                palo: '',
+                                valor: 0,
+                                description: '',
+                                dragEnable: false,
+                                classCss: 'card'
+                            }
+                        ]
                     }
                 ],
                 Board: [{
@@ -91,7 +99,7 @@ exports.OnAddNewGame = functions.firestore
                         Displayed: []
                     }]
                 }],
-                DisplayedCard: { 
+                DisplayedCard: {
                     id: 0,
                     position: 0,
                     palo: '',
@@ -101,9 +109,6 @@ exports.OnAddNewGame = functions.firestore
                     classCss: 'card'
                 }
             };
-
-
-            console.log('CurrentGame');
             // -- Create collection deck of cards in temporal array
             let cont = 1;
             CurrentGame.Baraja = [];
@@ -123,38 +128,48 @@ exports.OnAddNewGame = functions.firestore
                     contValue += 1;
                 }
             }
-
-            console.log('creamos la baraja con ', CurrentGame.Baraja.length, ' cartas');
             // -- shuffle
             for (let i = CurrentGame.Baraja.length - 1; i >= 0; i--) {
                 const randomIndex = Math.floor(Math.random() * (i + 1));
-                CurrentGame.Baraja[randomIndex].position = i;
-                CurrentGame.Baraja[i].position = randomIndex;
+                const positionAtInd = CurrentGame.Baraja[i].position;
+                CurrentGame.Baraja[i].position = CurrentGame.Baraja[randomIndex].position;
+                CurrentGame.Baraja[randomIndex].position = positionAtInd;
             }
-
-            console.log('mezclamos');
+            CurrentGame.Baraja.sort(function (a, b) { return a.position - b.position; });
             // -- players hands
             const totalForPlayers = ConfigGame.Players.cant * ConfigGame.Players.hand;
-            console.log('totalForPlayers', totalForPlayers);
-
             for (let i = 0; i < ConfigGame.Players.cant; i++) {
                 CurrentGame.Players.push({
                     id: '_' + i,
-                    hand:[],
+                    hand: [],
                 });
             }
-            console.log('creamos el array de jugadores');
-            for (let i = 0; i < totalForPlayers; i++) {
+            for (let i = CurrentGame.Baraja.length - 1; i >= CurrentGame.Baraja.length - totalForPlayers; i--) {
                 const indexPlayer = (i + ConfigGame.Players.cant) % ConfigGame.Players.cant;
-                CurrentGame.Players[indexPlayer].hand.push(CurrentGame.Baraja.pop());
-                CurrentGame.Players[indexPlayer].hand[CurrentGame.Players[indexPlayer].hand.length - 1].dragEnable = true;
-                CurrentGame.Players[indexPlayer].hand[CurrentGame.Players[indexPlayer].hand.length - 1].index = CurrentGame.Players[indexPlayer].hand.length;
+                const cardToHand = {
+                    id: CurrentGame.Baraja[i].id,
+                    position: CurrentGame.Players[indexPlayer].hand.length + 1,
+                    palo: CurrentGame.Baraja[i].palo,
+                    valor: CurrentGame.Baraja[i].valor,
+                    description: CurrentGame.Baraja[i].description,
+                    dragEnable: true,
+                    classCss: 'card handPlayer'
+                };
+                CurrentGame.Players[indexPlayer].hand.push(cardToHand);
+                CurrentGame.Baraja[i].id = 0;
             }
-            console.log('cargamos la mano de los jugadores');
             // -- Card on table
-            CurrentGame.DisplayedCard = CurrentGame.Baraja.pop();
-            console.log('pusimos la carta en la mesa');
-
+            const cardToDisplay = CurrentGame.Baraja[CurrentGame.Baraja.length - totalForPlayers - 1]
+            CurrentGame.DisplayedCard = {
+                id: cardToDisplay.id,
+                position: cardToDisplay.position,
+                palo: cardToDisplay.palo,
+                valor: cardToDisplay.valor,
+                description: cardToDisplay.description,
+                dragEnable: true,
+                classCss: 'card handPlayer'
+            };
+            cardToDisplay.id = 0;
             // // -- Boardgame
             // for (let x = 0; x < ConfigGame.board.cols; x++) {
             //     CurrentGame.Board.push({
@@ -170,27 +185,37 @@ exports.OnAddNewGame = functions.firestore
             //     }); 
             // }
 
-            // const snapshotplayers = await fdb.doc(pathGame).collection('Players').get();
-            // // tslint:disable-next-line:prefer-const
-            // for (let p of snapshotplayers.docs) {
-            //     const r = await fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
+            console.log('vale, tratamos de cargar la mano de los jugadores');
+            const snapshotplayers = await fdb.doc(pathGame).collection('Players').get();
+            let indPlayer = 0;
+            for (const p of snapshotplayers.docs) {
+                console.log('estamos con el jugador ', indPlayer, ' id:', p.id);
+                for (const c of CurrentGame.Players[indPlayer].hand) {
+                    const k = ('0' + (c.position).toString()).slice(-2);
+                    const x = await fdb.doc(pathGame).collection('Players').doc(p.id).collection('Hand').doc(k).set({
+                        id: c.id,
+                        position: c.position,
+                        palo: c.palo,
+                        valor: c.valor,
+                        description: c.description,
+                        dragEnable: false,
+                        classCss: 'card'
+                    });
+                }
+                indPlayer += 1;
 
-            //         timestamp: FieldValue.serverTimestamp(),
-            //         name: 'Chinker'
-            //     });
-            // }
-
-            // for (let p of newGame.Players) {
-
-            // }
-
-
-
-            console.log('newGame.gameType es ', newGame.gameType);
+                console.log('estamos con el jugador ', indPlayer, ' id:', p.id);
+                const r = await fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
+                    timestamp: FieldValue.serverTimestamp(),
+                    name: 'Chinker',
+                    idGame: context.params.gameId
+                });
+            }
+            console.log('pasamos la carga por jugador ');
             snap.ref.set(
                 {
                     timeStart: FieldValue.serverTimestamp(),
-                    displayedCard: { 
+                    displayedCard: {
                         id: CurrentGame.DisplayedCard.id,
                         position: CurrentGame.DisplayedCard.position,
                         palo: CurrentGame.DisplayedCard.palo,
@@ -198,47 +223,24 @@ exports.OnAddNewGame = functions.firestore
                         dragEnable: true,
                         classCss: 'card displayed onTable'
                     }
-                },{merge: true}
+                }, { merge: true }
             )
 
-            console.log('pasamos el  snap.ref.set');
-            console.log('vamos a buclear la baraja de ', CurrentGame.Baraja.length);
-            //  for (const c of CurrentGame.Baraja) {
-            //     console.log(c.position.toString(),c.description,'_de_',c.palo );
-            // }
-
-            // console.log('pasamos el  for de pruebas');
 
             for (const c of CurrentGame.Baraja) {
-                const k = ('0' + c.position.toString()).slice(-2);
-                console.log('la clave es ', k);
-                const r = await fdb.doc(pathGame).collection('Baraja').doc(k).set({
-                    id: c.id,
-                    position: c.position,
-                    palo: c.palo,
-                    valor: c.valor,
-                    description: c.description,
-                    dragEnable: false,
-                    classCss: 'card'
-                });
-
-
-                // const r = await fdb.doc(pathGame).collection('Baraja').doc(c.description + '-'+ c.palo).set({
-                //     id: c.id,
-                //     position: c.id,
-                //     palo: c.palo,
-                //     valor: c.valor,
-                //     description: c.description,
-                //     dragEnable: false,
-                //     classCss: 'card'
-                // });
+                if (c.id > 0) {
+                    const k = ('0' + (c.position).toString()).slice(-2);
+                    const r = await fdb.doc(pathGame).collection('Baraja').doc(k).set({
+                        id: c.id,
+                        position: c.position,
+                        palo: c.palo,
+                        valor: c.valor,
+                        description: c.description,
+                        dragEnable: false,
+                        classCss: 'card'
+                    });
+                }
             }
-
-            console.log('snap.ref.collection(Baraja).doc');
-
-
-
-
 
             return Promise.resolve('essssssaaaaaa');
         }
@@ -306,5 +308,20 @@ exports.OnAddNewGame = functions.firestore
         // })
 
 
+        // console.log('vamos a chequear  la baraja de ', CurrentGame.Baraja.length);
+        // let TestBaraja = '';
+        // for (const c of CurrentGame.Baraja) {
+        //     if (c) {
+        //         TestBaraja += 'Baraja |' + c.id + '|' + c.position.toString() + '|' + c.description + '_de_' + c.palo + '\r';
+        //     }
+        // }
+        // TestBaraja += 'EnMesa |' + CurrentGame.DisplayedCard.position.toString() + '|' + CurrentGame.DisplayedCard.description + '_de_' + CurrentGame.DisplayedCard.palo + '\r';
+        // for (const c of CurrentGame.Players[0].hand) {
+        //     TestBaraja += 'jugador 1 |' + c.position.toString() + '|' + c.description + '_de_' + c.palo + '\r';
+        // }
+        // for (const c of CurrentGame.Players[1].hand) {
+        //     TestBaraja += 'jugador 2 |' + c.position.toString() + '|' + c.description + '_de_' + c.palo + '\r';
+        // }
+        // console.log(TestBaraja);
     }
     );
