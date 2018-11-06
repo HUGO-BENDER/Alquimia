@@ -260,12 +260,6 @@ exports.OnAddNewGame = functions.firestore
                     }
                 });
             }
-
-
-
-
-
-
             //-- recuperamos los jugadores    
             const snapshotplayers = await fdb.doc(pathGame).collection('Players').get();
             let indPlayer = 0;
@@ -285,34 +279,30 @@ exports.OnAddNewGame = functions.firestore
                         classCss: 'card'
                     });
                 }
-                
+
                 for (let x = 0; x < ConfigGame.board.cols; x++) {
-                    const colKey = 'col' + (('0' + (x+1).toString()).slice(-2));
-
-
-                    await fdb.doc(pathGame).collection('BoardGame').doc(colKey).collection(p.id).set({
-                        id: x,
-                        idUserWin: '',
-                        nameUserWin: '',
-                        goal: {
-                            dragEnable: false,
-                            dropEnable: false,
-                            classCss: 'goal '
-                        }
-                    });
-
-
-
+                    const colKey = 'col' + (('0' + (x).toString()).slice(-2));
+                    for (let y = 0; y < ConfigGame.board.rows; y++) {
+                        const rowKey = 'row' + (('0' + (y).toString()).slice(-2));
+                        await fdb.doc(pathGame).collection('BoardGame').doc(colKey).collection(p.id).doc(rowKey).set({
+                            id: 0,
+                            position: y,
+                            palo: '',
+                            valor: 0,
+                            description: '',
+                            dragEnable: true,
+                            dropEnable: true,
+                            classCss: 'card '
+                        });
+                    }
                 }
-
-
 
                 console.log('estamos con el jugador ', indPlayer, ' id:', p.id);
                 const r = await fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
                     timeStartGame: FieldValue.serverTimestamp(),
                     timeLastTurn: FieldValue.serverTimestamp(),
                     name: 'Chinker',
-                    isMyTurn:ramdomFirstTurn === indPlayer
+                    isMyTurn: ramdomFirstTurn === indPlayer
                 });
 
                 indPlayer += 1;

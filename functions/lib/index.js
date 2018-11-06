@@ -251,6 +251,8 @@ exports.OnAddNewGame = functions.firestore
         //-- recuperamos los jugadores    
         const snapshotplayers = yield fdb.doc(pathGame).collection('Players').get();
         let indPlayer = 0;
+        const ramdomFirstTurn = Math.floor(Math.random() * (ConfigGame.Players.cant));
+        console.log('el jugador mano es ', ramdomFirstTurn);
         for (const p of snapshotplayers.docs) {
             console.log('estamos con el jugador ', indPlayer, ' id:', p.id);
             for (const c of CurrentGame.Players[indPlayer].hand) {
@@ -265,13 +267,30 @@ exports.OnAddNewGame = functions.firestore
                     classCss: 'card'
                 });
             }
-            indPlayer += 1;
+            for (let x = 0; x < ConfigGame.board.cols; x++) {
+                const colKey = 'col' + (('0' + (x).toString()).slice(-2));
+                for (let y = 0; y < ConfigGame.board.rows; y++) {
+                    const rowKey = 'row' + (('0' + (y).toString()).slice(-2));
+                    yield fdb.doc(pathGame).collection('BoardGame').doc(colKey).collection(p.id).doc(rowKey).set({
+                        id: 0,
+                        position: y,
+                        palo: '',
+                        valor: 0,
+                        description: '',
+                        dragEnable: true,
+                        dropEnable: true,
+                        classCss: 'card '
+                    });
+                }
+            }
             console.log('estamos con el jugador ', indPlayer, ' id:', p.id);
             const r = yield fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
-                timestamp: FieldValue.serverTimestamp(),
+                timeStartGame: FieldValue.serverTimestamp(),
+                timeLastTurn: FieldValue.serverTimestamp(),
                 name: 'Chinker',
-                idGame: context.params.gameId
+                isMyTurn: ramdomFirstTurn === indPlayer
             });
+            indPlayer += 1;
         }
         return Promise.resolve('essssssaaaaaa');
     }
