@@ -264,9 +264,7 @@ exports.OnAddNewGame = functions.firestore
             const snapshotplayers = await fdb.doc(pathGame).collection('Players').get();
             let indPlayer = 0;
             const ramdomFirstTurn = Math.floor(Math.random() * (ConfigGame.Players.cant));
-            console.log('el jugador mano es ', ramdomFirstTurn);
             for (const p of snapshotplayers.docs) {
-                console.log('estamos con el jugador ', indPlayer, ' id:', p.id);
                 for (const c of CurrentGame.Players[indPlayer].hand) {
                     const k = ('0' + (c.position).toString()).slice(-2);
                     const x = await fdb.doc(pathGame).collection('Players').doc(p.id).collection('Hand').doc(k).set({
@@ -296,8 +294,6 @@ exports.OnAddNewGame = functions.firestore
                         });
                     }
                 }
-
-                console.log('estamos con el jugador ', indPlayer, ' id:', p.id);
                 const r = await fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
                     timeStartGame: FieldValue.serverTimestamp(),
                     timeLastTurn: FieldValue.serverTimestamp(),
@@ -307,8 +303,6 @@ exports.OnAddNewGame = functions.firestore
 
                 indPlayer += 1;
             }
-
-
             return Promise.resolve('essssssaaaaaa');
         }
         catch (err) {
