@@ -42,9 +42,6 @@ export class PageHomeComponent implements OnInit {
         return actions.map(action => {
           const data = action.payload.doc.data() as Recruitment;
           const id = action.payload.doc.id;
-          console.log('volvimos ');
-          console.log(('0' + 1).slice(-2));
-          console.log(('0' + 20).slice(-2));
           return { id, ...data };
         });
       }

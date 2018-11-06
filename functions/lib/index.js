@@ -78,19 +78,32 @@ exports.OnAddNewGame = functions.firestore
                 }
             ],
             Board: [{
-                    Id: 0,
-                    IdUserWin: '',
-                    NameUserWin: '',
-                    Target: {
-                        id: 0,
+                    id: 0,
+                    idUserWin: '',
+                    nameUserWin: '',
+                    goal: {
+                        dragEnable: false,
                         dropEnable: false,
                         classCss: 'goal'
                     },
-                    Players: [{
-                            Id: '',
-                            Name: '',
-                            Displayed: []
-                        }]
+                    Players: [
+                        {
+                            name: '',
+                            bet: 0,
+                            deployedCards: [
+                                {
+                                    id: 0,
+                                    position: 0,
+                                    palo: 's',
+                                    valor: 0,
+                                    description: 'v',
+                                    dragEnable: true,
+                                    dropEnable: true,
+                                    classCss: 'card '
+                                }
+                            ]
+                        }
+                    ]
                 }],
             DisplayedCard: {
                 id: 0,
@@ -163,21 +176,79 @@ exports.OnAddNewGame = functions.firestore
             classCss: 'card handPlayer'
         };
         cardToDisplay.id = 0;
-        // // -- Boardgame
-        // for (let x = 0; x < ConfigGame.board.cols; x++) {
-        //     CurrentGame.Board.push({
-        //         Id: x,
-        //         IdUserWin: '',
-        //         NameUserWin: '',
-        //         Target: {
-        //             Id: x,
-        //             dropEnable: false,
-        //             classCss: 'planet '
-        //         },
-        //         Players: []
-        //     }); 
-        // }
-        console.log('vale, tratamos de cargar la mano de los jugadores');
+        // -- Boardgame
+        for (let x = 0; x < ConfigGame.board.cols; x++) {
+            CurrentGame.Board.push({
+                id: x,
+                idUserWin: '',
+                nameUserWin: '',
+                goal: {
+                    dragEnable: false,
+                    dropEnable: false,
+                    classCss: 'goal '
+                },
+                Players: [
+                    {
+                        name: '',
+                        bet: 0,
+                        deployedCards: [
+                            {
+                                id: 0,
+                                position: 0,
+                                palo: 's',
+                                valor: 0,
+                                description: 'v',
+                                dragEnable: true,
+                                dropEnable: true,
+                                classCss: 'card '
+                            }
+                        ]
+                    }
+                ]
+            });
+        }
+        // -- Actualizamos la raiz
+        snap.ref.set({
+            timeStart: FieldValue.serverTimestamp(),
+            displayedCard: {
+                id: CurrentGame.DisplayedCard.id,
+                position: CurrentGame.DisplayedCard.position,
+                palo: CurrentGame.DisplayedCard.palo,
+                valor: CurrentGame.DisplayedCard.valor,
+                dragEnable: true,
+                classCss: 'card displayed onTable'
+            }
+        }, { merge: true });
+        // -- Creamos la baraja
+        for (const c of CurrentGame.Baraja) {
+            if (c.id > 0) {
+                const k = ('0' + (c.position).toString()).slice(-2);
+                yield fdb.doc(pathGame).collection('Baraja').doc(k).set({
+                    id: c.id,
+                    position: c.position,
+                    palo: c.palo,
+                    valor: c.valor,
+                    description: c.description,
+                    dragEnable: false,
+                    classCss: 'card'
+                });
+            }
+        }
+        // -- Creamos parte del trablero
+        for (let x = 0; x < ConfigGame.board.cols; x++) {
+            const colKey = 'col' + (('0' + (x).toString()).slice(-2));
+            yield fdb.doc(pathGame).collection('BoardGame').doc(colKey).set({
+                id: x,
+                idUserWin: '',
+                nameUserWin: '',
+                goal: {
+                    dragEnable: false,
+                    dropEnable: false,
+                    classCss: 'goal '
+                }
+            });
+        }
+        //-- recuperamos los jugadores    
         const snapshotplayers = yield fdb.doc(pathGame).collection('Players').get();
         let indPlayer = 0;
         for (const p of snapshotplayers.docs) {
@@ -201,32 +272,6 @@ exports.OnAddNewGame = functions.firestore
                 name: 'Chinker',
                 idGame: context.params.gameId
             });
-        }
-        console.log('pasamos la carga por jugador ');
-        snap.ref.set({
-            timeStart: FieldValue.serverTimestamp(),
-            displayedCard: {
-                id: CurrentGame.DisplayedCard.id,
-                position: CurrentGame.DisplayedCard.position,
-                palo: CurrentGame.DisplayedCard.palo,
-                valor: CurrentGame.DisplayedCard.valor,
-                dragEnable: true,
-                classCss: 'card displayed onTable'
-            }
-        }, { merge: true });
-        for (const c of CurrentGame.Baraja) {
-            if (c.id > 0) {
-                const k = ('0' + (c.position).toString()).slice(-2);
-                const r = yield fdb.doc(pathGame).collection('Baraja').doc(k).set({
-                    id: c.id,
-                    position: c.position,
-                    palo: c.palo,
-                    valor: c.valor,
-                    description: c.description,
-                    dragEnable: false,
-                    classCss: 'card'
-                });
-            }
         }
         return Promise.resolve('essssssaaaaaa');
     }

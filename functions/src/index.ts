@@ -85,19 +85,32 @@ exports.OnAddNewGame = functions.firestore
                     }
                 ],
                 Board: [{
-                    Id: 0,
-                    IdUserWin: '',
-                    NameUserWin: '',
-                    Target: {
-                        id: 0,
+                    id: 0,
+                    idUserWin: '',
+                    nameUserWin: '',
+                    goal: {
+                        dragEnable: false,
                         dropEnable: false,
                         classCss: 'goal'
                     },
-                    Players: [{
-                        Id: '',
-                        Name: '',
-                        Displayed: []
-                    }]
+                    Players: [
+                        {
+                            name: '',
+                            bet: 0,
+                            deployedCards: [
+                                {
+                                    id: 0,
+                                    position: 0,
+                                    palo: 's',
+                                    valor: 0,
+                                    description: 'v',
+                                    dragEnable: true,
+                                    dropEnable: true,
+                                    classCss: 'card '
+                                }
+                            ]
+                        }
+                    ]
                 }],
                 DisplayedCard: {
                     id: 0,
@@ -170,48 +183,39 @@ exports.OnAddNewGame = functions.firestore
                 classCss: 'card handPlayer'
             };
             cardToDisplay.id = 0;
-            // // -- Boardgame
-            // for (let x = 0; x < ConfigGame.board.cols; x++) {
-            //     CurrentGame.Board.push({
-            //         Id: x,
-            //         IdUserWin: '',
-            //         NameUserWin: '',
-            //         Target: {
-            //             Id: x,
-            //             dropEnable: false,
-            //             classCss: 'planet '
-            //         },
-            //         Players: []
-            //     }); 
-            // }
-
-            console.log('vale, tratamos de cargar la mano de los jugadores');
-            const snapshotplayers = await fdb.doc(pathGame).collection('Players').get();
-            let indPlayer = 0;
-            for (const p of snapshotplayers.docs) {
-                console.log('estamos con el jugador ', indPlayer, ' id:', p.id);
-                for (const c of CurrentGame.Players[indPlayer].hand) {
-                    const k = ('0' + (c.position).toString()).slice(-2);
-                    const x = await fdb.doc(pathGame).collection('Players').doc(p.id).collection('Hand').doc(k).set({
-                        id: c.id,
-                        position: c.position,
-                        palo: c.palo,
-                        valor: c.valor,
-                        description: c.description,
+            // -- Boardgame
+            for (let x = 0; x < ConfigGame.board.cols; x++) {
+                CurrentGame.Board.push({
+                    id: x,
+                    idUserWin: '',
+                    nameUserWin: '',
+                    goal: {
                         dragEnable: false,
-                        classCss: 'card'
-                    });
-                }
-                indPlayer += 1;
-
-                console.log('estamos con el jugador ', indPlayer, ' id:', p.id);
-                const r = await fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
-                    timestamp: FieldValue.serverTimestamp(),
-                    name: 'Chinker',
-                    idGame: context.params.gameId
+                        dropEnable: false,
+                        classCss: 'goal '
+                    },
+                    Players: [
+                        {
+                            name: '',
+                            bet: 0,
+                            deployedCards: [
+                                {
+                                    id: 0,
+                                    position: 0,
+                                    palo: 's',
+                                    valor: 0,
+                                    description: 'v',
+                                    dragEnable: true,
+                                    dropEnable: true,
+                                    classCss: 'card '
+                                }
+                            ]
+                        }
+                    ]
                 });
             }
-            console.log('pasamos la carga por jugador ');
+
+            // -- Actualizamos la raiz
             snap.ref.set(
                 {
                     timeStart: FieldValue.serverTimestamp(),
@@ -226,11 +230,11 @@ exports.OnAddNewGame = functions.firestore
                 }, { merge: true }
             )
 
-
+            // -- Creamos la baraja
             for (const c of CurrentGame.Baraja) {
                 if (c.id > 0) {
                     const k = ('0' + (c.position).toString()).slice(-2);
-                    const r = await fdb.doc(pathGame).collection('Baraja').doc(k).set({
+                    await fdb.doc(pathGame).collection('Baraja').doc(k).set({
                         id: c.id,
                         position: c.position,
                         palo: c.palo,
@@ -241,6 +245,79 @@ exports.OnAddNewGame = functions.firestore
                     });
                 }
             }
+
+            // -- Creamos parte del trablero
+            for (let x = 0; x < ConfigGame.board.cols; x++) {
+                const colKey = 'col' + (('0' + (x).toString()).slice(-2));
+                await fdb.doc(pathGame).collection('BoardGame').doc(colKey).set({
+                    id: x,
+                    idUserWin: '',
+                    nameUserWin: '',
+                    goal: {
+                        dragEnable: false,
+                        dropEnable: false,
+                        classCss: 'goal '
+                    }
+                });
+            }
+
+
+
+
+
+
+            //-- recuperamos los jugadores    
+            const snapshotplayers = await fdb.doc(pathGame).collection('Players').get();
+            let indPlayer = 0;
+            const ramdomFirstTurn = Math.floor(Math.random() * (ConfigGame.Players.cant));
+            console.log('el jugador mano es ', ramdomFirstTurn);
+            for (const p of snapshotplayers.docs) {
+                console.log('estamos con el jugador ', indPlayer, ' id:', p.id);
+                for (const c of CurrentGame.Players[indPlayer].hand) {
+                    const k = ('0' + (c.position).toString()).slice(-2);
+                    const x = await fdb.doc(pathGame).collection('Players').doc(p.id).collection('Hand').doc(k).set({
+                        id: c.id,
+                        position: c.position,
+                        palo: c.palo,
+                        valor: c.valor,
+                        description: c.description,
+                        dragEnable: false,
+                        classCss: 'card'
+                    });
+                }
+                
+                for (let x = 0; x < ConfigGame.board.cols; x++) {
+                    const colKey = 'col' + (('0' + (x+1).toString()).slice(-2));
+
+
+                    await fdb.doc(pathGame).collection('BoardGame').doc(colKey).collection(p.id).set({
+                        id: x,
+                        idUserWin: '',
+                        nameUserWin: '',
+                        goal: {
+                            dragEnable: false,
+                            dropEnable: false,
+                            classCss: 'goal '
+                        }
+                    });
+
+
+
+                }
+
+
+
+                console.log('estamos con el jugador ', indPlayer, ' id:', p.id);
+                const r = await fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
+                    timeStartGame: FieldValue.serverTimestamp(),
+                    timeLastTurn: FieldValue.serverTimestamp(),
+                    name: 'Chinker',
+                    isMyTurn:ramdomFirstTurn === indPlayer
+                });
+
+                indPlayer += 1;
+            }
+
 
             return Promise.resolve('essssssaaaaaa');
         }
