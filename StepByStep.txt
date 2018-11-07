@@ -81,7 +81,7 @@ Step 009
     3  Board
 
 Step 010
-    ng generate service service/firestore/player
+    ng generate service services/firestore/player
     Show list of games in progress in first card
     List order by isMyTurn: timeLastTurn: 
     Bottoms Surrender and OpenGame
