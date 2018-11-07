@@ -85,4 +85,5 @@ Step 010
     Show list of games in progress in first card
     List order by isMyTurn: timeLastTurn: 
     Bottoms Surrender and OpenGame
+    ng generate service services/firestore/game
     

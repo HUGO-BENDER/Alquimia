@@ -30,12 +30,12 @@
                   </mat-panel-title>
                   <mat-panel-description>
                     {{gameInProgress.timeLastTurn.toDate() | date : 'medium' }}
+                    <a *ngIf="gameInProgress.isMyTurn" [routerLink]="['/game', gameInProgress.id]"><button mat-button color="primary"> Go </button></a>
                   </mat-panel-description>
                 </mat-expansion-panel-header>
                 es mi turno: {{gameInProgress.isMyTurn}}
                 <mat-action-row>
                   <button mat-button color="warn" (click)="surrender(gameInProgress)">Surrender</button>
-                  <a routerLink="/game"><button class="btn btn-success pull-right"> Go </button></a>
                   <button mat-button color="primary" (click)="open(gameInProgress)">Open</button>
                 </mat-action-row>
               </mat-expansion-panel>
