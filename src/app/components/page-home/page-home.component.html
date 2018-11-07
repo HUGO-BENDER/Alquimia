@@ -17,29 +17,29 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item (click)="createRoomGame()">xCreate new game</button>
+                <button mat-menu-item (click)="createRecruitment('xxxxx')">xCreate xxxxxx</button>
               </mat-menu>
             </mat-card-title>
           </mat-card-header>
           <mat-card-content class="dashboard-card-content">
             <!-- <mat-accordion class="example-headers-align">
-              <mat-expansion-panel *ngFor="let room of roomgames | async">
+              <mat-expansion-panel *ngFor="let gameInProgress of gamesInProgress  | async">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                    {{room.gameId}}
+                    {{gameInProgress.gameId}}
                   </mat-panel-title>
                   <mat-panel-description>
                     <span>
-                      <mat-icon>account_circle</mat-icon> {{room.creator.displayName}}
+                      <mat-icon>account_circle</mat-icon> {{gameInProgress.creator.displayName}}
                     </span>
-                    {{room.dateCreation.toDate() | date : 'medium' }}
+                    {{gameInProgress.dateCreation.toDate() | date : 'medium' }}
                   </mat-panel-description>
                 </mat-expansion-panel-header>
-                Id: {{room.id}}
-                state: {{room.state}}
+                Id: {{gameInProgress.id}}
+                state: {{gameInProgress.state}}
                 <mat-action-row>
-                  <button mat-button *ngIf="canDelete(room)" color="warn" (click)="deleteRoomgame(room)">Delete</button>
-                  <button mat-button [disabled]="!canJoin(room)" color="primary" (click)="joinTheRoomgame(room)">Join</button>
+                  <button mat-button color="warn" (click)="surrender(gameInProgress)">Surrender</button>
+                  <button mat-button color="primary" (click)="open(gameInProgress)">Open</button>
                 </mat-action-row>
               </mat-expansion-panel>
             </mat-accordion> -->

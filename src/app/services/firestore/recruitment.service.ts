@@ -26,6 +26,7 @@ export class RecruitmentService {
 
   joinRecruitment(r: Recruitment, userlogined: firebase.User): any {
     const rgRef = this.afs.collection('Recruitments').doc(r.id).ref;
+    r.players.push( <MinInfoPlayer> { uid: userlogined.uid, displayName: userlogined.displayName });
     return this.afs.firestore.runTransaction(
       transJoinGame => transJoinGame.get(rgRef).then(
         sfDoc => {
@@ -53,7 +54,7 @@ export class RecruitmentService {
 
     const NewId = this.createId();
     const newGameRef = this.afs.collection('Games').doc(NewId).ref;
-    const newGame: Game = { gameId: r.gameId };
+    const newGame: Game = { gameType: r.gameType };
     batch.set(newGameRef, newGame);
 
     r.players.forEach(p => {
@@ -61,8 +62,8 @@ export class RecruitmentService {
       batch.set(newGamePlayerRef, { uid: p.uid, displayName: p.displayName });
     });
 
-    // const rgRef = this.afs.collection('Recruitments').doc(r.id).ref;
-    // batch.delete(rgRef);
+    const rgRef = this.afs.collection('Recruitments').doc(r.id).ref;
+    batch.delete(rgRef);
 
     batch.commit().then(res => console.log('Batch completed!'), err => console.error(err));
   }

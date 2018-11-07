@@ -42,7 +42,6 @@ export class PageHomeComponent implements OnInit {
         return actions.map(action => {
           const data = action.payload.doc.data() as Recruitment;
           const id = action.payload.doc.id;
-          console.log('volvimos ');
           return { id, ...data };
         });
       }
@@ -56,7 +55,7 @@ export class PageHomeComponent implements OnInit {
       arrayPlayers.push(player1);
 
       const newRecruitment: Recruitment = {
-        gameId: idGame,
+        gameType: idGame,
         dateCreation: firebase.firestore.FieldValue.serverTimestamp(),
         state: recruitmentState.OPEN,
         creator: player1,
@@ -109,7 +108,10 @@ export class PageHomeComponent implements OnInit {
   joinRecruitment(r: Recruitment) {
     if (this.userlogined) {
       this.afsRecruitments.joinRecruitment(r, this.userlogined)
-        .then( this.checkIfRoomReady(r) )
+        .then(
+          () => this.checkIfRoomReady(r),
+          err => this.openSnackBar(err)
+        )
         .catch(function (error) {
           console.error('Error editing document: ', error);
         });
@@ -119,11 +121,15 @@ export class PageHomeComponent implements OnInit {
   }
 
   checkIfRoomReady(r: Recruitment) {
-    this.openSnackBar('xHeeeeyyy ' + this.userlogined.displayName  + ' te has unido al juego');
+    console.log('r.state = ' + r.state);
+
+
+    this.openSnackBar('xHeeeeyyy ' + this.userlogined.displayName + ' te has unido al juego');
     // Conditions for start the game. Simple. There are only 2 players.
     // Then... go. Start the game
-    this.afsRecruitments.createGameFromThisRecruitment(r);
 
+
+    this.afsRecruitments.createGameFromThisRecruitment(r);
 
   }
 

@@ -5,6 +5,6 @@ export interface ColPlayers {
 }
 
 export interface Game {
-    gameId: string;
+    gameType: string;
     Players?: ColPlayers;
 }
