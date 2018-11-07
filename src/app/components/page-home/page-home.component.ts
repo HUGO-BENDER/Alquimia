@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { RecruitmentService } from '../../services/firestore/Recruitment.service';
 import { Recruitment, recruitmentState } from '../../model/recruitment';
 import { MinInfoPlayer } from '../../model/player';
+import { GameInProgress } from '../../model/game';
 import * as firebase from 'firebase';
 
 @Component({
@@ -21,6 +22,7 @@ export class PageHomeComponent implements OnInit {
     { title: 'Card 4', cols: 1, rows: 1 }
   ];
 
+  gamesInProgress: Observable<GameInProgress[]>;
   recruitments: Observable<Recruitment[]>;
   userlogined: firebase.User;
   snackBarVerticalPositionTop: MatSnackBarVerticalPosition = 'top';

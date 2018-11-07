@@ -8,3 +8,9 @@ export interface Game {
     gameType: string;
     Players?: ColPlayers;
 }
+
+export interface GameInProgress {
+    id: string;
+    isMyTurn: boolean;
+    timeLastTurn: any;
+}

@@ -1,16 +1,17 @@
-import { Game } from '../model/game';
+import { GameInProgress } from '../model/game';
 
 export interface MinInfoPlayer {
     uid: any;
     displayName: any;
 }
 
-export interface ColActiveGames {
-    [keyGame: string]:  Game;
+export interface ColGamesInProgress {
+    [keyGame: string]:  GameInProgress;
+
 }
 
 export interface Player {
     uid: string;
     displayName: string;
-    ActiveGames: ColActiveGames;
+    GamesInProgress: ColGamesInProgress;
 }

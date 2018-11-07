@@ -40,7 +40,7 @@ Step 005:
 Firebase
     Create DataBase in https ://console.firebase.google.com/project/alquimia-160618 
     npm install firebase angularfire2 --save
-    ng generate service service/Metadata
+    ng generate service service/firestore/Metadata
 
 Step 006:
 Layout
@@ -80,5 +80,9 @@ Step 009
     2c Card in table
     3  Board
 
-    
+Step 010
+    ng generate service service/firestore/player
+    Show list of games in progress in first card
+    List order by isMyTurn: timeLastTurn: 
+    Bottoms Surrender and OpenGame
     
