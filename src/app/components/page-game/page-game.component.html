@@ -1,3 +1,38 @@
-<p>
-  page-game works!
-</p>
+<div *ngIf='currentGame'>
+  <p>
+    {{userlogined.displayName}}
+  </p>
+  --
+  <p>
+    {{currentGame.gameType}}
+  </p>
+  --
+  <p>
+    {{currentGame.timeStart }}
+  </p>
+  --
+  <p>
+    {{currentGame.displayedCard.id}}
+  </p>
+  --
+  <p>
+    {{currentGame.displayedCard.valor}} de {{currentGame.displayedCard.palo}}
+  </p>
+-----------------------
+    <div *ngFor="let card of hand">
+      <p>
+          {{card.valor}} de {{card.palo}}
+        </p>
+        
+  </div>
+  -----------------------
+  <div *ngFor="let col of boardGame">
+  <p>
+    {{col.id}} *** {{col.iUserWin}} 
+  </p>
+
+</div>
+
+
+
+</div>

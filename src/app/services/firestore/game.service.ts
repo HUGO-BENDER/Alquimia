@@ -10,14 +10,19 @@ export class GameService {
   constructor(private afs: AngularFirestore) { }
 
   public getGame(id: string) {
-    console.log('--- getGame(id) ---', id);
-    return this.afs.collection('Games').doc('vIrCv5U20WDpyiyfG5Zu').ref;
+    return this.afs.collection('Games').doc(id).ref;
   }
 
   public getHand(id: string, userlogined: firebase.User) {
-    return this.afs.collection('Games').doc(id).ref.get();
+    return this.afs.collection('Games').doc(id)
+                   .collection('Players').doc(userlogined.uid)
+                   .collection('Hand').ref;
   }
 
+  public getBoard(id: string) {
+    return this.afs.collection('Games').doc(id)
+                   .collection('BoardGame').snapshotChanges();
+  }
 
 
 

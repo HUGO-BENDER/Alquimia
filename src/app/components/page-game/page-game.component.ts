@@ -3,7 +3,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { GameService } from 'src/app/services/firestore/game.service';
-import { Game } from 'src/app/model/game';
+import { Game, Card, ColumnGame } from 'src/app/model/game';
 import * as firebase from 'firebase';
 
 @Component({
@@ -13,7 +13,9 @@ import * as firebase from 'firebase';
 })
 export class PageGameComponent implements OnInit {
 
-  currentGame: any;
+  currentGame: Game;
+  boardGame: Observable<ColumnGame[]>;
+  hand: Array<Card> = [];
   userlogined: firebase.User;
 
   constructor(
@@ -28,26 +30,37 @@ export class PageGameComponent implements OnInit {
     this.au.authState.subscribe(user => {
       if (user) {
         this.userlogined = user;
-
+        this.afsGame.getHand(idGame, user).get()
+          .then(snap => {
+            snap.forEach(doc => {
+              this.hand.push(<Card>doc.data());
+            });
+          })
+          .catch(error => { console.log('Error getting document:', error); });
       } else {
         this.userlogined = null;
       }
     });
 
-    this.afsGame.getGame(idGame).get().then( doc => {
-      console.log('------------- afsGame.getGame(idGame) ---');
-      console.log(doc);
-      this.currentGame = doc.data();
-    }
-  ).catch(function(error) {
-    console.log('Error getting document:', error);
-});
+    this.afsGame.getGame(idGame).get()
+      .then(doc => { this.currentGame = <Game>doc.data(); })
+      .catch(error => { console.log('Error getting document:', error); });
 
-    console.log('------------- this.currentGame ---');
-    console.log(this.currentGame);
+
+    this.boardGame = this.afsGame.getBoard(idGame).map(
+      actions => {
+        return actions.map(action => {
+          const data = action.payload.doc.data() as ColumnGame;
+          const id = action.payload.doc.id;
+          return { id, ...data };
+        });
+      }
+    );
+
+
+
+
+
+
   }
-
-
-
-
 }

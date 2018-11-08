@@ -10,17 +10,14 @@ import { MetadataService } from '../../services/firestore/metadata.service';
 })
 export class AppFooterComponent implements OnInit {
 
-  info: any;
+  info: Metadata = null;
 
   constructor(private dataservice: MetadataService) {
-    if ( this.info == null) {
-      this.info = { name: null , year: null, author: null, version: null};
-    }
   }
 
   ngOnInit() {
     this.dataservice.getMetadata().then(doc => {
-      this.info = doc.data();
+      this.info = <Metadata> doc.data();
     });
   }
 

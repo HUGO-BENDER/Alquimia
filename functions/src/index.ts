@@ -224,6 +224,7 @@ exports.OnAddNewGame = functions.firestore
                         position: CurrentGame.DisplayedCard.position,
                         palo: CurrentGame.DisplayedCard.palo,
                         valor: CurrentGame.DisplayedCard.valor,
+                        description: CurrentGame.DisplayedCard.description,
                         dragEnable: true,
                         classCss: 'card displayed onTable'
                     }
