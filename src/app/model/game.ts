@@ -5,7 +5,8 @@ export interface ColPlayers {
 }
 
 export interface ColumnGame {
-    id: string;
+    colId: string;
+    id: number;
     idUserWin: string;
     nameUserWin: string;
 }

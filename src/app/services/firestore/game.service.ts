@@ -20,8 +20,7 @@ export class GameService {
   }
 
   public getBoard(id: string) {
-    return this.afs.collection('Games').doc(id)
-                   .collection('BoardGame').snapshotChanges();
+    return this.afs.collection('Games').doc(id).collection('BoardGame').snapshotChanges();
   }
 
 

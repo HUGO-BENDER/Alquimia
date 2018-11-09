@@ -15,6 +15,7 @@ export class PageGameComponent implements OnInit {
 
   currentGame: Game;
   boardGame: Observable<ColumnGame[]>;
+  mySide: Array<Card>;
   hand: Array<Card> = [];
   userlogined: firebase.User;
 
@@ -47,12 +48,13 @@ export class PageGameComponent implements OnInit {
       .catch(error => { console.log('Error getting document:', error); });
 
 
+    console.log('this.afsGame.getBoard', idGame);
     this.boardGame = this.afsGame.getBoard(idGame).map(
       actions => {
         return actions.map(action => {
           const data = action.payload.doc.data() as ColumnGame;
-          const id = action.payload.doc.id;
-          return { id, ...data };
+          const colId = action.payload.doc.id;
+          return { colId, ...data };
         });
       }
     );

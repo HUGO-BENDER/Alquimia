@@ -26,12 +26,13 @@
         
   </div>
   -----------------------
-  <div *ngFor="let col of boardGame">
-  <p>
-    {{col.id}} *** {{col.iUserWin}} 
-  </p>
-
-</div>
+  
+    <div *ngFor="let col of boardGame | async">
+      <p>
+        {{col.colId}} *** {{col.id}} 
+      </p> 
+     </div>
+   
 
 
 
