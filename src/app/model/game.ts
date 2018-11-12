@@ -9,6 +9,7 @@ export interface ColumnGame {
     id: number;
     idUserWin: string;
     nameUserWin: string;
+    rows: Array<Card>;
 }
 
 export interface Board {

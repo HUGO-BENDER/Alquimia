@@ -15,8 +15,7 @@ export class GameService {
 
   public getHand(id: string, userlogined: firebase.User) {
     return this.afs.collection('Games').doc(id)
-                   .collection('Players').doc(userlogined.uid)
-                   .collection('Hand').ref;
+                   .collection('Players').doc(userlogined.uid).ref;
   }
 
   public getBoard(id: string) {

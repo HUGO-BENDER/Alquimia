@@ -32,10 +32,8 @@ export class PageGameComponent implements OnInit {
       if (user) {
         this.userlogined = user;
         this.afsGame.getHand(idGame, user).get()
-          .then(snap => {
-            snap.forEach(doc => {
-              this.hand.push(<Card>doc.data());
-            });
+          .then(doc => {
+            this.hand = doc.data().hand;
           })
           .catch(error => { console.log('Error getting document:', error); });
       } else {
@@ -47,13 +45,12 @@ export class PageGameComponent implements OnInit {
       .then(doc => { this.currentGame = <Game>doc.data(); })
       .catch(error => { console.log('Error getting document:', error); });
 
-
-    console.log('this.afsGame.getBoard', idGame);
     this.boardGame = this.afsGame.getBoard(idGame).map(
       actions => {
         return actions.map(action => {
           const data = action.payload.doc.data() as ColumnGame;
           const colId = action.payload.doc.id;
+          console.log(action.payload.doc.data());
           return { colId, ...data };
         });
       }

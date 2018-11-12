@@ -28,12 +28,9 @@
   -----------------------
   
     <div *ngFor="let col of boardGame | async">
-      <p>
         {{col.colId}} *** {{col.id}} 
-      </p> 
+        <div *ngFor="let casilla of col.rows">
+            {{casilla.nomPlayer}} *** {{casilla.active}} 
+         </div>
      </div>
-   
-
-
-
 </div>
