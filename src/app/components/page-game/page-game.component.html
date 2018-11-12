@@ -18,19 +18,21 @@
   <p>
     {{currentGame.displayedCard.valor}} de {{currentGame.displayedCard.palo}}
   </p>
------------------------
-    <div *ngFor="let card of hand">
-      <p>
-          {{card.valor}} de {{card.palo}}
-        </p>
-        
+  -----------------------
+  <div *ngFor="let card of hand">
+    <p>
+      {{card.valor}} de {{card.palo}}
+    </p>
+
   </div>
   -----------------------
-  
-    <div *ngFor="let col of boardGame | async">
-        {{col.colId}} *** {{col.id}} 
-        <div *ngFor="let casilla of col.rows">
-            {{casilla.nomPlayer}} *** {{casilla.active}} 
-         </div>
-     </div>
+
+  <div *ngFor="let col of boardGame | async">  
+    <div *ngFor="let casilla of col.rows ">
+      {{casilla.nomPlayer}} *** {{casilla.active}}
+    </div>
+    {{col.colId}} *** {{col.id}}
+  <div *ngFor="let casilla of col.rows">
+    {{casilla.position}} # {{casilla.nomPlayer}} *** {{casilla.active}} -- {{i}}
+  </div> -->
 </div>
