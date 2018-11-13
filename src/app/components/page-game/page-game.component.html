@@ -1,34 +1,51 @@
 <mat-sidenav-container class="gameWrapper">
   <mat-sidenav #sidenav class="game-sidenav">
     <div *ngIf='currentGame'>
-        <p>
-            {{userlogined.displayName}}
-          </p>
-          <p>
-              gameType: {{currentGame.gameType}}
-          </p>
-          --
-          <p>
-              timeStart: {{currentGame.timeStart.toDate() | date : 'medium' }}
-          </p>          --
-          <p>
-              turnCont: {{currentGame.turnCont }}
-          </p>
+      <p>
+        {{userlogined.displayName}}
+      </p>
+      <p>
+        gameType: {{currentGame.gameType}}
+      </p>
+      --
+      <p>
+        timeStart: {{currentGame.timeStart.toDate() | date : 'medium' }}
+      </p> --
+      <p>
+        turnCont: {{currentGame.turnCont }}
+      </p>
     </div>
   </mat-sidenav>
   <mat-sidenav-content class="game-content">
-    
-      <div class="game-display">
-          <div class="boardgame">
-            
+
+    <div class="game-display">
+      <div class="boardgame" >
+        
+      <div *ngFor="let col of boardGame | async">
+          <mat-grid-list rows="9" cols="1" rowHeight="60px">
+              <mat-grid-tile *ngFor="let casilla of getColumns(col.rows, false)" class="cell">
+                  {{casilla.position}}
+              </mat-grid-tile>
+              <mat-grid-tile>
+              </mat-grid-tile>
+              <mat-grid-tile *ngFor="let casilla of getColumns(col.rows, false)" class="cell">
+                  {{casilla.position}}
+                </mat-grid-tile>
+
+            </mat-grid-list>
+
           </div>
+
+
+
       </div>
+    </div>
 
     <div class="game-controls">
       <div class="game-controls-left">
-          <button mat-mini-fab class="btn-open-sideNav" (click)="sidenav.open()">
-              <mat-icon class="mat-24" aria-label="open sidebar">view_compact</mat-icon>
-            </button>
+        <button mat-mini-fab class="btn-open-sideNav" (click)="sidenav.open()">
+          <mat-icon class="mat-24" aria-label="open sidebar">view_compact</mat-icon>
+        </button>
       </div>
       <div class="game-controls-center">
         aca va la carta y el mazo
@@ -46,14 +63,15 @@
 
     <div class="game-hand">
 
-        <mat-grid-list cols="5" rowHeight="100px">
-            <mat-grid-tile
-                *ngFor="let tile of hand">
-              {{tile.description}}  {{tile.palo}}
-            </mat-grid-tile>
-          </mat-grid-list>
-
-
+      <mat-grid-list cols="9" rowHeight="100px">
+        <mat-grid-tile [colspan]=2>
+        </mat-grid-tile>
+        <mat-grid-tile *ngFor="let tile of hand" class="cell">
+          {{tile.description}} {{tile.palo}}
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]=2>
+        </mat-grid-tile>
+      </mat-grid-list>
     </div>
 
 
@@ -101,4 +119,3 @@
           {{casilla.position}} # {{casilla.nomPlayer}} *** {{casilla.active}} -- {{casilla.idPlayer}}
         </div>
       </div> -->
-
