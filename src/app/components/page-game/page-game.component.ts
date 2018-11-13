@@ -15,7 +15,6 @@ export class PageGameComponent implements OnInit {
 
   currentGame: Game;
   boardGame: Observable<ColumnGame[]>;
-  mySide: Array<Card>;
   hand: Array<Card> = [];
   userlogined: firebase.User;
 
@@ -55,11 +54,22 @@ export class PageGameComponent implements OnInit {
         });
       }
     );
-
-
-
-
-
-
   }
+
+  public getColumns (boardCols: Array<Card>, mySide: boolean): Array<Card> {
+    let cols: Array<Card> = [];
+      if (mySide) {
+        cols = boardCols.filter(c => c.idPlayer === this.userlogined.uid);
+        cols = cols.sort(function (a, b) { return a.position - b.position; });
+      } else {
+        cols = boardCols.filter(c => c.idPlayer !== this.userlogined.uid);
+        cols = cols.sort(function (a, b) { return b.position - a.position; });
+      }
+    return cols;
+  }
+
+
+
+
+
 }

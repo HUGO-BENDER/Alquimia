@@ -35,11 +35,9 @@ const fdb = admin.firestore();
 exports.OnAddNewGame = functions.firestore
     .document('Games/{gameId}')
     .onCreate(async (snap, context) => {
-
         try {
             const FieldValue = require('firebase-admin').firestore.FieldValue;
             const pathGame = '/Games/' + context.params.gameId;
-            //            const newGame = snap.data();
 
             // -- Fake for GetSettingGame.  2 to 4 players. 
             // -- For development only 2 players.
@@ -109,7 +107,7 @@ exports.OnAddNewGame = functions.firestore
                     classCss: 'card'
                 }
             };
-
+            // -- End Fake for GetSettingGame.  
 
             // -- Create collection deck of cards in temporal array
             let cont = 1;
@@ -150,8 +148,8 @@ exports.OnAddNewGame = functions.firestore
             }
             for (let i = CurrentGame.Baraja.length - 1; i >= CurrentGame.Baraja.length - totalForPlayers; i--) {
                 const indexPlayer = i % ConfigGame.Players.cant;
-                console.log('i=',i,' indexPlayer=',indexPlayer);
-              
+                console.log('i=', i, ' indexPlayer=', indexPlayer);
+
                 const cardToHand = {
                     id: CurrentGame.Baraja[i].id,
                     position: positions[indexPlayer] + 1,
@@ -177,44 +175,11 @@ exports.OnAddNewGame = functions.firestore
                 classCss: 'card handPlayer'
             };
             cardToDisplay.id = 0;
-            
-            // -- Boardgame            
-            // for (let x = 0; x < ConfigGame.board.cols; x++) {
-            //     CurrentGame.Board.push({
-            //         id: x,
-            //         idUserWin: '',
-            //         nameUserWin: '',
-            //         goal: {
-            //             dragEnable: false,
-            //             dropEnable: false,
-            //             classCss: 'goal '
-            //         },
-            //         rows: [
-            //             {
-            //                 idPlayer: '',
-            //                 id: 0,
-            //                 position: 0,
-            //                 palo: 's',
-            //                 valor: 0,
-            //                 description: 'v',
-            //                 dragEnable: true,
-            //                 dropEnable: true,
-            //                 classCss: 'card '
-            //             }
-            //         ]
-            //     });
-            // }
-
-
-
-
-
-
-
 
             // -- Actualizamos la raiz
             snap.ref.set(
                 {
+                    turnCont: 1,
                     timeStart: FieldValue.serverTimestamp(),
                     displayedCard: {
                         id: CurrentGame.DisplayedCard.id,
@@ -243,7 +208,6 @@ exports.OnAddNewGame = functions.firestore
                     });
                 }
             }
-
 
             //-- recuperamos los Id de los jugadores    
             const snapshotplayers = await fdb.doc(pathGame).collection('Players').get();
@@ -290,53 +254,11 @@ exports.OnAddNewGame = functions.firestore
 
             // -- Creamos la mano de los jugadores
             for (const p of snapshotplayers.docs) {
-                 const x = await fdb.doc(pathGame).collection('Players').doc(p.id).set(
+                const x = await fdb.doc(pathGame).collection('Players').doc(p.id).set(
                     {
                         hand: CurrentGame.Players[indPlayer].hand
                     }, { merge: true }
                 );
- 
-
-
-
-                // for (const c of CurrentGame.Players[indPlayer].hand) {
-                //     const k = ('0' + (c.position).toString()).slice(-2);
-                //     const x = await fdb.doc(pathGame).collection('Players').doc(p.id).collection('Hand').doc(k).set({
-                //         id: c.id,
-                //         position: c.position,
-                //         palo: c.palo,
-                //         valor: c.valor,
-                //         description: c.description,
-                //         dragEnable: false,
-                //         classCss: 'card'
-                //     });
-                // }
-
-                // for (let x = 0; x < ConfigGame.board.cols; x++) {
-                //     const colKey = 'col' + (('0' + (x).toString()).slice(-2));
-                //     for (let y = 0; y < ConfigGame.board.rows; y++) {
-                //         const rowKey = 'row' + (('0' + (y).toString()).slice(-2));
-
-
-
-
-
-
-                //         await fdb.doc(pathGame).collection('BoardGame').doc(colKey).collection(p.id).doc(rowKey).set({
-                //             id: 0,
-                //             position: y,
-                //             palo: '',
-                //             valor: 0,
-                //             description: '',
-                //             dragEnable: true,
-                //             dropEnable: true,
-                //             classCss: 'card '
-                //         });
-                //     }
-                //}
-
-
-
                 const r = await fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
                     timeStartGame: FieldValue.serverTimestamp(),
                     timeLastTurn: FieldValue.serverTimestamp(),
@@ -352,7 +274,8 @@ exports.OnAddNewGame = functions.firestore
             console.log('Error getting documents', err);
             return Promise.reject(err);
         }
-
+    }
+);
 
 
 
@@ -427,5 +350,3 @@ exports.OnAddNewGame = functions.firestore
         //     TestBaraja += 'jugador 2 |' + c.position.toString() + '|' + c.description + '_de_' + c.palo + '\r';
         // }
         // console.log(TestBaraja);
-    }
-    );

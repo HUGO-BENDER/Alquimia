@@ -17,6 +17,8 @@ export interface Board {
 }
 
 export interface Card {
+    idPlayer: string;
+    namePlayer: string;
     id: string;
     position: number;
     palo: string;
