@@ -1,39 +1,104 @@
-<div *ngIf='currentGame'>
-  <p>
-    {{userlogined.displayName}}
-  </p>
-  --
-  <p>
-    {{currentGame.gameType}}
-  </p>
-  --
-  <p>
-    {{currentGame.timeStart }}
-  </p>
-  --
-  <p>
-    {{currentGame.displayedCard.id}}
-  </p>
-  --
-  <p>
-    {{currentGame.displayedCard.valor}} de {{currentGame.displayedCard.palo}}
-  </p>
-  -----------------------
-  <div *ngFor="let card of hand">
-    <p>
-      {{card.valor}} de {{card.palo}}
-    </p>
-
-  </div>
-  -----------------------
-
-  <div *ngFor="let col of boardGame | async">  
-    -------------------------------------------------------
-    <div *ngFor="let casilla of getColumns(col.rows, false)">
-      {{casilla.position}} # {{casilla.nomPlayer}} *** {{casilla.active}} -- {{casilla.idPlayer}}
+<mat-sidenav-container class="gameWrapper">
+  <mat-sidenav #sidenav class="game-sidenav">
+    <div *ngIf='currentGame'>
+        <p>
+            {{userlogined.displayName}}
+          </p>
+          <p>
+              gameType: {{currentGame.gameType}}
+          </p>
+          --
+          <p>
+              timeStart: {{currentGame.timeStart.toDate() | date : 'medium' }}
+          </p>          --
+          <p>
+              turnCont: {{currentGame.turnCont }}
+          </p>
     </div>
-    {{col.colId}} *** {{col.id}}
-  <div *ngFor="let casilla of  getColumns(col.rows, true)">
-    {{casilla.position}} # {{casilla.nomPlayer}} *** {{casilla.active}} -- {{casilla.idPlayer}}
-  </div> 
-</div>
+  </mat-sidenav>
+  <mat-sidenav-content class="game-content">
+    
+      <div class="game-display">
+          <div class="boardgame">
+            
+          </div>
+      </div>
+
+    <div class="game-controls">
+      <div class="game-controls-left">
+          <button mat-mini-fab class="btn-open-sideNav" (click)="sidenav.open()">
+              <mat-icon class="mat-24" aria-label="open sidebar">view_compact</mat-icon>
+            </button>
+      </div>
+      <div class="game-controls-center">
+        aca va la carta y el mazo
+      </div>
+      <div class="game-controls-rigth" [@animAparecer]='xxxstateButtons'>
+        <button mat-raised-button class="btn-send-turn" (click)="sendTurn()">
+          xEnviar turno
+          <mat-icon class="mat-24" aria-label="enviar turno">send</mat-icon>
+        </button>
+        <button mat-raised-button class="btn-send-turn" (click)="resetTurn()">
+          <mat-icon class="mat-24" aria-label="reset turno">undo</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="game-hand">
+
+        <mat-grid-list cols="5" rowHeight="100px">
+            <mat-grid-tile
+                *ngFor="let tile of hand">
+              {{tile.description}}  {{tile.palo}}
+            </mat-grid-tile>
+          </mat-grid-list>
+
+
+    </div>
+
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+<!-- 
+    <div *ngIf='currentGame'>
+      <p>
+        {{userlogined.displayName}}
+      </p>
+      --
+      <p>
+        {{currentGame.gameType}}
+      </p>
+      --
+      <p>
+        {{currentGame.timeStart }}
+      </p>
+      --
+      <p>
+        {{currentGame.displayedCard.id}}
+      </p>
+      --
+      <p>
+        {{currentGame.displayedCard.valor}} de {{currentGame.displayedCard.palo}}
+      </p>
+      -----------------------
+      <div *ngFor="let card of hand">
+        <p>
+          {{card.valor}} de {{card.palo}}
+        </p>
+
+      </div>
+      -----------------------
+
+      <div *ngFor="let col of boardGame | async">
+        -------------------------------------------------------
+        <div *ngFor="let casilla of getColumns(col.rows, false)">
+          {{casilla.position}} # {{casilla.nomPlayer}} *** {{casilla.active}} -- {{casilla.idPlayer}}
+        </div>
+        {{col.colId}} *** {{col.id}}
+        <div *ngFor="let casilla of  getColumns(col.rows, true)">
+          {{casilla.position}} # {{casilla.nomPlayer}} *** {{casilla.active}} -- {{casilla.idPlayer}}
+        </div>
+      </div> -->
+

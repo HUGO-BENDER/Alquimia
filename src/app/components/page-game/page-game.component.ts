@@ -4,12 +4,24 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { GameService } from 'src/app/services/firestore/game.service';
 import { Game, Card, ColumnGame } from 'src/app/model/game';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-page-game',
   templateUrl: './page-game.component.html',
-  styleUrls: ['./page-game.component.scss']
+  styleUrls: ['./page-game.component.scss'],
+  animations: [
+    trigger('animAparecer', [
+      state('fuera', style({
+        transform: 'translateX(-100%)',
+      })),
+      state('dentro', style({
+        transform: 'translateX(0)',
+      })),
+      transition('fuera <=> dentro', animate('300ms')),
+    ])
+  ]
 })
 export class PageGameComponent implements OnInit {
 
@@ -17,6 +29,7 @@ export class PageGameComponent implements OnInit {
   boardGame: Observable<ColumnGame[]>;
   hand: Array<Card> = [];
   userlogined: firebase.User;
+  stateButtons = 'fuera';
 
   constructor(
     public au: AngularFireAuth,
