@@ -33,7 +33,6 @@ exports.OnAddNewGame = functions.firestore
     try {
         const FieldValue = require('firebase-admin').firestore.FieldValue;
         const pathGame = '/Games/' + context.params.gameId;
-        //            const newGame = snap.data();
         // -- Fake for GetSettingGame.  2 to 4 players. 
         // -- For development only 2 players.
         const ConfigGame = {
@@ -101,6 +100,7 @@ exports.OnAddNewGame = functions.firestore
                 classCss: 'card'
             }
         };
+        // -- End Fake for GetSettingGame.  
         // -- Create collection deck of cards in temporal array
         let cont = 1;
         CurrentGame.Baraja = [];
@@ -166,34 +166,9 @@ exports.OnAddNewGame = functions.firestore
             classCss: 'card handPlayer'
         };
         cardToDisplay.id = 0;
-        // -- Boardgame            
-        // for (let x = 0; x < ConfigGame.board.cols; x++) {
-        //     CurrentGame.Board.push({
-        //         id: x,
-        //         idUserWin: '',
-        //         nameUserWin: '',
-        //         goal: {
-        //             dragEnable: false,
-        //             dropEnable: false,
-        //             classCss: 'goal '
-        //         },
-        //         rows: [
-        //             {
-        //                 idPlayer: '',
-        //                 id: 0,
-        //                 position: 0,
-        //                 palo: 's',
-        //                 valor: 0,
-        //                 description: 'v',
-        //                 dragEnable: true,
-        //                 dropEnable: true,
-        //                 classCss: 'card '
-        //             }
-        //         ]
-        //     });
-        // }
         // -- Actualizamos la raiz
         snap.ref.set({
+            turnCont: 1,
             timeStart: FieldValue.serverTimestamp(),
             displayedCard: {
                 id: CurrentGame.DisplayedCard.id,
@@ -263,34 +238,6 @@ exports.OnAddNewGame = functions.firestore
             const x = yield fdb.doc(pathGame).collection('Players').doc(p.id).set({
                 hand: CurrentGame.Players[indPlayer].hand
             }, { merge: true });
-            // for (const c of CurrentGame.Players[indPlayer].hand) {
-            //     const k = ('0' + (c.position).toString()).slice(-2);
-            //     const x = await fdb.doc(pathGame).collection('Players').doc(p.id).collection('Hand').doc(k).set({
-            //         id: c.id,
-            //         position: c.position,
-            //         palo: c.palo,
-            //         valor: c.valor,
-            //         description: c.description,
-            //         dragEnable: false,
-            //         classCss: 'card'
-            //     });
-            // }
-            // for (let x = 0; x < ConfigGame.board.cols; x++) {
-            //     const colKey = 'col' + (('0' + (x).toString()).slice(-2));
-            //     for (let y = 0; y < ConfigGame.board.rows; y++) {
-            //         const rowKey = 'row' + (('0' + (y).toString()).slice(-2));
-            //         await fdb.doc(pathGame).collection('BoardGame').doc(colKey).collection(p.id).doc(rowKey).set({
-            //             id: 0,
-            //             position: y,
-            //             palo: '',
-            //             valor: 0,
-            //             description: '',
-            //             dragEnable: true,
-            //             dropEnable: true,
-            //             classCss: 'card '
-            //         });
-            //     }
-            //}
             const r = yield fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
                 timeStartGame: FieldValue.serverTimestamp(),
                 timeLastTurn: FieldValue.serverTimestamp(),
@@ -305,58 +252,58 @@ exports.OnAddNewGame = functions.firestore
         console.log('Error getting documents', err);
         return Promise.reject(err);
     }
-    // let textoLibre: string = '';
-    // newGame.players.forEach(p => {
-    //     fdb.collection('Users').doc(p.uid).collection('Playing').doc(context.params.gameId).set({
-    //         name: 'aaaaaaaaaa ' + Date.now(),
-    //         profilePicUrl: 'pasamos ;-)'
-    //     });
-    // })
-    // const algundatocarajo = newGame.data().gameType;
-    // console.log('vale, recibo datos del newgame. algundatocarajo es ', algundatocarajo, ' <= terminó');
-    // const juegoActual:
-    // return fdb.doc(pathGame).collection('Players').get()
-    //     .then((snapshot) => {
-    //         snapshot.forEach((player) => {
-    //             textoLibre = textoLibre + ' -- ' + player.id + '=>' + player.data();
-    //             console.log(player.id, ' => ', player.data());
-    //         });
-    //     }).then(() =>
-    //         fdb.collection('Users').doc().set({
-    //             name: 'hhhheeeeeyyyyyyyy ' + Date.now().toLocaleString(),
-    //             juego: 'aca va el text ' + textoLibre,
-    //             profilePicUrl: 'pasamos ;-)'
-    //         })
-    //     );
-    // return fdb.collection('Users').doc(user.uid).set({
-    //     name: `${fullName}`,
-    //     profilePicUrl: `${pathPhoto}`
-    // });
-    // return newgame.ref.set({
-    //     pasamosPorFuncion: true
-    //   }, {merge: true});
-    //const pathGame = '/Games/' + context.params.gameId1;
-    // await admin.database().ref('pruebas').push({ pasamosPorFuncion: true });
-    // newgame.ref.update({ pasamosPorFuncion: true });
-    // console.log('context.params.gameId = ' + context.params.gameId);
-    // newgame.players.forEach(p => {
-    //     console.log(p.displayName);
-    //     // return admin.database().ref(`/messages/${messageId}`).update({ moderated: true });
-    // })
-    // console.log('vamos a chequear  la baraja de ', CurrentGame.Baraja.length);
-    // let TestBaraja = '';
-    // for (const c of CurrentGame.Baraja) {
-    //     if (c) {
-    //         TestBaraja += 'Baraja |' + c.id + '|' + c.position.toString() + '|' + c.description + '_de_' + c.palo + '\r';
-    //     }
-    // }
-    // TestBaraja += 'EnMesa |' + CurrentGame.DisplayedCard.position.toString() + '|' + CurrentGame.DisplayedCard.description + '_de_' + CurrentGame.DisplayedCard.palo + '\r';
-    // for (const c of CurrentGame.Players[0].hand) {
-    //     TestBaraja += 'jugador 1 |' + c.position.toString() + '|' + c.description + '_de_' + c.palo + '\r';
-    // }
-    // for (const c of CurrentGame.Players[1].hand) {
-    //     TestBaraja += 'jugador 2 |' + c.position.toString() + '|' + c.description + '_de_' + c.palo + '\r';
-    // }
-    // console.log(TestBaraja);
 }));
+// let textoLibre: string = '';
+// newGame.players.forEach(p => {
+//     fdb.collection('Users').doc(p.uid).collection('Playing').doc(context.params.gameId).set({
+//         name: 'aaaaaaaaaa ' + Date.now(),
+//         profilePicUrl: 'pasamos ;-)'
+//     });
+// })
+// const algundatocarajo = newGame.data().gameType;
+// console.log('vale, recibo datos del newgame. algundatocarajo es ', algundatocarajo, ' <= terminó');
+// const juegoActual:
+// return fdb.doc(pathGame).collection('Players').get()
+//     .then((snapshot) => {
+//         snapshot.forEach((player) => {
+//             textoLibre = textoLibre + ' -- ' + player.id + '=>' + player.data();
+//             console.log(player.id, ' => ', player.data());
+//         });
+//     }).then(() =>
+//         fdb.collection('Users').doc().set({
+//             name: 'hhhheeeeeyyyyyyyy ' + Date.now().toLocaleString(),
+//             juego: 'aca va el text ' + textoLibre,
+//             profilePicUrl: 'pasamos ;-)'
+//         })
+//     );
+// return fdb.collection('Users').doc(user.uid).set({
+//     name: `${fullName}`,
+//     profilePicUrl: `${pathPhoto}`
+// });
+// return newgame.ref.set({
+//     pasamosPorFuncion: true
+//   }, {merge: true});
+//const pathGame = '/Games/' + context.params.gameId1;
+// await admin.database().ref('pruebas').push({ pasamosPorFuncion: true });
+// newgame.ref.update({ pasamosPorFuncion: true });
+// console.log('context.params.gameId = ' + context.params.gameId);
+// newgame.players.forEach(p => {
+//     console.log(p.displayName);
+//     // return admin.database().ref(`/messages/${messageId}`).update({ moderated: true });
+// })
+// console.log('vamos a chequear  la baraja de ', CurrentGame.Baraja.length);
+// let TestBaraja = '';
+// for (const c of CurrentGame.Baraja) {
+//     if (c) {
+//         TestBaraja += 'Baraja |' + c.id + '|' + c.position.toString() + '|' + c.description + '_de_' + c.palo + '\r';
+//     }
+// }
+// TestBaraja += 'EnMesa |' + CurrentGame.DisplayedCard.position.toString() + '|' + CurrentGame.DisplayedCard.description + '_de_' + CurrentGame.DisplayedCard.palo + '\r';
+// for (const c of CurrentGame.Players[0].hand) {
+//     TestBaraja += 'jugador 1 |' + c.position.toString() + '|' + c.description + '_de_' + c.palo + '\r';
+// }
+// for (const c of CurrentGame.Players[1].hand) {
+//     TestBaraja += 'jugador 2 |' + c.position.toString() + '|' + c.description + '_de_' + c.palo + '\r';
+// }
+// console.log(TestBaraja);
 //# sourceMappingURL=index.js.map

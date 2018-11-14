@@ -19,25 +19,13 @@
   <mat-sidenav-content class="game-content">
 
     <div class="game-display">
-      <div class="boardgame" >
-        
-      <div *ngFor="let col of boardGame | async">
-          <mat-grid-list rows="9" cols="1" rowHeight="60px">
-              <mat-grid-tile *ngFor="let casilla of getColumns(col.rows, false)" class="cell">
-                  {{casilla.position}}
-              </mat-grid-tile>
-              <mat-grid-tile>
-              </mat-grid-tile>
-              <mat-grid-tile *ngFor="let casilla of getColumns(col.rows, false)" class="cell">
-                  {{casilla.position}}
-                </mat-grid-tile>
-
-            </mat-grid-list>
-
-          </div>
-
-
-
+      <div class="boardgame">
+        <mat-grid-list rows="9" cols="9">
+          <mat-grid-tile *ngFor="let casilla of matrixBoardGame" class="cell">
+            {{casilla.idCol}}/{{casilla.position}} # {{casilla.nomPlayer | slice:0:4}}
+            <p>{{casilla.description}}</p>
+          </mat-grid-tile>
+        </mat-grid-list>
       </div>
     </div>
 

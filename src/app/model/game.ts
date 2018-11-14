@@ -20,6 +20,7 @@ export interface Card {
     idPlayer: string;
     namePlayer: string;
     id: string;
+    idCol: number;
     position: number;
     palo: string;
     valor: string;

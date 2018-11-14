@@ -27,6 +27,7 @@ export class PageGameComponent implements OnInit {
 
   currentGame: Game;
   boardGame: Observable<ColumnGame[]>;
+  matrixBoardGame: Array<Card> = [];
   hand: Array<Card> = [];
   userlogined: firebase.User;
   stateButtons = 'fuera';
@@ -62,22 +63,41 @@ export class PageGameComponent implements OnInit {
         return actions.map(action => {
           const data = action.payload.doc.data() as ColumnGame;
           const colId = action.payload.doc.id;
-          console.log(action.payload.doc.data());
           return { colId, ...data };
         });
       }
     );
+
+    this.boardGame.subscribe(arr => {
+      this.matrixBoardGame = this.getMatrixOf(arr);
+    });
+
   }
 
-  public getColumns (boardCols: Array<Card>, mySide: boolean): Array<Card> {
-    let cols: Array<Card> = [];
-      if (mySide) {
-        cols = boardCols.filter(c => c.idPlayer === this.userlogined.uid);
-        cols = cols.sort(function (a, b) { return a.position - b.position; });
-      } else {
-        cols = boardCols.filter(c => c.idPlayer !== this.userlogined.uid);
-        cols = cols.sort(function (a, b) { return b.position - a.position; });
+  public getMatrixOf(cols): Array<Card> {
+    const matrix: Array<Card> = Array(81).fill({}) ;
+    for (const c of cols) {
+      for (const ca of c.rows) {
+        ca.idCol = c.id;
+        if (ca.idPlayer === this.userlogined.uid) {
+          matrix[ (45 + (c.id ) + (ca.position * 9))] = ca;
+        } else {
+          matrix[ (c.id ) + (( 3 - ca.position ) * 9)] = ca;
+        }
       }
+    }
+    return matrix;
+  }
+
+  public getColumns(boardCols: Array<Card>, mySide: boolean): Array<Card> {
+    let cols: Array<Card> = [];
+    if (mySide) {
+      cols = boardCols.filter(c => c.idPlayer === this.userlogined.uid);
+      cols = cols.sort(function (a, b) { return a.position - b.position; });
+    } else {
+      cols = boardCols.filter(c => c.idPlayer !== this.userlogined.uid);
+      cols = cols.sort(function (a, b) { return b.position - a.position; });
+    }
     return cols;
   }
 
