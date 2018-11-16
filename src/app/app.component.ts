@@ -22,7 +22,12 @@ export class AppComponent implements OnInit {
 
     router.events.subscribe((_: NavigationEnd) => {
       if (_.url) {
-      this.currentUrl = _.url;
+        if (_.url.lastIndexOf('/') > 0) {
+          this.currentUrl = _.url.substring(0, _.url.lastIndexOf('/'));
+        } else {
+          this.currentUrl = _.url;
+        }
+        console.log('this.currentUrl = ', this.currentUrl);
       }
     });
   }
