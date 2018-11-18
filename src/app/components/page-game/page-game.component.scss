@@ -1,65 +1,91 @@
-.gameWrapper {
-  background-color: #6f34f8;
-  width: 100%;
-}
-
-.game-sidenav {
-  width: 60vw;
+.gameWrapperFullScren {
+  background-color: rgb(107, 189, 138);
+  min-width: 100vw; 
+  min-height: 100vh;
 }
 
 .game-content {
-  background-color: red;
-  display: flex;
-  flex-direction: column;
+  min-width: 100vw; 
+  min-height: 100vh;
 
   .game-display {
-    flex: 5 1 auto;
-    background-color: darkkhaki;
-    padding: 20px;
-    display: flex;
 
-    .boardgame {
-      border: 1px solid grey;
-      background-color: rgb(119, 107, 189);
-      flex: 1 1 auto;
+    min-height: 80vh;
+    background-color: darkkhaki;
+
+    .panzoomcontroler {
+      position: relative;
+      top: 2vh;
+      left: 2vw;
+      min-height: 76vh;
+      max-height: 76vh;
+      min-width: 96vw;   
+      max-width: 96vw; 
+      overflow: hidden;
+      border: 1px solid red;
+      background-color: rgb(189, 107, 125);
     }
 
   }
 
   .game-controls {
-    flex: 0 0 auto;
+    min-height: 5vh;
+    max-height: 5vh;
     background-color: teal;
     border-top: 2px solid royalblue;
     display: flex;
     flex-direction: row;
-
     .game-controls-left {
       flex: 0 0 auto;
       background-color: rgb(190, 187, 11);
-
       .btn-open-sideNav {
-        float: left;
-        margin: 15px;
-        margin-top: -20px;
-
-        .mat-24 {
-          transform: rotate(-90deg);
+        margin-top: -25px;
+        margin-left: 10px;
+        background-color: transparent !important;
+        .contenedor-logo-back{
+          height: 60px;
+          width: 60px;
+          margin-top: -17px;
+          .logo-lado-izq {
+            fill: #0273d4;
+          }      
+          .logo-lado-der {
+            fill: #0143a3;
+          }
+        }
+        .contenedor-logo-front{
+          height: 60px;
+          width: 60px;
+          margin-top: -60px;
+          .logo-fondo-letra {
+            fill: #fff;
+          }
+        }
+        .alq-in {
+          animation: alq-fadeinApp 1s ease;
+        }       
+        .alq-hover:hover {
+          animation: alq-icon-on-over 1s ease;
         }
       }
+
+
+
+
+
     }
 
     .game-controls-center {
       flex: 1 1 auto;
+      text-align: center;
       border: 1px solid grey;
     }
-
 
     .game-controls-rigth {
       flex: 0 0 auto;
       background-color: rgb(190, 187, 11);
 
       .btn-send-turn {
-        float: right;
         margin: 10px;
         margin-top: -20px;
       }
@@ -72,15 +98,159 @@
   }
 
   .game-hand {
-    flex: 0 0 auto;
+    min-height: 15vh;
+    max-height: 15vh;
+    overflow: hidden;
     background-color: teal;
     padding: 0 20px 20px 20px;
   }
 
+}
 
-.cell{
+.boardgame {
+  display: table-row;
+}
+.columna {
+  display: table-cell;
+}
+.celda{
   border: 1px solid black;
-
+  min-width: 100px;
+  max-width: 100px;
+  min-height: 100px;
+  max-height: 100px;
+  height: 100px;
+  overflow: hidden;
+}
+.cell-allied{
+  background-color: rgb(20, 231, 30);
+}
+.cell-enemy{
+  background-color: rgb(255, 146, 127);
+}
+.cell-neutral{
+  background-color: white;
 }
 
-}
+
+
+
+
+    
+@keyframes alq-icon-on-over {
+  from {
+      opacity: 0;
+      transform: rotateY(180deg);
+  }
+  to {
+      opacity: 1;
+      transform: rotateY(360deg);
+  }
+  }
+  
+  @keyframes alq-fadeinApp {
+  from {
+      opacity: 0;
+      transform: rotateY(180deg);
+  }
+  to {
+      opacity: 1;
+      transform: rotateY(360deg);
+  }
+  }
+
+
+
+
+// .gameWrapperFullScren {
+//   background-color: rgb(107, 189, 138);
+//   min-width: 100vw; 
+//   min-height: 100vh;
+// }
+
+// .game-content {
+//   display: flex;
+//   flex-direction: column;
+
+//   .game-display {
+//     flex: 5;    
+//     min-height: 0px;
+//     background-color: darkkhaki;
+//     padding: 20px;
+
+//     .boardgame {
+//       border: 1px solid red;
+//       background-color: rgb(189, 107, 125);
+//       flex: 1;
+//       min-height: 0px;
+//     }
+
+//   }
+
+//   .game-controls {
+//     flex: 1;
+//     background-color: teal;
+//     border-top: 2px solid royalblue;
+//     display: flex;
+//     flex-direction: row;
+
+//     .game-controls-left {
+//       flex: 0 0 auto;
+//       background-color: rgb(190, 187, 11);
+
+//       .btn-open-sideNav {
+//         float: left;
+//         margin: 15px;
+//         margin-top: -20px;
+
+//         .mat-24 {
+//           transform: rotate(-90deg);
+//         }
+//       }
+//     }
+
+//     .game-controls-center {
+//       flex: 1 1 auto;
+//       border: 1px solid grey;
+//     }
+
+
+//     .game-controls-rigth {
+//       flex: 0 0 auto;
+//       background-color: rgb(190, 187, 11);
+
+//       .btn-send-turn {
+//         float: right;
+//         margin: 10px;
+//         margin-top: -20px;
+//       }
+
+//     }
+
+
+
+
+//   }
+
+//   .game-hand {
+//     flex: 1;
+//     background-color: teal;
+//     padding: 0 20px 20px 20px;
+//   }
+
+// }
+
+
+
+// .table{
+//   border: 1px dotted red;
+//   background-color: greenyellow;
+//   // overflow: hidden;
+// }
+
+// .cell{
+//   border: 1px dotted black;
+//   background-color: aquamarine;
+//   max-width: 100px;
+//   overflow: hidden;
+// }

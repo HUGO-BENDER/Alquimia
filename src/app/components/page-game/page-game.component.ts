@@ -27,7 +27,7 @@ export class PageGameComponent implements OnInit {
 
   currentGame: Game;
   boardGame: Observable<ColumnGame[]>;
-  matrixBoardGame: Array<Card> = [];
+  // matrixBoardGame: Array<Card> = [];
   hand: Array<Card> = [];
   userlogined: firebase.User;
   stateButtons = 'fuera';
@@ -68,26 +68,26 @@ export class PageGameComponent implements OnInit {
       }
     );
 
-    this.boardGame.subscribe(arr => {
-      this.matrixBoardGame = this.getMatrixOf(arr);
-    });
+    // this.boardGame.subscribe(arr => {
+    //   this.matrixBoardGame = this.getMatrixOf(arr);
+    // });
 
   }
 
-  public getMatrixOf(cols): Array<Card> {
-    const matrix: Array<Card> = Array(81).fill({}) ;
-    for (const c of cols) {
-      for (const ca of c.rows) {
-        ca.idCol = c.id;
-        if (ca.idPlayer === this.userlogined.uid) {
-          matrix[ (45 + (c.id ) + (ca.position * 9))] = ca;
-        } else {
-          matrix[ (c.id ) + (( 3 - ca.position ) * 9)] = ca;
-        }
-      }
-    }
-    return matrix;
-  }
+  // public getMatrixOf(cols): Array<Card> {
+  //   const matrix: Array<Card> = Array(81).fill({}) ;
+  //   for (const c of cols) {
+  //     for (const ca of c.rows) {
+  //       ca.idCol = c.id;
+  //       if (ca.idPlayer === this.userlogined.uid) {
+  //         matrix[ (45 + (c.id ) + (ca.position * 9))] = ca;
+  //       } else {
+  //         matrix[ (c.id ) + (( 3 - ca.position ) * 9)] = ca;
+  //       }
+  //     }
+  //   }
+  //   return matrix;
+  // }
 
   public getColumns(boardCols: Array<Card>, mySide: boolean): Array<Card> {
     let cols: Array<Card> = [];
@@ -101,8 +101,8 @@ export class PageGameComponent implements OnInit {
     return cols;
   }
 
-
-
-
+public onZoom(e: Event) {
+  console.log(e);
+}
 
 }
