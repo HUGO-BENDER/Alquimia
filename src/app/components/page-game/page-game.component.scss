@@ -13,7 +13,7 @@
     min-height: 80vh;
     background-color: darkkhaki;
 
-    .panzoomcontroler {
+    .framepanzoom {
       position: relative;
       top: 2vh;
       left: 2vw;
@@ -24,6 +24,7 @@
       overflow: hidden;
       border: 1px solid red;
       background-color: rgb(189, 107, 125);
+      user-select: none; 
     }
 
   }

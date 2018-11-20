@@ -31,7 +31,7 @@
   <mat-sidenav-content class="game-content">
 
     <div class="game-display">
-      <div class="panzoomcontroler">
+      <div appFramepanzoom class="framepanzoom">
         <div class="boardgame"  (mousewhell)="onZoom($event)" >
           <div *ngFor="let col of boardGame | async" class="columna">
             <div *ngFor="let casilla of getColumns(col.rows, false)" class="celda cell-enemy">
