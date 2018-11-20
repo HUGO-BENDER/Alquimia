@@ -1,5 +1,5 @@
 <div class="containerfooter">
-    <div flex>
+    <div flex *ngIf="info">
         <h6>{{info.name}} xVersion: {{info.version}}</h6>
         <h6>{{info.author}} Copyright {{info.year}}</h6>
     </div>

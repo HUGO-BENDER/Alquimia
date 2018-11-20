@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
-import { RecruitmentService } from '../../services/firestore/Recruitment.service';
-import { Recruitment, recruitmentState } from '../../model/recruitment';
-import { MinInfoPlayer } from '../../model/player';
+import { RecruitmentService } from 'src/app/services/firestore/Recruitment.service';
+import { PlayerService } from 'src/app/services/firestore/player.service';
+import { Recruitment, recruitmentState } from 'src/app/model/recruitment';
+import { MinInfoPlayer } from 'src/app/model/player';
+import { GameInProgress } from 'src/app/model/game';
 import * as firebase from 'firebase';
 
 @Component({
@@ -21,19 +23,31 @@ export class PageHomeComponent implements OnInit {
     { title: 'Card 4', cols: 1, rows: 1 }
   ];
 
+  gamesInProgress: Observable<GameInProgress[]>;
   recruitments: Observable<Recruitment[]>;
   userlogined: firebase.User;
   snackBarVerticalPositionTop: MatSnackBarVerticalPosition = 'top';
 
-  constructor(public au: AngularFireAuth, private afsRecruitments: RecruitmentService, public snackBar: MatSnackBar) { }
+  constructor(public au: AngularFireAuth, private afsRecruitments: RecruitmentService,
+              public afsPlayer: PlayerService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
 
     this.au.authState.subscribe(user => {
       if (user) {
         this.userlogined = user;
+        this.gamesInProgress = this.afsPlayer.getGamesInProgress(user).map(
+          actions => {
+            return actions.map(action => {
+              const data = action.payload.doc.data() as GameInProgress;
+              const id = action.payload.doc.id;
+              return { id, ...data };
+            });
+          }
+        );
       } else {
         this.userlogined = null;
+        this.gamesInProgress = null;
       }
     });
 

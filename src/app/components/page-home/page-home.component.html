@@ -22,27 +22,24 @@
             </mat-card-title>
           </mat-card-header>
           <mat-card-content class="dashboard-card-content">
-            <!-- <mat-accordion class="example-headers-align">
+            <mat-accordion class="example-headers-align">
               <mat-expansion-panel *ngFor="let gameInProgress of gamesInProgress  | async">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                    {{gameInProgress.gameId}}
+                    {{gameInProgress.id}}
                   </mat-panel-title>
                   <mat-panel-description>
-                    <span>
-                      <mat-icon>account_circle</mat-icon> {{gameInProgress.creator.displayName}}
-                    </span>
-                    {{gameInProgress.dateCreation.toDate() | date : 'medium' }}
+                    {{gameInProgress.timeLastTurn.toDate() | date : 'medium' }}
+                    <a *ngIf="gameInProgress.isMyTurn" [routerLink]="['/game', gameInProgress.id]"><button mat-button color="primary"> Go </button></a>
                   </mat-panel-description>
                 </mat-expansion-panel-header>
-                Id: {{gameInProgress.id}}
-                state: {{gameInProgress.state}}
+                es mi turno: {{gameInProgress.isMyTurn}}
                 <mat-action-row>
                   <button mat-button color="warn" (click)="surrender(gameInProgress)">Surrender</button>
                   <button mat-button color="primary" (click)="open(gameInProgress)">Open</button>
                 </mat-action-row>
               </mat-expansion-panel>
-            </mat-accordion> -->
+            </mat-accordion>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>

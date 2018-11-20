@@ -11,10 +11,10 @@
         <mat-icon matListIcon>home</mat-icon>
         {{ "Home.Title"| translate }} 
       </a>
-      <a mat-list-item routerLink="/game" [class.activated]="currentUrl == '/game'" (click)='appsidenav.toggle()'>
+      <!-- <a mat-list-item routerLink="/game" [class.activated]="currentUrl == '/game'" (click)='appsidenav.toggle()'>
         <mat-icon matListIcon>casino</mat-icon>
          {{ "Game.Title"| translate }} 
-      </a>
+      </a> -->
       <a mat-list-item routerLink="/about" [class.activated]="currentUrl == '/about'" (click)='appsidenav.toggle()'>
         <mat-icon matListIcon>persons</mat-icon>
         {{ "About.Title"| translate }} 
@@ -22,7 +22,7 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content class="app-container">
-    <header> 
+    <header *ngIf="currentUrl != '/game'"> 
       <app-tool-bar></app-tool-bar>
     </header>
     <router-outlet class="router-outlet"></router-outlet>
