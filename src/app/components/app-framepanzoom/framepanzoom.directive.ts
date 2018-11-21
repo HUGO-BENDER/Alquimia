@@ -5,8 +5,10 @@ import { Directive, ElementRef, HostListener, AfterViewInit } from '@angular/cor
 })
 export class FramepanzoomDirective implements AfterViewInit {
   frameOnPan: boolean;
-  framePanZoom: any;
-  contentPanZoom: any;
+  elementFrame: any;
+  rectFrame: Rectangle;
+  elementContent: any;
+  rectContent: Rectangle;
   pointIniPan: Point;
   zoomRatio: number;
 
@@ -14,11 +16,31 @@ export class FramepanzoomDirective implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.framePanZoom = this.el.nativeElement;
-    this.contentPanZoom = this.el.nativeElement.childNodes[0];
+    this.elementFrame = this.el.nativeElement;
+// call onresize
+// call calculateFix
+// call put
+    this.rectFrame = <Rectangle> {
+      width: 0,
+      heigth: 0,
+      topLeft: <Point> {x: 0, y: 0},
+      topRigth: <Point> {x: 0, y: 0},
+      bottomLeft: <Point> {x: 0, y: 0},
+      bottomRigth: <Point> {x: 0, y: 0}
+    };
+    this.elementContent = this.el.nativeElement.childNodes[0];
+    this.rectContent = <Rectangle> {
+      width: 0,
+      heigth: 0,
+      topLeft: <Point> {x: 0, y: 0},
+      topRigth: <Point> {x: 0, y: 0},
+      bottomLeft: <Point> {x: 0, y: 0},
+      bottomRigth: <Point> {x: 0, y: 0}
+    };
+    //
     console.log('---------------------------------------------------');
-    console.log('framePanZoom = ', this.framePanZoom);
-    console.log('contentPanZoom = ', this.contentPanZoom);
+    console.log('framePanZoom = ', this.elementFrame);
+    console.log('contentPanZoom = ', this.elementContent);
     console.log('---------------------------------------------------');
     // framePanZoom
     // clientHeight: 476
@@ -79,6 +101,11 @@ export class FramepanzoomDirective implements AfterViewInit {
   }
   private onPan(event: any) {
     console.log('onPan');
+
+
+
+
+
   }
   private onLeave() {
     if (this.frameOnPan) {
@@ -88,7 +115,7 @@ export class FramepanzoomDirective implements AfterViewInit {
     this.highlight(null);
   }
   private highlight(color: string) {
-    this.framePanZoom.nativeElement.style.backgroundColor = color;
+    this.elementFrame.nativeElement.style.backgroundColor = color;
   }
 
   private mouseWheelFunc(event: any) {
@@ -113,5 +140,15 @@ export class FramepanzoomDirective implements AfterViewInit {
 interface Point {
   x: number;
   y: number;
+}
+
+interface Rectangle {
+  topLeft: Point;
+  topRigth: Point;
+  bottomLeft: Point;
+  bottomRigth: Point;
+  heigth: number;
+  width: number;
+  Orientation?: string;
 }
 
