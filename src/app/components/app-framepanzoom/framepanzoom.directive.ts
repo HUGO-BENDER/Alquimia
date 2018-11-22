@@ -10,38 +10,27 @@ export class FramepanzoomDirective implements AfterViewInit {
   elementContent: any;
   rectContent: Rectangle;
   pointIniPan: Point;
-  zoomRatio: number;
+  cssScale: number;
+  resizeTimeout: any;
+  // portrait
+  // landscape
+
 
   constructor(private el: ElementRef) {
+
   }
 
   ngAfterViewInit() {
-    this.elementFrame = this.el.nativeElement;
-// call onresize
-// call calculateFix
-// call put
-    this.rectFrame = <Rectangle> {
-      width: 0,
-      heigth: 0,
-      topLeft: <Point> {x: 0, y: 0},
-      topRigth: <Point> {x: 0, y: 0},
-      bottomLeft: <Point> {x: 0, y: 0},
-      bottomRigth: <Point> {x: 0, y: 0}
-    };
-    this.elementContent = this.el.nativeElement.childNodes[0];
-    this.rectContent = <Rectangle> {
-      width: 0,
-      heigth: 0,
-      topLeft: <Point> {x: 0, y: 0},
-      topRigth: <Point> {x: 0, y: 0},
-      bottomLeft: <Point> {x: 0, y: 0},
-      bottomRigth: <Point> {x: 0, y: 0}
-    };
-    //
-    console.log('---------------------------------------------------');
-    console.log('framePanZoom = ', this.elementFrame);
-    console.log('contentPanZoom = ', this.elementContent);
-    console.log('---------------------------------------------------');
+    if (this.el.nativeElement) {
+      this.elementContent = this.el.nativeElement.childNodes[0];
+      this.elementFrame = this.el.nativeElement;
+      this.resize();
+      this.calculateMinFix();
+      this.applyChanges();
+    }
+    // call put
+
+
     // framePanZoom
     // clientHeight: 476
     // ​​clientLeft: 1
@@ -87,6 +76,15 @@ export class FramepanzoomDirective implements AfterViewInit {
   @HostListener('onmousewheel', ['$event']) onMouseWheelIE(event: any) {
     this.mouseWheelFunc(event);
   }
+  @HostListener('window:resize') onResize() {
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+    }
+    this.resizeTimeout = setTimeout((() => {
+      this.resize();
+    }).bind(this), 500);
+
+  }
   // End Region HostListener
 
 
@@ -107,6 +105,53 @@ export class FramepanzoomDirective implements AfterViewInit {
 
 
   }
+  private resize() {
+    console.log('Entre en resize');
+    this.rectFrame = <Rectangle>{
+      width: this.elementFrame.width,
+      heigth: this.elementFrame.heigth,
+      topLeft: <Point>{ x: 0, y: 0 },
+      topRigth: <Point>{ x: 0, y: 0 },
+      bottomLeft: <Point>{ x: 0, y: 0 },
+      bottomRigth: <Point>{ x: 0, y: 0 }
+    };
+    this.rectContent = <Rectangle>{
+      width: this.elementContent.width,
+      heigth: this.elementContent.heigth,
+      topLeft: <Point>{ x: 0, y: 0 },
+      topRigth: <Point>{ x: 0, y: 0 },
+      bottomLeft: <Point>{ x: 0, y: 0 },
+      bottomRigth: <Point>{ x: 0, y: 0 }
+    };
+  }
+  private calculateMinFix() {
+    if (this.rectFrame.width > this.rectFrame.heigth) {
+      this.rectFrame.orientation = 'landscape';
+    } else {
+      this.rectFrame.orientation = 'portrait';
+    }
+    if (this.rectContent.width > this.rectContent.heigth) {
+      this.rectContent.orientation = 'landscape';
+    } else {
+      this.rectContent.orientation = 'portrait';
+    }
+
+    if (this.rectFrame.orientation !== this.rectContent.orientation) {
+      if (this.rectFrame.orientation = 'landscape') {
+        this.cssScale = this.rectFrame.heigth / this.rectContent.heigth;
+      } else {
+        this.cssScale = this.rectFrame.width / this.rectContent.width;
+      }
+    }
+
+
+
+  }
+  private applyChanges() {
+
+  }
+
+
   private onLeave() {
     if (this.frameOnPan) {
       this.frameOnPan = false;
@@ -149,6 +194,6 @@ interface Rectangle {
   bottomRigth: Point;
   heigth: number;
   width: number;
-  Orientation?: string;
+  orientation?: string;
 }
 
