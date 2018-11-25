@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, AfterViewInit } from '@angular/core';
+import { Directive, ElementRef, HostListener, AfterViewInit, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[appFramepanzoom]'
@@ -16,36 +16,31 @@ export class FramepanzoomDirective implements AfterViewInit {
   // landscape
 
 
-  constructor(private el: ElementRef) {
-
+  constructor(private el: ElementRef, private renderer: Renderer2) {
+    if (this.el.nativeElement) {
+      this.elementFrame = this.el.nativeElement;
+    }
   }
 
   ngAfterViewInit() {
-    if (this.el.nativeElement) {
+if (this.el.nativeElement) {
       this.elementContent = this.el.nativeElement.childNodes[0];
       this.elementFrame = this.el.nativeElement;
-      this.resize();
-      this.calculateMinFix();
-      this.applyChanges();
+      const intervalIni = setInterval((() => {
+        if (this.elementContent !== undefined && this.elementContent.clientWidth > 0) {
+          clearInterval(intervalIni);
+          console.log('clearInterval --- ----- ');
+          this.resize();
+        }
+        console.log('seguimos intentando --- ----- ');
+      } ).bind(this), 500);
+
+
+
+      // setTimeout(() => {
+      //   this.resize();
+      // }, 5000);
     }
-    // call put
-
-
-    // framePanZoom
-    // clientHeight: 476
-    // ​​clientLeft: 1
-    // ​​clientTop: 1
-    // ​​clientWidth: 328
-
-    // contentPanZoom
-    // clientHeight: 900
-    // ​clientLeft: 0
-    // ​clientTop: 0
-    // ​clientWidth: 900
-    // offsetHeight: 900
-    // ​offsetLeft: 1
-    // ​​offsetTop: 1
-    // ​offsetWidth: 900
   }
 
 
@@ -106,49 +101,63 @@ export class FramepanzoomDirective implements AfterViewInit {
 
   }
   private resize() {
-    console.log('Entre en resize');
+    console.log('Entre en resize', this.elementContent.clientWidth);
+    if (this.elementContent.clientWidth === 0) { return; }
     this.rectFrame = <Rectangle>{
-      width: this.elementFrame.width,
-      heigth: this.elementFrame.heigth,
+      width: this.elementFrame.clientWidth,
+      heigth: this.elementFrame.clientHeight,
       topLeft: <Point>{ x: 0, y: 0 },
       topRigth: <Point>{ x: 0, y: 0 },
       bottomLeft: <Point>{ x: 0, y: 0 },
       bottomRigth: <Point>{ x: 0, y: 0 }
     };
     this.rectContent = <Rectangle>{
-      width: this.elementContent.width,
-      heigth: this.elementContent.heigth,
+      width: this.elementContent.clientWidth,
+      heigth: this.elementContent.clientHeight,
       topLeft: <Point>{ x: 0, y: 0 },
       topRigth: <Point>{ x: 0, y: 0 },
       bottomLeft: <Point>{ x: 0, y: 0 },
       bottomRigth: <Point>{ x: 0, y: 0 }
     };
+    this.calculateMinFix();
+    this.applyChanges();
   }
   private calculateMinFix() {
-    if (this.rectFrame.width > this.rectFrame.heigth) {
-      this.rectFrame.orientation = 'landscape';
-    } else {
-      this.rectFrame.orientation = 'portrait';
-    }
-    if (this.rectContent.width > this.rectContent.heigth) {
-      this.rectContent.orientation = 'landscape';
-    } else {
-      this.rectContent.orientation = 'portrait';
-    }
 
-    if (this.rectFrame.orientation !== this.rectContent.orientation) {
-      if (this.rectFrame.orientation = 'landscape') {
-        this.cssScale = this.rectFrame.heigth / this.rectContent.heigth;
-      } else {
-        this.cssScale = this.rectFrame.width / this.rectContent.width;
-      }
-    }
+    this.rectFrame.orientation = this.rectFrame.width > this.rectFrame.heigth ? 'landscape' : 'portrait';
+    this.rectContent.orientation = this.rectContent.width > this.rectContent.heigth ? 'landscape' : 'portrait';
+
+    this.cssScale = Math.min(this.rectFrame.heigth / this.rectContent.heigth, this.rectFrame.width / this.rectContent.width);
+    // if (this.rectFrame.orientation !== this.rectContent.orientation) {
+    //   if (this.rectFrame.orientation = 'landscape') {
+    //     this.cssScale = this.rectFrame.heigth / this.rectContent.heigth;
+    //   } else {
+    //     this.cssScale = this.rectFrame.width / this.rectContent.width;
+    //   }
+    // }
 
 
 
   }
   private applyChanges() {
-
+    // const transformation = {
+    //   '-moz-transform-origin': '0px 0px 0px',
+    //   'transform-origin': '0px 0px 0px',
+    //   '-ms-transform-origin': '0px 0px 0px',
+    //   '-webkit-transform-origin': '0px 0px 0px',
+    //   '-webkit-transform': 'scale(' + this.cssScale + ')',
+    //   '-moz-transform': 'scale(' + this.cssScale + ')',
+    //   '-ms-transform': 'scale(' + this.cssScale + ')',
+    //   '-o-transform': 'scale(' + this.cssScale + ')',
+    //   'transform': 'scale(' + this.cssScale + ')'
+    // };
+    // this.renderer.setProperty(this.elementContent, 'transform', transformation);
+    // const arg = 'scale(' + this.cssScale + ')';
+    this.elementContent.style.transformOrigin = '0px 0px 0px';
+    this.elementContent.style.transform = 'scale(' + this.cssScale + ')';
+    // this.renderer.setProperty(this.elementContent, 'transform-origin', '0px 0px 0px');
+    // this.renderer.setProperty(this.elementContent, 'transform', 'scale(' + this.cssScale + ')');
+    console.log('Entre en applyChanges ', ' scale(' + this.cssScale + ')');
   }
 
 
@@ -160,7 +169,7 @@ export class FramepanzoomDirective implements AfterViewInit {
     this.highlight(null);
   }
   private highlight(color: string) {
-    this.elementFrame.nativeElement.style.backgroundColor = color;
+    this.elementFrame.style.backgroundColor = color;
   }
 
   private mouseWheelFunc(event: any) {
