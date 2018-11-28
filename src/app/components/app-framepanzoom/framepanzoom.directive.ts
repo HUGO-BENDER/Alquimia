@@ -4,16 +4,25 @@ import { Directive, ElementRef, HostListener, AfterViewInit, Renderer2 } from '@
   selector: '[appFramepanzoom]'
 })
 export class FramepanzoomDirective implements AfterViewInit {
-  frameOnPan: boolean;
+  // -- var DOM
   elementFrame: any;
   rectFrame: Rectangle;
   elementContent: any;
   rectContent: Rectangle;
-  pointIniPan: Point;
+
+  // -- var control user
+  keepInMinFix: boolean;
+
+  // -- var control
+  frameOnPan: boolean;
+  panPointIni: Point;
+  zoomPointMouse: Point;
+  zoomPointTarget: Point;
   cssScale: number;
   resizeTimeout: any;
   valuesMinFix: ScaleAndPoint;
   valuesActual: ScaleAndPoint;
+
 
 
   constructor(private el: ElementRef, private renderer: Renderer2) {
@@ -48,7 +57,7 @@ export class FramepanzoomDirective implements AfterViewInit {
     this.stopPan(event);
   }
   @HostListener('mousemove', ['$event']) onMouseMove(event: any) {
-    if (this.frameOnPan) { this.onPan(event); }
+    this.onPan(event);
   }
   @HostListener('mouseenter') onMouseEnter() {
     this.highlight('yellow');
@@ -79,30 +88,39 @@ export class FramepanzoomDirective implements AfterViewInit {
 
   private starPan(event: MouseEvent) {
     this.frameOnPan = true;
-    this.pointIniPan = { x: event.offsetX, y: event.offsetY };
-    console.log('starPan', this.pointIniPan);
+    this.panPointIni = { x: event.clientX, y: event.clientY };
+    console.log('starPan', this.panPointIni);
   }
   private stopPan(event: any) {
     console.log('stopPan');
     this.frameOnPan = false;
   }
-  private onPan(event: any) {
-    console.log('onPan');
+  private onPan(event: MouseEvent) {
+    if (this.frameOnPan) {
+      console.log('onPan');
+      const deltaX = this.panPointIni.x - event.clientX;
+      const deltaY = this.panPointIni.y - event.clientY;
+      const newX = this.valuesActual.pointTopLeft.x - deltaX;
+      const newY = this.valuesActual.pointTopLeft.y - deltaY;
 
+      this.applyChanges({
+        cssScale: this.valuesActual.cssScale,
+        pointTopLeft: {
+          x: Math.round(newX),
+          y: Math.round(newY)
+        }
+      });
 
-
-
-
+      this.panPointIni = { x: event.clientX, y: event.clientY };
+    } else {
+      console.log('solo se mueve el mause');
+    }
   }
   private resize() {
     this.valuesMinFix = this.calculateMinFix();
     if (this.valuesActual.cssScale < this.valuesMinFix.cssScale) {
       this.applyChanges(this.valuesMinFix);
-      console.log('Agrandamos el viewport. redimensionamos');
-    } else {
-      console.log('Achicamos el viewport.');
     }
-
   }
   private calculateMinFix(): ScaleAndPoint {
     this.rectFrame = <Rectangle>{
@@ -116,9 +134,6 @@ export class FramepanzoomDirective implements AfterViewInit {
       orientation: this.elementContent.clientWidth > this.elementContent.clientHeight ? 'landscape' : 'portrait',
       topLeft: <Point>{ x: 0, y: 0 }
     };
-
-    // this.rectFrame.orientation = this.rectFrame.width > this.rectFrame.heigth ? 'landscape' : 'portrait';
-    // this.rectContent.orientation = this.rectContent.width > this.rectContent.heigth ? 'landscape' : 'portrait';
 
     if (this.rectFrame.orientation !== this.rectContent.orientation) {
       if (this.rectFrame.orientation === 'landscape') {
@@ -151,8 +166,54 @@ export class FramepanzoomDirective implements AfterViewInit {
     }
     return this.valuesMinFix;
   }
-
-
+  private onLeave() {
+    this.frameOnPan = false;
+    this.highlight(null);
+  }
+  private mouseWheelFunc(e: any) {
+    e = window.event || e; // old IE support
+    let newX = 0;
+    let newY = 0;
+    const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+    const factor = 0.1 * delta;
+    const oldScale = this.valuesActual.cssScale;
+    const newScale = Math.max(this.valuesActual.cssScale + factor, this.valuesMinFix.cssScale);
+    const xInTarget = e.pageX - this.elementFrame.offsetLeft - this.valuesActual.pointTopLeft.x;
+    const yInTarget = e.pageY - this.elementFrame.offsetTop - this.valuesActual.pointTopLeft.y;
+    if (newScale !== this.valuesMinFix.cssScale) {
+      newX = this.valuesActual.pointTopLeft.x + (xInTarget - (xInTarget / oldScale * newScale));
+      newY = this.valuesActual.pointTopLeft.y + (yInTarget - (yInTarget / oldScale * newScale));
+    } else {
+      const diffX = this.valuesActual.pointTopLeft.x - this.valuesMinFix.pointTopLeft.x;
+      if (Math.abs(diffX) < 10) {
+        newX = this.valuesMinFix.pointTopLeft.x;
+      } else {
+        newX = this.valuesActual.pointTopLeft.x - (diffX / 10);
+      }
+      const diffY = this.valuesActual.pointTopLeft.y - this.valuesMinFix.pointTopLeft.y;
+      if (Math.abs(this.valuesActual.pointTopLeft.y) < 10) {
+        newY = this.valuesMinFix.pointTopLeft.y;
+      } else {
+        newY = this.valuesActual.pointTopLeft.y - (diffY / 10);
+      }
+    }
+    this.applyChanges({
+      cssScale: newScale,
+      pointTopLeft: {
+        x: Math.round(newX),
+        y: Math.round(newY)
+      }
+    });
+    // for IE
+    e.returnValue = false;
+    // for Chrome and Firefox
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+  }
+  private highlight(color: string) {
+    this.elementFrame.style.backgroundColor = color;
+  }
   private applyChanges(dataToApply: ScaleAndPoint) {
     let transformation = 'translate(' + (dataToApply.pointTopLeft.x) + 'px,' + (dataToApply.pointTopLeft.y) + 'px)';
     transformation += ' scale(' + dataToApply.cssScale + ')';
@@ -165,42 +226,11 @@ export class FramepanzoomDirective implements AfterViewInit {
         y: dataToApply.pointTopLeft.y
       }
     };
-
+    // ---  the  renderer not working ¿?!!  :-(
     // this.renderer.setProperty(this.elementContent, 'transform', transformation);
     // this.renderer.setProperty(this.elementContent, 'transform-origin', '0px 0px 0px');
     // this.renderer.setProperty(this.elementContent, 'transform', transformation);
-    console.log('Entre en applyChanges ', transformation);
   }
-
-
-  private onLeave() {
-    if (this.frameOnPan) {
-      this.frameOnPan = false;
-      console.log('stopPan');
-    }
-    this.highlight(null);
-  }
-  private highlight(color: string) {
-    this.elementFrame.style.backgroundColor = color;
-  }
-
-  private mouseWheelFunc(event: any) {
-    event = window.event || event; // old IE support
-    const delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
-    if (delta > 0) {
-      console.log('para arriba ', delta);
-    } else if (delta < 0) {
-      console.log('para ABAJO ', delta);
-    }
-    // for IE
-    event.returnValue = false;
-    // for Chrome and Firefox
-    if (event.preventDefault) {
-      event.preventDefault();
-    }
-  }
-
-
 }
 
 interface Point {
@@ -215,9 +245,6 @@ interface ScaleAndPoint {
 
 interface Rectangle {
   topLeft: Point;
-  topRigth: Point;
-  bottomLeft: Point;
-  bottomRigth: Point;
   heigth: number;
   width: number;
   orientation?: string;
