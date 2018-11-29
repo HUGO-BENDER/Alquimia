@@ -100,8 +100,34 @@ export class FramepanzoomDirective implements AfterViewInit {
       console.log('onPan');
       const deltaX = this.panPointIni.x - event.clientX;
       const deltaY = this.panPointIni.y - event.clientY;
-      const newX = this.valuesActual.pointTopLeft.x - deltaX;
-      const newY = this.valuesActual.pointTopLeft.y - deltaY;
+      let newX = this.valuesActual.pointTopLeft.x - deltaX;
+      let newY = this.valuesActual.pointTopLeft.y - deltaY;
+
+      // -- Check no exceds de limits
+      if (this.valuesActual.cssScale === this.valuesMinFix.cssScale) {
+        newX = Math.max(Math.min(newX, this.valuesMinFix.pointTopLeft.x), 0);
+        newY = Math.max(Math.min(newY, this.valuesMinFix.pointTopLeft.y), 0);
+      } else {
+        // Si contenido es mas ancho que el frame
+        if ( this.rectContent.width * this.valuesActual.cssScale > this.rectFrame.width) {
+          newX = Math.min(newX, 15);
+          newX = Math.max(newX, this.rectFrame.width - (this.rectContent.width * this.valuesActual.cssScale) - 15);
+        } else {
+          newX = Math.min(newX, 15);
+          // -- ?
+        }
+        // si el contenido es mas alto que el frame
+        if ( this.rectContent.heigth * this.valuesActual.cssScale > this.rectFrame.heigth) {
+          newY = Math.min(newY, 15);
+          newY = Math.max(newY, this.rectFrame.heigth - (this.rectContent.heigth * this.valuesActual.cssScale) - 15);
+        } else {
+          newX = Math.min(newX, 15);
+          // -- ?
+        }
+      }
+
+
+
 
       this.applyChanges({
         cssScale: this.valuesActual.cssScale,
