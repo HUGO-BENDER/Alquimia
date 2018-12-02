@@ -23,8 +23,6 @@ export class FramepanzoomDirective implements AfterViewInit {
   valuesMinFix: ScaleAndPoint;
   valuesActual: ScaleAndPoint;
 
-
-
   constructor(private el: ElementRef, private renderer: Renderer2) {
     if (this.el.nativeElement) {
       this.elementFrame = this.el.nativeElement;
@@ -113,21 +111,18 @@ export class FramepanzoomDirective implements AfterViewInit {
           newX = Math.min(newX, 15);
           newX = Math.max(newX, this.rectFrame.width - (this.rectContent.width * this.valuesActual.cssScale) - 15);
         } else {
-          newX = Math.min(newX, 15);
-          // -- ?
+          newX = Math.max(newX, 0);
+          newX = Math.min(newX, (this.rectFrame.width - (this.rectContent.width * this.valuesActual.cssScale)) /  2);
         }
         // si el contenido es mas alto que el frame
         if ( this.rectContent.heigth * this.valuesActual.cssScale > this.rectFrame.heigth) {
           newY = Math.min(newY, 15);
           newY = Math.max(newY, this.rectFrame.heigth - (this.rectContent.heigth * this.valuesActual.cssScale) - 15);
         } else {
-          newX = Math.min(newX, 15);
-          // -- ?
+          newY = Math.max(newY, 0);
+          newY = Math.min(newY, (this.rectFrame.heigth - (this.rectContent.heigth * this.valuesActual.cssScale)) / 2);
         }
       }
-
-
-
 
       this.applyChanges({
         cssScale: this.valuesActual.cssScale,
@@ -136,10 +131,7 @@ export class FramepanzoomDirective implements AfterViewInit {
           y: Math.round(newY)
         }
       });
-
       this.panPointIni = { x: event.clientX, y: event.clientY };
-    } else {
-      console.log('solo se mueve el mause');
     }
   }
   private resize() {
