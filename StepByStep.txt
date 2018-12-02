@@ -91,3 +91,6 @@ Step 011
     Make zoom and pan on boardgame
     ng g d components/app-framepanzoom/framepanzoom
     hostListener mouse event
+
+Step 012
+    Reorder hand 
