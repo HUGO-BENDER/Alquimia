@@ -18,10 +18,10 @@ export class AppLoginComponent implements OnInit {
   errorCallback(errorData: FirebaseUISignInFailure): void {
     this.dialogRef.close();
   }
- 
+
   successCallback(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
     this.dialogRef.close();
-  } 
+  }
 
 
 }

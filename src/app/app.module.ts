@@ -39,6 +39,7 @@ import { PageServiceConditionsComponent } from './components/page-service-condit
 
 import * as firebase from 'firebase';
 import * as firebaseui from 'firebaseui';
+import { FramepanzoomDirective } from './components/app-framepanzoom/framepanzoom.directive';
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInFlow: 'popup',
@@ -88,7 +89,8 @@ export function createTranslateLoader(http: Http) {
     AppFooterComponent,
     AppLoginComponent,
     PagePolicyPrivacyComponent,
-    PageServiceConditionsComponent
+    PageServiceConditionsComponent,
+    FramepanzoomDirective
   ],
   imports: [
     BrowserModule,

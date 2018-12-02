@@ -87,3 +87,7 @@ Step 010
     Bottoms Surrender and OpenGame
     ng generate service services/firestore/game
     
+Step 011
+    Make zoom and pan on boardgame
+    ng g d components/app-framepanzoom/framepanzoom
+    hostListener mouse event
