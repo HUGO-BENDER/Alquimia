@@ -1,11 +1,11 @@
 .gameWrapperFullScren {
   background-color: rgb(107, 189, 138);
-  min-width: 100vw; 
+  min-width: 100vw;
   min-height: 100vh;
 }
 
 .game-content {
-  min-width: 100vw; 
+  min-width: 100vw;
   min-height: 100vh;
 
   .game-display {
@@ -13,18 +13,18 @@
     min-height: 80vh;
     background-color: darkkhaki;
 
-    .framepanzoom {
+    .boardgamepanzoom {
       position: relative;
       top: 2vh;
       left: 2vw;
       min-height: 76vh;
       max-height: 76vh;
-      min-width: 96vw;   
-      max-width: 96vw; 
+      min-width: 96vw;
+      max-width: 96vw;
       overflow: hidden;
       border: 1px solid red;
       background-color: rgb(189, 107, 125);
-      user-select: none; 
+      user-select: none;
     }
 
   }
@@ -36,44 +36,48 @@
     border-top: 2px solid royalblue;
     display: flex;
     flex-direction: row;
+
     .game-controls-left {
       flex: 0 0 auto;
       background-color: rgb(190, 187, 11);
+
       .btn-open-sideNav {
         margin-top: -25px;
         margin-left: 10px;
         background-color: transparent !important;
-        .contenedor-logo-back{
+
+        .contenedor-logo-back {
           height: 60px;
           width: 60px;
           margin-top: -17px;
+
           .logo-lado-izq {
             fill: #0273d4;
-          }      
+          }
+
           .logo-lado-der {
             fill: #0143a3;
           }
         }
-        .contenedor-logo-front{
+
+        .contenedor-logo-front {
           height: 60px;
           width: 60px;
           margin-top: -60px;
+
           .logo-fondo-letra {
             fill: #fff;
           }
         }
+
         .alq-in {
           animation: alq-fadeinApp 1s ease;
-        }       
+        }
+
         .alq-hover:hover {
           animation: alq-icon-on-over 1s ease;
         }
       }
-
-
-
-
-
     }
 
     .game-controls-center {
@@ -98,23 +102,41 @@
 
   }
 
-  .game-hand {
+  // .game-hand {
+  //   min-height: 15vh;
+  //   max-height: 15vh;
+  //   overflow: hidden;
+  //   background-color: teal;
+  //   padding: 0 20px 20px 20px;
+  // }
+
+  .handpanzoom {
+    position: relative;
+    left: 2vw;
     min-height: 15vh;
     max-height: 15vh;
+    min-width: 96vw;
+    max-width: 96vw;
+    overflow: hidden;
+    border: 1px solid red;
+    user-select: none;
     overflow: hidden;
     background-color: teal;
-    padding: 0 20px 20px 20px;
   }
+
+
 
 }
 
 .boardgame {
   display: table-row;
 }
+
 .columna {
   display: table-cell;
 }
-.celda{
+
+.celda {
   border: 1px solid black;
   min-width: 100px;
   max-width: 100px;
@@ -123,13 +145,16 @@
   height: 100px;
   overflow: hidden;
 }
-.cell-allied{
+
+.cell-allied {
   background-color: rgb(20, 231, 30);
 }
-.cell-enemy{
+
+.cell-enemy {
   background-color: rgb(255, 146, 127);
 }
-.cell-neutral{
+
+.cell-neutral {
   background-color: white;
 }
 
@@ -137,28 +162,30 @@
 
 
 
-    
+
 @keyframes alq-icon-on-over {
   from {
-      opacity: 0;
-      transform: rotateY(180deg);
+    opacity: 0;
+    transform: rotateY(180deg);
   }
+
   to {
-      opacity: 1;
-      transform: rotateY(360deg);
+    opacity: 1;
+    transform: rotateY(360deg);
   }
-  }
-  
-  @keyframes alq-fadeinApp {
+}
+
+@keyframes alq-fadeinApp {
   from {
-      opacity: 0;
-      transform: rotateY(180deg);
+    opacity: 0;
+    transform: rotateY(180deg);
   }
+
   to {
-      opacity: 1;
-      transform: rotateY(360deg);
+    opacity: 1;
+    transform: rotateY(360deg);
   }
-  }
+}
 
 
 

@@ -31,8 +31,8 @@
   <mat-sidenav-content class="game-content">
 
     <div class="game-display">
-      <div appFramepanzoom class="framepanzoom">
-        <div class="boardgame"  (mousewhell)="onZoom($event)" >
+      <div appFramepanzoom class="boardgamepanzoom">
+        <div class="boardgame">
           <div *ngFor="let col of boardGame | async" class="columna">
             <div *ngFor="let casilla of getColumns(col.rows, false)" class="celda cell-enemy">
               {{col.id}}/{{casilla.position}} # {{casilla.nomPlayer | slice:0:4}}
@@ -80,21 +80,25 @@
       </div>
     </div>
 
-    <div class="game-hand">
+    <div appFramepanzoom class="handpanzoom">
 
+
+    </div>
+
+
+
+    <!-- <div class="game-hand">
       <mat-grid-list cols="9" rowHeight="100px">
         <mat-grid-tile [colspan]=2>
         </mat-grid-tile>
-        <mat-grid-tile *ngFor="let tile of hand" class="cell">
-           <!-- {{tile.description}} -->
-            <!-- {{tile.palo| slice:0:3 }} -->
+        <mat-grid-tile *ngFor="let tile of hand" class="celda">
           <img src="../assets/images/n_{{tile.description}}.svg"/> 
           <img src="../assets/images/{{tile.palo | slice:0:3 | lowercase}}.svg"/>
         </mat-grid-tile>
         <mat-grid-tile [colspan]=2>
         </mat-grid-tile>
       </mat-grid-list>
-    </div>
+    </div> -->
 
 
   </mat-sidenav-content>

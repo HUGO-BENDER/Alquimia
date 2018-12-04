@@ -87,15 +87,12 @@ export class FramepanzoomDirective implements AfterViewInit {
   private starPan(event: MouseEvent) {
     this.frameOnPan = true;
     this.panPointIni = { x: event.clientX, y: event.clientY };
-    console.log('starPan', this.panPointIni);
   }
   private stopPan(event: any) {
-    console.log('stopPan');
     this.frameOnPan = false;
   }
   private onPan(event: MouseEvent) {
     if (this.frameOnPan) {
-      console.log('onPan');
       const deltaX = this.panPointIni.x - event.clientX;
       const deltaY = this.panPointIni.y - event.clientY;
       let newX = this.valuesActual.pointTopLeft.x - deltaX;
