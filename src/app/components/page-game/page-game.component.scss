@@ -102,15 +102,7 @@
 
   }
 
-  // .game-hand {
-  //   min-height: 15vh;
-  //   max-height: 15vh;
-  //   overflow: hidden;
-  //   background-color: teal;
-  //   padding: 0 20px 20px 20px;
-  // }
-
-  .handpanzoom {
+  .game-hand {
     position: relative;
     left: 2vw;
     min-height: 15vh;
@@ -122,6 +114,9 @@
     user-select: none;
     overflow: hidden;
     background-color: teal;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
   }
 
 
@@ -158,6 +153,27 @@
   background-color: white;
 }
 
+.handcelda{
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: rgb(184, 174, 174);
+  min-width: 200px;
+  max-width: 200px;
+  min-height: 100px;
+  max-height: 100px;
+  height: 100px;
+  overflow: hidden;
+  user-select: none;
+  cursor: move;
+  .celdasvg{
+    user-select: none;
+    min-width: 90px;
+    max-width: 90px;
+    min-height: 100px;
+    max-height: 100px;
+    height: 100px;
+  }
+}
 
 
 

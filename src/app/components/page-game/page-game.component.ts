@@ -14,9 +14,11 @@ import * as firebase from 'firebase';
   animations: [
     trigger('animAparecer', [
       state('fuera', style({
+        position: 'absolute',
         transform: 'translateX(-100%)',
       })),
       state('dentro', style({
+        position: 'relative',
         transform: 'translateX(0)',
       })),
       transition('fuera <=> dentro', animate('300ms')),
@@ -27,10 +29,11 @@ export class PageGameComponent implements OnInit {
 
   currentGame: Game;
   boardGame: Observable<ColumnGame[]>;
-  // matrixBoardGame: Array<Card> = [];
   hand: Array<Card> = [];
   userlogined: firebase.User;
   stateButtons = 'fuera';
+  piezaJugada: Card;
+
 
   constructor(
     public au: AngularFireAuth,
@@ -67,12 +70,70 @@ export class PageGameComponent implements OnInit {
         });
       }
     );
-
-    // this.boardGame.subscribe(arr => {
-    //   this.matrixBoardGame = this.getMatrixOf(arr);
-    // });
-
   }
+
+
+
+  public getColumns(boardCols: Array<Card>, mySide: boolean): Array<Card> {
+    let cols: Array<Card> = [];
+    if (mySide) {
+      cols = boardCols.filter(c => c.idPlayer === this.userlogined.uid);
+      cols = cols.sort(function (a, b) { return a.position - b.position; });
+    } else {
+      cols = boardCols.filter(c => c.idPlayer !== this.userlogined.uid);
+      cols = cols.sort(function (a, b) { return b.position - a.position; });
+    }
+    return cols;
+  }
+
+  public onDragStart(c: Card) {
+    console.log('Empezamos. estoy arrastrando un ' + c.description + ' de ', c.palo);
+    this.piezaJugada = c;
+    // -- c.border = '3px dashed black';
+  }
+  public finArrastre() {
+    // this.piezaJugada.border = '3px solid #999999';
+    console.log('Se terminó');
+  }
+  public onDragOverMano(e: any, c: Card) {
+    e.preventDefault();
+  }
+
+  public onDropMano(c: Card) {
+    const ini = c.position;
+    const fin = this.piezaJugada.position;
+    if (c.position < this.piezaJugada.position) {
+      for (let i = c.position; i < this.piezaJugada.position; i++) {
+        this.hand[i - 1].position = i + 1;
+      }
+      this.piezaJugada.position = ini;
+    } else {
+      for (let i = this.piezaJugada.position ; i < c.position; i++) {
+        this.hand[i].position = i;
+      }
+      this.piezaJugada.position = ini;
+    }
+    this.reordenarMano();
+  }
+
+
+
+
+
+  public reordenarMano() {
+    this.hand.sort(function(a, b) {
+        if ( a.position < b.position ) {
+            return -1;
+        }
+        if ( a.position > b.position ) {
+            return 1;
+        }
+        return 0;
+    });
+}
+
+}
+
 
   // public getMatrixOf(cols): Array<Card> {
   //   const matrix: Array<Card> = Array(81).fill({}) ;
@@ -88,21 +149,3 @@ export class PageGameComponent implements OnInit {
   //   }
   //   return matrix;
   // }
-
-  public getColumns(boardCols: Array<Card>, mySide: boolean): Array<Card> {
-    let cols: Array<Card> = [];
-    if (mySide) {
-      cols = boardCols.filter(c => c.idPlayer === this.userlogined.uid);
-      cols = cols.sort(function (a, b) { return a.position - b.position; });
-    } else {
-      cols = boardCols.filter(c => c.idPlayer !== this.userlogined.uid);
-      cols = cols.sort(function (a, b) { return b.position - a.position; });
-    }
-    return cols;
-  }
-
-public onZoom(e: Event) {
-  console.log(e);
-}
-
-}

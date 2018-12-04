@@ -85,10 +85,12 @@ export class FramepanzoomDirective implements AfterViewInit {
 
 
   private starPan(event: MouseEvent) {
+    this.elementFrame.style.cursor = 'move';
     this.frameOnPan = true;
     this.panPointIni = { x: event.clientX, y: event.clientY };
   }
   private stopPan(event: any) {
+    this.elementFrame.style.cursor = 'default';
     this.frameOnPan = false;
   }
   private onPan(event: MouseEvent) {
@@ -182,6 +184,7 @@ export class FramepanzoomDirective implements AfterViewInit {
     return this.valuesMinFix;
   }
   private onLeave() {
+    this.elementFrame.style.cursor = 'default';
     this.frameOnPan = false;
     this.highlight(null);
   }
