@@ -31,8 +31,8 @@
   <mat-sidenav-content class="game-content">
 
     <div class="game-display">
-      <div appFramepanzoom class="framepanzoom">
-        <div class="boardgame"  (mousewhell)="onZoom($event)" >
+      <div appFramepanzoom class="boardgamepanzoom">
+        <div class="boardgame">
           <div *ngFor="let col of boardGame | async" class="columna">
             <div *ngFor="let casilla of getColumns(col.rows, false)" class="celda cell-enemy">
               {{col.id}}/{{casilla.position}} # {{casilla.nomPlayer | slice:0:4}}
@@ -68,7 +68,7 @@
       <div class="game-controls-center">
         aca va la carta y el mazo
       </div>
-      <div class="game-controls-rigth">
+      <div class="game-controls-rigth" [@animAparecer]='stateButtons'>
         <!-- [@animAparecer]='stateButtons' -->
         <button mat-raised-button class="btn-send-turn" (click)="resetTurn()">
           <mat-icon class="mat-24" aria-label="reset turno">undo</mat-icon>
@@ -81,69 +81,12 @@
     </div>
 
     <div class="game-hand">
-
-      <mat-grid-list cols="9" rowHeight="100px">
-        <mat-grid-tile [colspan]=2>
-        </mat-grid-tile>
-        <mat-grid-tile *ngFor="let tile of hand" class="cell">
-          {{tile.description}} {{tile.palo}}
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]=2>
-        </mat-grid-tile>
-      </mat-grid-list>
+      <div *ngFor="let card of hand" class="handcelda" draggable="true" 
+      (dragstart)="onDragStart(card)" (dragend)="finArrastre()" 
+      (drop)="onDropMano(card)" (dragover)="onDragOverMano($event, card)">
+        <img draggable="false" class="celdasvg" src="../assets/images/n_{{card.description}}.svg"/> 
+        <img draggable="false" class="celdasvg" src="../assets/images/{{card.palo | slice:0:3 | lowercase}}.svg"/>
+      </div>
     </div>
-
-
   </mat-sidenav-content>
 </mat-sidenav-container>
-
-
-<!-- 
-    <div *ngIf='currentGame'>
-      <p>
-        {{userlogined.displayName}}
-      </p>
-      --
-      <p>
-        {{currentGame.gameType}}
-      </p>
-      --
-      <p>
-        {{currentGame.timeStart }}
-      </p>
-      --
-      <p>
-        {{currentGame.displayedCard.id}}
-      </p>
-      --
-      <p>
-        {{currentGame.displayedCard.valor}} de {{currentGame.displayedCard.palo}}
-      </p>
-      -----------------------
-      <div *ngFor="let card of hand">
-        <p>
-          {{card.valor}} de {{card.palo}}
-        </p>
-
-      </div>
-      -----------------------
-
-      <div *ngFor="let col of boardGame | async">
-        -------------------------------------------------------
-        <div *ngFor="let casilla of getColumns(col.rows, false)">
-          {{casilla.position}} # {{casilla.nomPlayer}} *** {{casilla.active}} -- {{casilla.idPlayer}}
-        </div>
-        {{col.colId}} *** {{col.id}}
-        <div *ngFor="let casilla of  getColumns(col.rows, true)">
-          {{casilla.position}} # {{casilla.nomPlayer}} *** {{casilla.active}} -- {{casilla.idPlayer}}
-        </div>
-      </div>
-    
-               <mat-grid-list rows="9" cols="9" rowHeight="100px" class="table">
-          <mat-grid-tile *ngFor="let casilla of matrixBoardGame" class="cell">
-            {{casilla.idCol}}/{{casilla.position}} # {{casilla.nomPlayer | slice:0:4}}
-            <p>{{casilla.description}}</p>
-          </mat-grid-tile>
-        </mat-grid-list>
-    
-    -->
