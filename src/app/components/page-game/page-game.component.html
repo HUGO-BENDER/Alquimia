@@ -81,7 +81,8 @@
     </div>
 
     <div class="game-hand">
-      <div *ngFor="let card of hand" class="handcelda" draggable="true" 
+      <div *ngFor="let card of hand" draggable="true" 
+      [ngClass]="[ 'handcelda' , card.classCss ]"
       (dragstart)="onDragStart(card)" (dragend)="finArrastre()" 
       (drop)="onDropMano(card)" (dragover)="onDragOverMano($event, card)">
         <img draggable="false" class="celdasvg" src="../assets/images/n_{{card.description}}.svg"/> 

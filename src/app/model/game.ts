@@ -27,7 +27,7 @@ export interface Card {
     description: string;
     dragEnable: boolean;
     dropEnable: boolean;
-    classCss: string;
+    classCss: any;
 }
 
 export interface Game {

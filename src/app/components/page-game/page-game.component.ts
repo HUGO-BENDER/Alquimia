@@ -89,10 +89,10 @@ export class PageGameComponent implements OnInit {
   public onDragStart(c: Card) {
     console.log('Empezamos. estoy arrastrando un ' + c.description + ' de ', c.palo);
     this.piezaJugada = c;
-    // -- c.border = '3px dashed black';
+    c.classCss = 'cell-OnDrag';
   }
   public finArrastre() {
-    // this.piezaJugada.border = '3px solid #999999';
+    this.piezaJugada.classCss = 'cell-Default';
     console.log('Se terminó');
   }
   public onDragOverMano(e: any, c: Card) {

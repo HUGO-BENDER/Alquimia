@@ -157,24 +157,31 @@
   border: 1px solid black;
   border-radius: 5px;
   background-color: rgb(184, 174, 174);
-  min-width: 200px;
-  max-width: 200px;
-  min-height: 100px;
-  max-height: 100px;
-  height: 100px;
+  min-width: 100px;
+  max-width: 100px;
+  min-height: 50px;
+  max-height: 50px;
+  height: 50px;
   overflow: hidden;
   user-select: none;
+  display: flex;
+  flex-direction: row;
   cursor: move;
   .celdasvg{
     user-select: none;
-    min-width: 90px;
-    max-width: 90px;
-    min-height: 100px;
-    max-height: 100px;
-    height: 100px;
+    min-width: 45px;
+    max-width: 45px;
+    min-height: 50px;
+    max-height: 50px;
+    height: 50px;
   }
 }
-
+.cell-Default{
+  opacity: 1;
+}
+.cell-OnDrag{
+  opacity: 0.4;
+}
 
 
 
