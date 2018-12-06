@@ -87,50 +87,47 @@ export class PageGameComponent implements OnInit {
   }
 
   public onDragStart(c: Card) {
-    console.log('Empezamos. estoy arrastrando un ' + c.description + ' de ', c.palo);
     this.piezaJugada = c;
     c.classCss = 'cell-OnDrag';
   }
-  public finArrastre() {
+  public onDragEnd() {
     this.piezaJugada.classCss = 'cell-Default';
-    console.log('Se terminó');
   }
-  public onDragOverMano(e: any, c: Card) {
+  public onDragOverHand(e: any, c: Card) {
+    c.classCss = 'cell-OnDragOverMano';
     e.preventDefault();
   }
-
-  public onDropMano(c: Card) {
+  public onDragLeave(e: any, c: Card) {
+    c.classCss = 'cell-Default';
+    e.preventDefault();
+  }
+  public onDropHand(c: Card) {
+    c.classCss = 'cell-Default';
     const ini = c.position;
-    const fin = this.piezaJugada.position;
     if (c.position < this.piezaJugada.position) {
       for (let i = c.position; i < this.piezaJugada.position; i++) {
         this.hand[i - 1].position = i + 1;
       }
       this.piezaJugada.position = ini;
     } else {
-      for (let i = this.piezaJugada.position ; i < c.position; i++) {
+      for (let i = this.piezaJugada.position; i < c.position; i++) {
         this.hand[i].position = i;
       }
       this.piezaJugada.position = ini;
     }
-    this.reordenarMano();
+    this.hand.sort(function (a, b) { return a.position - b.position; });
   }
 
+  public onDropBoard(c: Card) {
 
 
+  }
+  public onDragOverBoard(e: any, col: ColumnGame, card: Card) {
+    console.log('estoy sobre el ', col.id + '/' + card.position + '#' + card.nomPlayer);
+    card.classCss = 'cell-OnDragOverMano';
+    e.preventDefault();
+  }
 
-
-  public reordenarMano() {
-    this.hand.sort(function(a, b) {
-        if ( a.position < b.position ) {
-            return -1;
-        }
-        if ( a.position > b.position ) {
-            return 1;
-        }
-        return 0;
-    });
-}
 
 }
 
