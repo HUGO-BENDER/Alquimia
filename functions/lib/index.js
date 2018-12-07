@@ -204,16 +204,15 @@ exports.OnAddNewGame = functions.firestore
             for (let x = 0; x < ConfigGame.board.rows; x++) {
                 emptyColumna.push({
                     idPlayer: p.id,
-                    nomPlayer: p.data().displayName,
+                    displayNamePlayer: p.data().displayName,
                     active: x === 0,
                     id: 0,
                     position: x,
                     palo: '',
                     valor: 0,
                     description: '',
-                    dragEnable: true,
-                    dropEnable: true,
-                    classCss: 'card '
+                    dragEnable: x === 0,
+                    classCss: 'cell-Default'
                 });
             }
         }
@@ -222,13 +221,12 @@ exports.OnAddNewGame = functions.firestore
             const colKey = 'col' + (('0' + (x).toString()).slice(-2));
             yield fdb.doc(pathGame).collection('BoardGame').doc(colKey).set({
                 id: x,
-                idUserWin: '',
-                nameUserWin: '',
+                idPlayerWin: '',
+                displayNamePlayerWin: '',
                 goal: {
                     dragEnable: false,
-                    dropEnable: false,
                     bet: 0,
-                    classCss: 'goal '
+                    classCss: 'goal-Default'
                 },
                 rows: emptyColumna,
             });

@@ -35,15 +35,16 @@
         <div class="boardgame">
           <div *ngFor="let col of boardGame | async" class="boardColumn">
             <div *ngFor="let c of getColumns(col.rows, false)" class="cell cell-enemy">
-              {{col.id}}/{{c.position}} # {{c.nomPlayer | slice:0:4}}
+              {{col.id}}/{{c.position}} # {{c.displayNamePlayer | slice:0:4}}
             </div>
             <div class="cell cell-neutral">{{col.colId}} *** {{col.id}}</div>
-            <div *ngFor="let card of  getColumns(col.rows, true)" [ngClass]="[ 'cell', 'cell-allied']" draggable=card.dragEnable
+            <div *ngFor="let card of  getColumns(col.rows, true)" [ngClass]="['cell','cell-allied', card.classCss ]" draggable=card.dragEnable
               (dragstart)="onDragStart(card)" 
               (dragend)="onDragEnd()" 
+              (dragleave)="onDragLeave($event, card)"
               (drop)="onDropBoard(card)" 
               (dragover)="onDragOverBoard($event, col, card)">
-              {{col.id}}/{{card.position}} # {{card .nomPlayer | slice:0:4}}
+              {{col.id}}/{{card.position}} # {{card.displayNamePlayer | slice:0:4}}
             </div>
           </div>
         </div>
@@ -85,8 +86,13 @@
     </div>
 
     <div class="game-hand">
-      <div *ngFor="let card of hand" draggable="true" [ngClass]="[ 'handCell' , card.classCss ]" (dragstart)="onDragStart(card)"
-        (dragend)="onDragEnd()" (drop)="onDropHand(card)" (dragover)="onDragOverHand($event, card)" (dragleave)="onDragLeave($event, card)">
+      <div *ngFor="let card of hand" 
+        draggable="true" [ngClass]="['handCell', card.classCss ]"
+        (dragstart)="onHandDragStart(card)"
+        (dragend)="onHandDragEnd()" 
+        (dragover)="onHandDragOver($event, card)" 
+        (dragleave)="onHandDragLeave($event, card)"
+        (drop)="onHandDrop(card)" >
         <img draggable="false" class="celdasvg" src="../assets/images/n_{{card.description}}.svg" />
         <img draggable="false" class="celdasvg" src="../assets/images/{{card.palo | slice:0:3 | lowercase}}.svg" />
       </div>

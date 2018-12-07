@@ -85,24 +85,29 @@ export class PageGameComponent implements OnInit {
     }
     return cols;
   }
-
-  public onDragStart(c: Card) {
+  // -- Hand D&D
+  public onHandDragStart(c: Card) {
     this.piezaJugada = c;
-    c.classCss = 'cell-OnDrag';
+    c.classCss = 'handCell-OnDrag ';
+    console.log('onHandDragStart class= ', c.id, ' -- ', c.classCss);
   }
-  public onDragEnd() {
-    this.piezaJugada.classCss = 'cell-Default';
+  public onHandDragEnd() {
+    this.piezaJugada.classCss = 'handCell-Default ';
+    console.log('onHandDragEnd class= ', this.piezaJugada.classCss);
   }
-  public onDragOverHand(e: any, c: Card) {
-    c.classCss = 'cell-OnDragOverMano';
+  public onHandDragOver(e: any, c: Card) {
+    c.classCss = 'handCell-OnDragOver';
     e.preventDefault();
   }
-  public onDragLeave(e: any, c: Card) {
-    c.classCss = 'cell-Default';
+  public onHandDragLeave(e: any, c: Card) {
+    if (this.piezaJugada.id !== c.id) {
+      c.classCss = 'handCell-Default';
+    }
+    console.log('onHandDragLeave class= ', c.classCss);
     e.preventDefault();
   }
-  public onDropHand(c: Card) {
-    c.classCss = 'cell-Default';
+  public onHandDrop(c: Card) {
+    c.classCss = 'handCell-Default';
     const ini = c.position;
     if (c.position < this.piezaJugada.position) {
       for (let i = c.position; i < this.piezaJugada.position; i++) {
@@ -117,14 +122,21 @@ export class PageGameComponent implements OnInit {
     }
     this.hand.sort(function (a, b) { return a.position - b.position; });
   }
-
-  public onDropBoard(c: Card) {
+  // -- Board
+  public onBoardDragStart(c: Card) {
+    this.piezaJugada = c;
+    c.classCss = 'handCell-OnDrag';
+  }
+  public onBoardDragEnd() {
+    this.piezaJugada.classCss = 'handCell-Default';
+  }
+  public onBoardDrop(c: Card) {
 
 
   }
-  public onDragOverBoard(e: any, col: ColumnGame, card: Card) {
-    console.log('estoy sobre el ', col.id + '/' + card.position + '#' + card.nomPlayer);
-    card.classCss = 'cell-OnDragOverMano';
+  public onBoardDragOver(e: any, col: ColumnGame, card: Card) {
+    console.log('estoy sobre el ', col.id + '/' + card.position + '#' + card.displayNamePlayer);
+    card.classCss = 'boardCell-OnDragOverMano';
     e.preventDefault();
   }
 
