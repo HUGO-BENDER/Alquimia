@@ -93,7 +93,7 @@ exports.OnAddNewGame = functions.firestore
                             description: 'v',
                             dragEnable: true,
                             dropEnable: true,
-                            classCss: 'cell-Default '
+                            classCss: 'cell-Default'
                         }
                     ]
                 }],
@@ -148,8 +148,6 @@ exports.OnAddNewGame = functions.firestore
             }
             for (let i = CurrentGame.Baraja.length - 1; i >= CurrentGame.Baraja.length - totalForPlayers; i--) {
                 const indexPlayer = i % ConfigGame.Players.cant;
-                console.log('i=', i, ' indexPlayer=', indexPlayer);
-
                 const cardToHand = {
                     id: CurrentGame.Baraja[i].id,
                     position: positions[indexPlayer] + 1,

@@ -153,6 +153,16 @@
   background-color: white;
 }
 
+
+.celdasvg {
+  user-select: none;
+  min-width: 45px;
+  max-width: 45px;
+  min-height: 50px;
+  max-height: 50px;
+  height: 50px;
+}
+
 .handCell {
   border: 1px solid black;
   border-radius: 5px;
@@ -168,15 +178,6 @@
   flex-direction: row;
   cursor: move;
 
-  .celdasvg {
-    user-select: none;
-    min-width: 45px;
-    max-width: 45px;
-    min-height: 50px;
-    max-height: 50px;
-    height: 50px;
-  }
-
 }
 
 .handCell-Default {
@@ -190,16 +191,30 @@
   background-color: rgb(255, 238, 0);
 }
 
-.handCell-OnDragOverMano {
+.handCell-OnDragOver {
   border: 3px dashed green;
-  background-color: rgb(131, 250, 151);
+  background-color: rgb(178, 248, 190);
 }
 
-.handCell-Default {
+.boardCell-Default {
   border: 1px solid black;
-  background-color: rgb(184, 174, 174);
+  background-color: rgb(20, 231, 30);
   opacity: 1;
 }
+
+.boardCell-OnDrag {
+  opacity: 0.4;
+  background-color: rgb(255, 238, 0);
+}
+
+.boardCell-OnDragOver {
+  border: 3px dashed green;
+  background-color: rgb(178, 248, 190);
+}
+.boardCell-denyDragOver {
+  background-color: rgb(24, 24, 24);
+}
+
 
 .goal-Default {
   border: 1px solid black;

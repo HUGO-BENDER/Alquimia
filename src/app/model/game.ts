@@ -26,7 +26,6 @@ export interface Card {
     valor: string;
     description: string;
     dragEnable: boolean;
-    dropEnable: boolean;
     classCss: any;
 }
 
