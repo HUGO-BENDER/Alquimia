@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { ActivatedRoute } from '@angular/router';
-// import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDrag } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDrag } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs/Observable';
 import { GameService } from 'src/app/services/firestore/game.service';
 import { Game, Card, ColumnGame } from 'src/app/model/game';
@@ -72,8 +72,6 @@ export class PageGameComponent implements OnInit {
     );
   }
 
-
-
   public getColumns(boardCols: Array<Card>, mySide: boolean): Array<Card> {
     let cols: Array<Card> = [];
     if (mySide) {
@@ -86,6 +84,8 @@ export class PageGameComponent implements OnInit {
     return cols;
   }
   // -- Hand D&D
+
+
   public onHandDragStart(c: Card) {
     this.piezaEnJuego = c;
     c.classCss = 'handCell-OnDrag ';
@@ -107,21 +107,27 @@ export class PageGameComponent implements OnInit {
     }
     e.preventDefault();
   }
-  public onHandDrop(c: Card) {
-    c.classCss = 'handCell-Default ';
-    const ini = c.position;
-    if (c.position < this.piezaEnJuego.position) {
-      for (let i = c.position; i < this.piezaEnJuego.position; i++) {
-        this.hand[i - 1].position = i + 1;
-      }
-      this.piezaEnJuego.position = ini;
-    } else {
-      for (let i = this.piezaEnJuego.position; i < c.position; i++) {
-        this.hand[i].position = i;
-      }
-      this.piezaEnJuego.position = ini;
-    }
-    this.hand.sort(function (a, b) { return a.position - b.position; });
+
+
+  public onHandDrop(event: any) {
+    moveItemInArray(this.hand, event.previousIndex, event.currentIndex);
+
+
+
+    // c.classCss = 'handCell-Default ';
+    // const ini = c.position;
+    // if (c.position < this.piezaEnJuego.position) {
+    //   for (let i = c.position; i < this.piezaEnJuego.position; i++) {
+    //     this.hand[i - 1].position = i + 1;
+    //   }
+    //   this.piezaEnJuego.position = ini;
+    // } else {
+    //   for (let i = this.piezaEnJuego.position; i < c.position; i++) {
+    //     this.hand[i].position = i;
+    //   }
+    //   this.piezaEnJuego.position = ini;
+    // }
+    // this.hand.sort(function (a, b) { return a.position - b.position; });
   }
   // -- Board
   public onBoardDragStart(c: Card) {

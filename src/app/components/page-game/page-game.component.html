@@ -84,12 +84,11 @@
       </div>
     </div>
 
-    <!-- <div class="game-hand"> -->
-
         <div cdkDropList cdkDropListOrientation="horizontal"  class="game-hand" (cdkDropListDropped)="onHandDrop($event)">
-            <div [ngClass]="['handCell', card.classCss ]" *ngFor="let card of hand" cdkDrag>
-                <img draggable="false" class="celdasvg" src="../assets/images/n_{{card.description}}.svg" />
-                <img draggable="false" class="celdasvg" src="../assets/images/{{card.palo | slice:0:3 | lowercase}}.svg" />
+            <div [ngClass]="['handCell', card.classCss ]" *ngFor="let card of hand" cdkDrag [cdkDragDisabled]="!card.dragEnable">
+              <div class="handCell-placeholder" *cdkDragPlaceholder></div>  
+              <img draggable="false" class="celdasvg" src="../assets/images/n_{{card.description}}.svg" />
+              <img draggable="false" class="celdasvg" src="../assets/images/{{card.palo | slice:0:3 | lowercase}}.svg" />
             </div>
           </div>
 
