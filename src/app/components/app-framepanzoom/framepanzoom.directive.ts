@@ -106,15 +106,15 @@ export class FramepanzoomDirective implements AfterViewInit {
         newY = Math.max(Math.min(newY, this.valuesMinFix.pointTopLeft.y), 0);
       } else {
         // Si contenido es mas ancho que el frame
-        if ( this.rectContent.width * this.valuesActual.cssScale > this.rectFrame.width) {
+        if (this.rectContent.width * this.valuesActual.cssScale > this.rectFrame.width) {
           newX = Math.min(newX, 15);
           newX = Math.max(newX, this.rectFrame.width - (this.rectContent.width * this.valuesActual.cssScale) - 15);
         } else {
           newX = Math.max(newX, 0);
-          newX = Math.min(newX, (this.rectFrame.width - (this.rectContent.width * this.valuesActual.cssScale)) /  2);
+          newX = Math.min(newX, (this.rectFrame.width - (this.rectContent.width * this.valuesActual.cssScale)) / 2);
         }
         // si el contenido es mas alto que el frame
-        if ( this.rectContent.heigth * this.valuesActual.cssScale > this.rectFrame.heigth) {
+        if (this.rectContent.heigth * this.valuesActual.cssScale > this.rectFrame.heigth) {
           newY = Math.min(newY, 15);
           newY = Math.max(newY, this.rectFrame.heigth - (this.rectContent.heigth * this.valuesActual.cssScale) - 15);
         } else {
@@ -135,8 +135,12 @@ export class FramepanzoomDirective implements AfterViewInit {
   }
   private resize() {
     this.valuesMinFix = this.calculateMinFix();
-    if (this.valuesActual.cssScale < this.valuesMinFix.cssScale) {
+    if (this.isMobileDevice()) {
       this.applyChanges(this.valuesMinFix);
+    } else {
+      if (this.valuesActual.cssScale < this.valuesMinFix.cssScale) {
+        this.applyChanges(this.valuesMinFix);
+      }
     }
   }
   private calculateMinFix(): ScaleAndPoint {
@@ -248,6 +252,10 @@ export class FramepanzoomDirective implements AfterViewInit {
     // this.renderer.setProperty(this.elementContent, 'transform', transformation);
     // this.renderer.setProperty(this.elementContent, 'transform-origin', '0px 0px 0px');
     // this.renderer.setProperty(this.elementContent, 'transform', transformation);
+  }
+
+  private isMobileDevice(): boolean {
+    return (typeof window.orientation !== 'undefined') || (navigator.userAgent.indexOf('IEMobile') !== -1);
   }
 }
 

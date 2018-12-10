@@ -51,8 +51,6 @@
           </div>
         </div>
       </div>
-
-
     </div>
 
     <div class="game-controls">
@@ -86,14 +84,24 @@
       </div>
     </div>
 
-    <div class="game-hand">
-      <div *ngFor="let card of hand" [draggable]=card.dragEnable [ngClass]="['handCell', card.classCss ]" (dragstart)="onHandDragStart(card)"
+    <!-- <div class="game-hand"> -->
+
+        <div cdkDropList cdkDropListOrientation="horizontal"  class="game-hand" (cdkDropListDropped)="onHandDrop($event)">
+            <div [ngClass]="['handCell', card.classCss ]" *ngFor="let card of hand" cdkDrag>
+                <img draggable="false" class="celdasvg" src="../assets/images/n_{{card.description}}.svg" />
+                <img draggable="false" class="celdasvg" src="../assets/images/{{card.palo | slice:0:3 | lowercase}}.svg" />
+            </div>
+          </div>
+
+
+
+      <!-- <div *ngFor="let card of hand" [draggable]=card.dragEnable [ngClass]="['handCell', card.classCss ]" (dragstart)="onHandDragStart(card)"
         (dragend)="onHandDragEnd()" (dragover)="onHandDragOver($event, card)" (dragleave)="onHandDragLeave($event, card)"
         (drop)="onHandDrop(card)">
         <img draggable="false" class="celdasvg" src="../assets/images/n_{{card.description}}.svg" />
         <img draggable="false" class="celdasvg" src="../assets/images/{{card.palo | slice:0:3 | lowercase}}.svg" />
         {{card.dragEnable}}
-      </div>
-    </div>
+      </div> -->
+    <!-- </div> -->
   </mat-sidenav-content>
 </mat-sidenav-container>

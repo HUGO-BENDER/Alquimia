@@ -20,13 +20,14 @@ export interface Card {
     idPlayer: string;
     displayNamePlayer: string;
     id: string;
-    idCol: number;
+    idCol?: number;
     position: number;
     palo: string;
     valor: string;
     description: string;
-    dragEnable: boolean;
-    classCss: any;
+    dragEnable?: boolean;
+    classCss?: any;
+    previousValues?: Card;
 }
 
 export interface Game {

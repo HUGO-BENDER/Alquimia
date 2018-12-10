@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+// import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDrag } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs/Observable';
 import { GameService } from 'src/app/services/firestore/game.service';
 import { Game, Card, ColumnGame } from 'src/app/model/game';
