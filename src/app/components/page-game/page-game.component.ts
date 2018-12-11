@@ -34,6 +34,7 @@ export class PageGameComponent implements OnInit {
   userlogined: firebase.User;
   stateButtons = 'fuera';
   piezaEnJuego: Card;
+  handCellForceSquare: string;
 
   constructor(
     public au: AngularFireAuth,
@@ -50,6 +51,7 @@ export class PageGameComponent implements OnInit {
         this.afsGame.getHand(idGame, user).get()
           .then(doc => {
             this.hand = doc.data().hand;
+            this.onResize(null);
           })
           .catch(error => { console.log('Error getting document:', error); });
       } else {
@@ -83,36 +85,22 @@ export class PageGameComponent implements OnInit {
     }
     return cols;
   }
+
+  // -- layout
+  public onResize(event: any) {
+    if (window.innerWidth * 0.96 / this.hand.length < window.innerHeight * 0.15) {
+      this.handCellForceSquare = 'handCellSquareVW';
+    } else {
+      this.handCellForceSquare = 'handCellSquareVH';
+    }
+    for (const hc of this.hand) {
+      hc.classCss = this.handCellForceSquare;
+    }
+  }
+
   // -- Hand D&D
-
-
-  public onHandDragStart(c: Card) {
-    this.piezaEnJuego = c;
-    c.classCss = 'handCell-OnDrag ';
-  }
-  public onHandDragEnd() {
-    if (this.piezaEnJuego.dragEnable) {
-      this.piezaEnJuego.classCss = 'handCell-Default ';
-    }
-  }
-  public onHandDragOver(e: any, c: Card) {
-    if (this.piezaEnJuego.id !== c.id) {
-      c.classCss = 'handCell-OnDragOver ';
-    }
-    e.preventDefault();
-  }
-  public onHandDragLeave(e: any, c: Card) {
-    if (this.piezaEnJuego.id !== c.id) {
-      c.classCss = 'handCell-Default ';
-    }
-    e.preventDefault();
-  }
-
-
   public onHandDrop(event: any) {
     moveItemInArray(this.hand, event.previousIndex, event.currentIndex);
-
-
 
     // c.classCss = 'handCell-Default ';
     // const ini = c.position;
