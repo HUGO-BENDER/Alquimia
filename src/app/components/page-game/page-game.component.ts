@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { ActivatedRoute } from '@angular/router';
-import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDrag } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, CdkDrag, copyArrayItem } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs/Observable';
 import { GameService } from 'src/app/services/firestore/game.service';
 import { Game, Card, ColumnGame } from 'src/app/model/game';
@@ -118,34 +118,52 @@ export class PageGameComponent implements OnInit {
     // this.hand.sort(function (a, b) { return a.position - b.position; });
   }
   // -- Board
-  public onBoardDragStart(c: Card) {
-    this.piezaEnJuego = c;
-    c.classCss = 'boardCell-OnDrag ';
-  }
-  public onBoardDragEnd() {
-    this.piezaEnJuego.classCss = 'boardCell-Default ';
-  }
-  public onBoardDragOver(e: any, col: ColumnGame, card: Card) {
+  public onBoardDrop(event: CdkDragDrop<Card[]>) {
+    console.log('onBoardDrop', event.container.data);
 
-    console.log('estoy sobre el ', col.id + '/' + card.position + '#' + card.displayNamePlayer, ' puedo? ', card.dragEnable);
-    if (card.dragEnable) {
-      card.classCss = 'boardCell-OnDragOver';
-      e.preventDefault();
-    } else {
-      card.classCss = 'boardCell-denyDragOver';
-    }
-  }
-  public onBoardDragLeave(e: any, card: Card) {
-    card.classCss = card.id === '0' ? 'boardCell-Default' : 'handCell-Default';
-    e.preventDefault();
-  }
-  public onBoardDrop(col: ColumnGame, c: Card) {
-    this.copyValues(this.piezaEnJuego, c);
+    copyArrayItem(event.previousContainer.data,
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex);
+
+
     for (const hc of this.hand) {
       hc.dragEnable = false;
     }
     this.stateButtons = 'dentro';
   }
+
+
+  // public onBoardDragStart(c: Card) {
+  //   this.piezaEnJuego = c;
+  //   c.classCss = 'boardCell-OnDrag ';
+  // }
+  // public onBoardDragEnd() {
+  //   this.piezaEnJuego.classCss = 'boardCell-Default ';
+  // }
+  // public onBoardDragOver(e: any, col: ColumnGame, card: Card) {
+
+  //   console.log('estoy sobre el ', col.id + '/' + card.position + '#' + card.displayNamePlayer, ' puedo? ', card.dragEnable);
+  //   if (card.dragEnable) {
+  //     card.classCss = 'boardCell-OnDragOver';
+  //     e.preventDefault();
+  //   } else {
+  //     card.classCss = 'boardCell-denyDragOver';
+  //   }
+  // }
+  // public onBoardDragLeave(e: any, card: Card) {
+  //   card.classCss = card.id === '0' ? 'boardCell-Default' : 'handCell-Default';
+  //   e.preventDefault();
+  // }
+  // public onBoardDrop(col: ColumnGame, c: Card) {
+  //   this.copyValues(this.piezaEnJuego, c);
+  //   for (const hc of this.hand) {
+  //     hc.dragEnable = false;
+  //   }
+  //   this.stateButtons = 'dentro';
+  // }
+
+
   public resetTurn() {
 
     for (const hc of this.hand) {
