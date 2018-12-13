@@ -42,8 +42,6 @@
             <div *ngFor="let card of  getColumns(col.rows, true)" [ngClass]="['cell','cell-allied', card.classCss ]">
               <div *ngIf="card.id === 0 && card.dragEnable" [ngClass]="['cell','cell-allied', card.classCss ]"
                 cdkDropList id=boardDropList{{col.id}} (cdkDropListDropped)="onBoardDrop($event,card)">
-                {{col.id}}/{{card.position}} # {{card.displayNamePlayer | slice:0:4}}
-                {{card.id}}
               </div>
               <div *ngIf="card.id === 0">
                 {{col.id}}/{{card.position}} # {{card.displayNamePlayer | slice:0:4}}
@@ -83,7 +81,7 @@
       <div class="game-controls-center">
         aca va la carta y el mazo
       </div>
-      <div class="game-controls-rigth" [@animAparecer]='stateButtons'>
+      <div class="game-controls-rigth" [@animAppear]='stateButtons'>
         <button mat-raised-button class="btn-send-turn" (click)="resetTurn()">
           <mat-icon class="mat-24" aria-label="reset turno">undo</mat-icon>
         </button>
@@ -97,14 +95,20 @@
       <div cdkDropList class="handDropList" #handDropList="cdkDropList" [cdkDropListData]="hand"
         [cdkDropListConnectedTo]="['boardDropList0','boardDropList1','boardDropList2','boardDropList3','boardDropList4','boardDropList5','boardDropList6','boardDropList7','boardDropList8']"
         cdkDropListOrientation="horizontal" (cdkDropListDropped)="onHandDrop($event)">
-        <div [ngClass]="['handCell', card.classCss ]" (window:resize)="onResize($event)" *ngFor="let card of hand"
-          cdkDrag [cdkDragDisabled]="!card.dragEnable">
+        <div *ngFor="let card of hand" (window:resize)="onResize($event)" cdkDrag [cdkDragDisabled]="!card.dragEnable"
+          [ngClass]="['handCell', card.classCss ]">
           <div [ngClass]="['handCell-placeholder', card.classCss ]" *cdkDragPlaceholder></div>
-          <mat-grid-list cols="2" rowHeight="1:1" gutterSize="0px" class="gridList2x2">
+          <mat-grid-list *ngIf="!card.previousValues" cols="2" rowHeight="1:1" gutterSize="0px" class="gridList2x2">
             <mat-grid-tile><img class="gridTile11" src="../assets/images/n_{{card.description}}.svg" /></mat-grid-tile>
             <mat-grid-tile><img class="gridTile12" src="../assets/images/{{card.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
             <mat-grid-tile><img class="gridTile21" src="../assets/images/{{card.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
             <mat-grid-tile><img class="gridTile22" src="../assets/images/n_{{card.description}}.svg" /></mat-grid-tile>
+          </mat-grid-list>
+          <mat-grid-list *ngIf="card.previousValues" cols="2" rowHeight="1:1" gutterSize="0px" class="gridList2x2 gridTileDisabled">
+            <mat-grid-tile><img class="gridTile11 gridTileDisabled" src="../assets/images/n_{{card.previousValues.description}}.svg" /></mat-grid-tile>
+            <mat-grid-tile><img class="gridTile12 gridTileDisabled" src="../assets/images/{{card.previousValues.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+            <mat-grid-tile><img class="gridTile21 gridTileDisabled" src="../assets/images/{{card.previousValues.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+            <mat-grid-tile><img class="gridTile22 gridTileDisabled" src="../assets/images/n_{{card.previousValues.description}}.svg" /></mat-grid-tile>
           </mat-grid-list>
         </div>
       </div>

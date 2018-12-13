@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { ActivatedRoute } from '@angular/router';
-import { CdkDragDrop, moveItemInArray, CdkDrag, copyArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs/Observable';
 import { GameService } from 'src/app/services/firestore/game.service';
 import { Game, Card, ColumnGame } from 'src/app/model/game';
@@ -13,16 +13,16 @@ import * as firebase from 'firebase';
   templateUrl: './page-game.component.html',
   styleUrls: ['./page-game.component.scss'],
   animations: [
-    trigger('animAparecer', [
-      state('fuera', style({
+    trigger('animAppear', [
+      state('outside', style({
         position: 'absolute',
         transform: 'translateX(-100%)',
       })),
-      state('dentro', style({
+      state('inside', style({
         position: 'relative',
         transform: 'translateX(0)',
       })),
-      transition('fuera <=> dentro', animate('300ms')),
+      transition('outside <=> inside', animate('300ms')),
     ])
   ]
 })
@@ -31,8 +31,9 @@ export class PageGameComponent implements OnInit {
   boardGame: Observable<ColumnGame[]>;
   hand: Array<Card> = [];
   userlogined: firebase.User;
-  stateButtons = 'fuera';
+  stateButtons = 'outside';
   handCellForceSquare: string;
+  boardCellChanged: Array<Card> = [];
 
   constructor(
     public au: AngularFireAuth,
@@ -106,12 +107,13 @@ export class PageGameComponent implements OnInit {
   // -- Board
   public onBoardDrop(event: CdkDragDrop<Card[]>, c: Card) {
     const ori = event.previousContainer.data[event.previousIndex];
+    this.boardCellChanged.push(c);
     this.copyValues(ori, c, true);
     this.copyValues(null, ori, true);
     for (const hc of this.hand) {
       hc.dragEnable = false;
     }
-    this.stateButtons = 'dentro';
+    this.stateButtons = 'inside';
   }
   // -- Botons
   public resetTurn() {
@@ -122,11 +124,14 @@ export class PageGameComponent implements OnInit {
         hc.previousValues = null;
       }
     }
-    // -- TODO Buclear por el tablero
-
-
-
-    this.stateButtons = 'fuera';
+    for (const bc of this.boardCellChanged) {
+      if (bc.previousValues) {
+        this.copyValues(bc.previousValues, bc, false);
+        bc.previousValues = null;
+      }
+    }
+    this.boardCellChanged = [];
+    this.stateButtons = 'outside';
   }
 
   // -- Auxiliar functions
