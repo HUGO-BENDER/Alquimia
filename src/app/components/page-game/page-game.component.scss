@@ -183,6 +183,10 @@
   background-color: rgb(209, 198, 38);
 }
 
+
+// .handCell-Default {
+// }
+
 .gridList2x2 {
   user-select: none;
   background-color: white;
@@ -212,6 +216,7 @@
 .cdk-drag-preview {
   box-sizing: border-box;
   border: 2px dotted black;
+  opacity: 0.4;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
     0 8px 10px 1px rgba(0, 0, 0, 0.14),
     0 3px 14px 2px rgba(0, 0, 0, 0.12);
@@ -262,98 +267,3 @@
   }
 }
 
-
-
-
-// .gameWrapperFullScren {
-//   background-color: rgb(107, 189, 138);
-//   min-width: 100vw; 
-//   min-height: 100vh;
-// }
-
-// .game-content {
-//   display: flex;
-//   flex-direction: column;
-
-//   .game-display {
-//     flex: 5;    
-//     min-height: 0px;
-//     background-color: darkkhaki;
-//     padding: 20px;
-
-//     .boardgame {
-//       border: 1px solid red;
-//       background-color: rgb(189, 107, 125);
-//       flex: 1;
-//       min-height: 0px;
-//     }
-
-//   }
-
-//   .game-controls {
-//     flex: 1;
-//     background-color: teal;
-//     border-top: 2px solid royalblue;
-//     display: flex;
-//     flex-direction: row;
-
-//     .game-controls-left {
-//       flex: 0 0 auto;
-//       background-color: rgb(190, 187, 11);
-
-//       .btn-open-sideNav {
-//         float: left;
-//         margin: 15px;
-//         margin-top: -20px;
-
-//         .mat-24 {
-//           transform: rotate(-90deg);
-//         }
-//       }
-//     }
-
-//     .game-controls-center {
-//       flex: 1 1 auto;
-//       border: 1px solid grey;
-//     }
-
-
-//     .game-controls-rigth {
-//       flex: 0 0 auto;
-//       background-color: rgb(190, 187, 11);
-
-//       .btn-send-turn {
-//         float: right;
-//         margin: 10px;
-//         margin-top: -20px;
-//       }
-
-//     }
-
-
-
-
-//   }
-
-//   .game-hand {
-//     flex: 1;
-//     background-color: teal;
-//     padding: 0 20px 20px 20px;
-//   }
-
-// }
-
-
-
-// .table{
-//   border: 1px dotted red;
-//   background-color: greenyellow;
-//   // overflow: hidden;
-// }
-
-// .cell{
-//   border: 1px dotted black;
-//   background-color: aquamarine;
-//   max-width: 100px;
-//   overflow: hidden;
-// }

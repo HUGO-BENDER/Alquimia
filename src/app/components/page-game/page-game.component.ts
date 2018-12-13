@@ -27,13 +27,11 @@ import * as firebase from 'firebase';
   ]
 })
 export class PageGameComponent implements OnInit {
-
   currentGame: Game;
   boardGame: Observable<ColumnGame[]>;
   hand: Array<Card> = [];
   userlogined: firebase.User;
   stateButtons = 'fuera';
-  piezaEnJuego: Card;
   handCellForceSquare: string;
 
   constructor(
@@ -99,83 +97,64 @@ export class PageGameComponent implements OnInit {
   }
 
   // -- Hand D&D
-  public onHandDrop(event: any) {
+  public onHandDrop(event: CdkDragDrop<Card[]>) {
     moveItemInArray(this.hand, event.previousIndex, event.currentIndex);
-
-    // c.classCss = 'handCell-Default ';
-    // const ini = c.position;
-    // if (c.position < this.piezaEnJuego.position) {
-    //   for (let i = c.position; i < this.piezaEnJuego.position; i++) {
-    //     this.hand[i - 1].position = i + 1;
-    //   }
-    //   this.piezaEnJuego.position = ini;
-    // } else {
-    //   for (let i = this.piezaEnJuego.position; i < c.position; i++) {
-    //     this.hand[i].position = i;
-    //   }
-    //   this.piezaEnJuego.position = ini;
-    // }
-    // this.hand.sort(function (a, b) { return a.position - b.position; });
+    for (let i = 0; i < this.hand.length; i++) {
+      event.container.data[i].position = i;
+    }
   }
   // -- Board
-  public onBoardDrop(event: CdkDragDrop<Card[]>) {
-    console.log('onBoardDrop', event.container.data);
-
-    copyArrayItem(event.previousContainer.data,
-      event.container.data,
-      event.previousIndex,
-      event.currentIndex);
-
-
+  public onBoardDrop(event: CdkDragDrop<Card[]>, c: Card) {
+    const ori = event.previousContainer.data[event.previousIndex];
+    this.copyValues(ori, c, true);
+    this.copyValues(null, ori, true);
     for (const hc of this.hand) {
       hc.dragEnable = false;
     }
     this.stateButtons = 'dentro';
   }
-
-
-  // public onBoardDragStart(c: Card) {
-  //   this.piezaEnJuego = c;
-  //   c.classCss = 'boardCell-OnDrag ';
-  // }
-  // public onBoardDragEnd() {
-  //   this.piezaEnJuego.classCss = 'boardCell-Default ';
-  // }
-  // public onBoardDragOver(e: any, col: ColumnGame, card: Card) {
-
-  //   console.log('estoy sobre el ', col.id + '/' + card.position + '#' + card.displayNamePlayer, ' puedo? ', card.dragEnable);
-  //   if (card.dragEnable) {
-  //     card.classCss = 'boardCell-OnDragOver';
-  //     e.preventDefault();
-  //   } else {
-  //     card.classCss = 'boardCell-denyDragOver';
-  //   }
-  // }
-  // public onBoardDragLeave(e: any, card: Card) {
-  //   card.classCss = card.id === '0' ? 'boardCell-Default' : 'handCell-Default';
-  //   e.preventDefault();
-  // }
-  // public onBoardDrop(col: ColumnGame, c: Card) {
-  //   this.copyValues(this.piezaEnJuego, c);
-  //   for (const hc of this.hand) {
-  //     hc.dragEnable = false;
-  //   }
-  //   this.stateButtons = 'dentro';
-  // }
-
-
+  // -- Botons
   public resetTurn() {
-
     for (const hc of this.hand) {
       hc.dragEnable = true;
+      if (hc.previousValues) {
+        this.copyValues(hc.previousValues, hc, false);
+        hc.previousValues = null;
+      }
     }
+    // -- TODO Buclear por el tablero
+
+
+
     this.stateButtons = 'fuera';
   }
-  public copyValues(valuesFrom: Card, valuesTo: Card) {
-    valuesTo.id = valuesFrom.id;
-    valuesTo.valor = valuesFrom.valor;
-    valuesTo.description = valuesFrom.description;
-    valuesTo.palo = valuesFrom.palo;
+
+  // -- Auxiliar functions
+  public copyValues(valuesFrom: Card, valuesTo: Card, bk: boolean) {
+    if (bk) {
+      valuesTo.previousValues = {
+        idPlayer: valuesTo.idPlayer,
+        displayNamePlayer: valuesTo.displayNamePlayer,
+        id: valuesTo.id,
+        position: valuesTo.position,
+        palo: valuesTo.palo,
+        valor: valuesTo.valor,
+        description: valuesTo.description,
+        dragEnable: valuesTo.dragEnable,
+        classCss: valuesTo.classCss
+      };
+    }
+    if (valuesFrom) {
+      valuesTo.id = valuesFrom.id;
+      valuesTo.valor = valuesFrom.valor;
+      valuesTo.description = valuesFrom.description;
+      valuesTo.palo = valuesFrom.palo;
+    } else {
+      valuesTo.id = null;
+      valuesTo.valor = null;
+      valuesTo.description = null;
+      valuesTo.palo = null;
+    }
   }
 }
 
