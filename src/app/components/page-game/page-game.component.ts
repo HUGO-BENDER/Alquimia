@@ -133,7 +133,9 @@ export class PageGameComponent implements OnInit {
     this.boardCellChanged = [];
     this.stateButtons = 'outside';
   }
-
+  public sendTurn() {
+    alert('Vamos a enviar el turno');
+  }
   // -- Auxiliar functions
   public copyValues(valuesFrom: Card, valuesTo: Card, bk: boolean) {
     if (bk) {
