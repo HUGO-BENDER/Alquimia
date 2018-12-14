@@ -18,16 +18,16 @@ export interface Board {
 
 export interface Card {
     idPlayer: string;
-    namePlayer: string;
+    displayNamePlayer: string;
     id: string;
-    idCol: number;
+    idCol?: number;
     position: number;
     palo: string;
     valor: string;
     description: string;
-    dragEnable: boolean;
-    dropEnable: boolean;
-    classCss: string;
+    dragEnable?: boolean;
+    classCss?: any;
+    previousValues?: Card;
 }
 
 export interface Game {

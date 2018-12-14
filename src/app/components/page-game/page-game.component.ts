@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs/Observable';
 import { GameService } from 'src/app/services/firestore/game.service';
 import { Game, Card, ColumnGame } from 'src/app/model/game';
@@ -12,28 +13,27 @@ import * as firebase from 'firebase';
   templateUrl: './page-game.component.html',
   styleUrls: ['./page-game.component.scss'],
   animations: [
-    trigger('animAparecer', [
-      state('fuera', style({
+    trigger('animAppear', [
+      state('outside', style({
         position: 'absolute',
         transform: 'translateX(-100%)',
       })),
-      state('dentro', style({
+      state('inside', style({
         position: 'relative',
         transform: 'translateX(0)',
       })),
-      transition('fuera <=> dentro', animate('300ms')),
+      transition('outside <=> inside', animate('300ms')),
     ])
   ]
 })
 export class PageGameComponent implements OnInit {
-
   currentGame: Game;
   boardGame: Observable<ColumnGame[]>;
   hand: Array<Card> = [];
   userlogined: firebase.User;
-  stateButtons = 'fuera';
-  piezaJugada: Card;
-
+  stateButtons = 'outside';
+  handCellForceSquare: string;
+  boardCellChanged: Array<Card> = [];
 
   constructor(
     public au: AngularFireAuth,
@@ -50,6 +50,7 @@ export class PageGameComponent implements OnInit {
         this.afsGame.getHand(idGame, user).get()
           .then(doc => {
             this.hand = doc.data().hand;
+            this.onResize(null);
           })
           .catch(error => { console.log('Error getting document:', error); });
       } else {
@@ -72,8 +73,6 @@ export class PageGameComponent implements OnInit {
     );
   }
 
-
-
   public getColumns(boardCols: Array<Card>, mySide: boolean): Array<Card> {
     let cols: Array<Card> = [];
     if (mySide) {
@@ -86,53 +85,87 @@ export class PageGameComponent implements OnInit {
     return cols;
   }
 
-  public onDragStart(c: Card) {
-    console.log('Empezamos. estoy arrastrando un ' + c.description + ' de ', c.palo);
-    this.piezaJugada = c;
-    // -- c.border = '3px dashed black';
-  }
-  public finArrastre() {
-    // this.piezaJugada.border = '3px solid #999999';
-    console.log('Se terminó');
-  }
-  public onDragOverMano(e: any, c: Card) {
-    e.preventDefault();
-  }
-
-  public onDropMano(c: Card) {
-    const ini = c.position;
-    const fin = this.piezaJugada.position;
-    if (c.position < this.piezaJugada.position) {
-      for (let i = c.position; i < this.piezaJugada.position; i++) {
-        this.hand[i - 1].position = i + 1;
-      }
-      this.piezaJugada.position = ini;
+  // -- layout
+  public onResize(event: any) {
+    if (window.innerWidth * 0.96 / this.hand.length < window.innerHeight * 0.15) {
+      this.handCellForceSquare = 'handCellSquareVW';
     } else {
-      for (let i = this.piezaJugada.position ; i < c.position; i++) {
-        this.hand[i].position = i;
-      }
-      this.piezaJugada.position = ini;
+      this.handCellForceSquare = 'handCellSquareVH';
     }
-    this.reordenarMano();
+    for (const hc of this.hand) {
+      hc.classCss = this.handCellForceSquare;
+    }
   }
 
+  // -- Hand D&D
+  public onHandDrop(event: CdkDragDrop<Card[]>) {
+    moveItemInArray(this.hand, event.previousIndex, event.currentIndex);
+    for (let i = 0; i < this.hand.length; i++) {
+      event.container.data[i].position = i;
+    }
+  }
+  // -- Board
+  public onBoardDrop(event: CdkDragDrop<Card[]>, c: Card) {
+    const ori = event.previousContainer.data[event.previousIndex];
+    this.boardCellChanged.push(c);
+    this.copyValues(ori, c, true);
+    this.copyValues(null, ori, true);
+    for (const hc of this.hand) {
+      hc.dragEnable = false;
+    }
+    this.stateButtons = 'inside';
+  }
+  // -- Botons
+  public resetTurn() {
+    for (const hc of this.hand) {
+      hc.dragEnable = true;
+      if (hc.previousValues) {
+        this.copyValues(hc.previousValues, hc, false);
+        hc.previousValues = null;
+      }
+    }
+    for (const bc of this.boardCellChanged) {
+      if (bc.previousValues) {
+        this.copyValues(bc.previousValues, bc, false);
+        bc.previousValues = null;
+      }
+    }
+    this.boardCellChanged = [];
+    this.stateButtons = 'outside';
+  }
 
+  // -- Auxiliar functions
+  public copyValues(valuesFrom: Card, valuesTo: Card, bk: boolean) {
+    if (bk) {
+      valuesTo.previousValues = {
+        idPlayer: valuesTo.idPlayer,
+        displayNamePlayer: valuesTo.displayNamePlayer,
+        id: valuesTo.id,
+        position: valuesTo.position,
+        palo: valuesTo.palo,
+        valor: valuesTo.valor,
+        description: valuesTo.description,
+        dragEnable: valuesTo.dragEnable,
+        classCss: valuesTo.classCss
+      };
+    }
+    if (valuesFrom) {
+      valuesTo.id = valuesFrom.id;
+      valuesTo.valor = valuesFrom.valor;
+      valuesTo.description = valuesFrom.description;
+      valuesTo.palo = valuesFrom.palo;
+    } else {
+      valuesTo.id = null;
+      valuesTo.valor = null;
+      valuesTo.description = null;
+      valuesTo.palo = null;
+    }
+  }
 
-
-
-  public reordenarMano() {
-    this.hand.sort(function(a, b) {
-        if ( a.position < b.position ) {
-            return -1;
-        }
-        if ( a.position > b.position ) {
-            return 1;
-        }
-        return 0;
-    });
 }
 
-}
+
+
 
 
   // public getMatrixOf(cols): Array<Card> {

@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './components/app-routing/app-routing.module';
 import { Http } from '@angular/http';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 // --Material
 import { AppMaterialModule } from './components/app-material/app-material.module';
@@ -19,6 +20,8 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 // --Firebase UI
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import * as firebase from 'firebase';
+import * as firebaseui from 'firebaseui';
 
 // --Services
 import { MetadataService } from './services/firestore/metadata.service';
@@ -37,9 +40,10 @@ import { AppLoginComponent } from './components/app-login/app-login.component';
 import { PagePolicyPrivacyComponent } from './components/page-policy-privacy/page-policy-privacy.component';
 import { PageServiceConditionsComponent } from './components/page-service-conditions/page-service-conditions.component';
 
-import * as firebase from 'firebase';
-import * as firebaseui from 'firebaseui';
+// -- directives
 import { FramepanzoomDirective } from './components/app-framepanzoom/framepanzoom.directive';
+
+
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInFlow: 'popup',
@@ -97,6 +101,7 @@ export function createTranslateLoader(http: Http) {
     BrowserAnimationsModule,
     AppRoutingModule,
     AppMaterialModule,
+    DragDropModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,

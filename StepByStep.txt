@@ -93,4 +93,11 @@ Step 011
     hostListener mouse event
 
 Step 012
+    Use cdk/drag-drop
     Reorder hand 
+    Drop on Board
+    Reset Turn
+
+Step 013
+    Send Turn
+    

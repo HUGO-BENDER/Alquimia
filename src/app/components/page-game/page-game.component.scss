@@ -111,12 +111,17 @@
     max-width: 96vw;
     overflow: hidden;
     border: 1px solid red;
-    user-select: none;
     overflow: hidden;
     background-color: teal;
     display: flex;
     flex-direction: row;
     justify-content: center;
+
+    .handDropList{
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
   }
 
 
@@ -127,12 +132,21 @@
   display: table-row;
 }
 
-.columna {
+.boardColumn {
   display: table-cell;
 }
 
-.celda {
+.cell {
   border: 1px solid black;
+  min-width: 100px;
+  max-width: 100px;
+  min-height: 100px;
+  max-height: 100px;
+  height: 100px;
+  overflow: hidden;
+}
+
+.cell-Drop{
   min-width: 100px;
   max-width: 100px;
   min-height: 100px;
@@ -153,30 +167,93 @@
   background-color: white;
 }
 
-.handcelda{
+.handCell {
   border: 1px solid black;
   border-radius: 5px;
-  background-color: rgb(184, 174, 174);
-  min-width: 200px;
-  max-width: 200px;
-  min-height: 100px;
-  max-height: 100px;
-  height: 100px;
+  flex: 1 1 auto;
   overflow: hidden;
+}
+
+.handCell-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #ccc;
+  border: dotted 3px #999;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.handCellSquareVH {
+  height: 14vh;
+  width: 14vh;
+  background-color: rgb(143, 56, 146);
+}
+
+.handCellSquareVW {
+  height: 18vw;
+  width: 18vw;
+  background-color: rgb(209, 198, 38);
+}
+
+
+// .handCell-Default {
+// }
+
+.gridList2x2 {
   user-select: none;
-  cursor: move;
-  .celdasvg{
-    user-select: none;
-    min-width: 90px;
-    max-width: 90px;
-    min-height: 100px;
-    max-height: 100px;
-    height: 100px;
+  background-color: white;
+  .gridTile11{
+    transform-origin: 50% 50%;
+    transform: scale(0.9);
   }
+  .gridTile12{
+    transform-origin: 50% 50%;
+    transform: scale(0.9);
+  }
+  .gridTile21{
+    transform-origin: 50% 50%;
+    transform: rotate(180deg) scale(0.9);
+  }
+  .gridTile22{
+    transform-origin: 50% 50%;
+    transform: rotate(180deg) scale(0.9);
+  }
+}
+
+.gridTileDisabled{
+  opacity: 0.7;
+  background-color: gray;
 }
 
 
 
+
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border: 2px dotted black;
+  opacity: 0.4;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-dragging .handCell:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cell-Drop > .cdk-drag-placeholder {
+  background-color: red;
+}
+
+
+.goal-Default {
+  border: 1px solid black;
+  background-color: rgb(184, 174, 174);
+}
 
 
 @keyframes alq-icon-on-over {
@@ -203,98 +280,3 @@
   }
 }
 
-
-
-
-// .gameWrapperFullScren {
-//   background-color: rgb(107, 189, 138);
-//   min-width: 100vw; 
-//   min-height: 100vh;
-// }
-
-// .game-content {
-//   display: flex;
-//   flex-direction: column;
-
-//   .game-display {
-//     flex: 5;    
-//     min-height: 0px;
-//     background-color: darkkhaki;
-//     padding: 20px;
-
-//     .boardgame {
-//       border: 1px solid red;
-//       background-color: rgb(189, 107, 125);
-//       flex: 1;
-//       min-height: 0px;
-//     }
-
-//   }
-
-//   .game-controls {
-//     flex: 1;
-//     background-color: teal;
-//     border-top: 2px solid royalblue;
-//     display: flex;
-//     flex-direction: row;
-
-//     .game-controls-left {
-//       flex: 0 0 auto;
-//       background-color: rgb(190, 187, 11);
-
-//       .btn-open-sideNav {
-//         float: left;
-//         margin: 15px;
-//         margin-top: -20px;
-
-//         .mat-24 {
-//           transform: rotate(-90deg);
-//         }
-//       }
-//     }
-
-//     .game-controls-center {
-//       flex: 1 1 auto;
-//       border: 1px solid grey;
-//     }
-
-
-//     .game-controls-rigth {
-//       flex: 0 0 auto;
-//       background-color: rgb(190, 187, 11);
-
-//       .btn-send-turn {
-//         float: right;
-//         margin: 10px;
-//         margin-top: -20px;
-//       }
-
-//     }
-
-
-
-
-//   }
-
-//   .game-hand {
-//     flex: 1;
-//     background-color: teal;
-//     padding: 0 20px 20px 20px;
-//   }
-
-// }
-
-
-
-// .table{
-//   border: 1px dotted red;
-//   background-color: greenyellow;
-//   // overflow: hidden;
-// }
-
-// .cell{
-//   border: 1px dotted black;
-//   background-color: aquamarine;
-//   max-width: 100px;
-//   overflow: hidden;
-// }

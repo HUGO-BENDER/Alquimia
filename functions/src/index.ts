@@ -66,7 +66,7 @@ exports.OnAddNewGame = functions.firestore
                     valor: 0,
                     description: '',
                     dragEnable: false,
-                    classCss: 'card'
+                    classCss: 'cell-Default'
                 }],
                 Players: [
                     {
@@ -81,7 +81,7 @@ exports.OnAddNewGame = functions.firestore
                     goal: {
                         dragEnable: false,
                         dropEnable: false,
-                        classCss: 'goal'
+                        classCss: 'goal-Default'
                     },
                     rows: [
                         {
@@ -93,7 +93,7 @@ exports.OnAddNewGame = functions.firestore
                             description: 'v',
                             dragEnable: true,
                             dropEnable: true,
-                            classCss: 'card '
+                            classCss: 'cell-Default'
                         }
                     ]
                 }],
@@ -104,7 +104,7 @@ exports.OnAddNewGame = functions.firestore
                     valor: 0,
                     description: '',
                     dragEnable: false,
-                    classCss: 'card'
+                    classCss: 'cell-Default'
                 }
             };
             // -- End Fake for GetSettingGame.  
@@ -121,8 +121,8 @@ exports.OnAddNewGame = functions.firestore
                         palo: s,
                         valor: v,
                         description: ConfigGame.Cards.descCards[contValue],
-                        dragEnable: false,
-                        classCss: 'card '
+                        dragEnable: true,
+                        classCss: 'handCell-Default'
                     });
                     cont += 1;
                     contValue += 1;
@@ -148,8 +148,6 @@ exports.OnAddNewGame = functions.firestore
             }
             for (let i = CurrentGame.Baraja.length - 1; i >= CurrentGame.Baraja.length - totalForPlayers; i--) {
                 const indexPlayer = i % ConfigGame.Players.cant;
-                console.log('i=', i, ' indexPlayer=', indexPlayer);
-
                 const cardToHand = {
                     id: CurrentGame.Baraja[i].id,
                     position: positions[indexPlayer] + 1,
@@ -157,7 +155,7 @@ exports.OnAddNewGame = functions.firestore
                     valor: CurrentGame.Baraja[i].valor,
                     description: CurrentGame.Baraja[i].description,
                     dragEnable: true,
-                    classCss: 'card handPlayer'
+                    classCss: 'handCell-Default'
                 };
                 CurrentGame.Players[indexPlayer].hand.push(cardToHand);
                 CurrentGame.Baraja[i].id = 0;
@@ -172,7 +170,7 @@ exports.OnAddNewGame = functions.firestore
                 valor: cardToDisplay.valor,
                 description: cardToDisplay.description,
                 dragEnable: true,
-                classCss: 'card handPlayer'
+                classCss: 'handCell-Default'
             };
             cardToDisplay.id = 0;
 
@@ -188,7 +186,7 @@ exports.OnAddNewGame = functions.firestore
                         valor: CurrentGame.DisplayedCard.valor,
                         description: CurrentGame.DisplayedCard.description,
                         dragEnable: true,
-                        classCss: 'card displayed onTable'
+                        classCss: 'handCell-Default'
                     }
                 }, { merge: true }
             )
@@ -204,7 +202,7 @@ exports.OnAddNewGame = functions.firestore
                         valor: c.valor,
                         description: c.description,
                         dragEnable: false,
-                        classCss: 'card'
+                        classCss: 'handCell-Default'
                     });
                 }
             }
@@ -220,16 +218,15 @@ exports.OnAddNewGame = functions.firestore
                     emptyColumna.push(
                         {
                             idPlayer: p.id,
-                            nomPlayer: p.data().displayName,
+                            displayNamePlayer: p.data().displayName,
                             active: x === 0,
                             id: 0,
                             position: x,
                             palo: '',
                             valor: 0,
                             description: '',
-                            dragEnable: true,
-                            dropEnable: true,
-                            classCss: 'card '
+                            dragEnable:  x === 0,
+                            classCss: 'cell-Default'
                         }
                     );
                 }
@@ -240,13 +237,12 @@ exports.OnAddNewGame = functions.firestore
                 const colKey = 'col' + (('0' + (x).toString()).slice(-2));
                 await fdb.doc(pathGame).collection('BoardGame').doc(colKey).set({
                     id: x,
-                    idUserWin: '',
-                    nameUserWin: '',
+                    idPlayerWin: '',
+                    displayNamePlayerWin: '',
                     goal: {
                         dragEnable: false,
-                        dropEnable: false,
                         bet: 0,
-                        classCss: 'goal '
+                        classCss: 'goal-Default'
                     },
                     rows: emptyColumna,
                 });
