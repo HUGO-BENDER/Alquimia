@@ -34,13 +34,12 @@
       <div appFramepanzoom class="boardgamepanzoom">
         <div class="boardgame" cdkDropListGroup>
           <div *ngFor="let col of boardGame | async" class="boardColumn">
-            <div *ngFor="let c of getColumns(col.rows, false)" class="cell cell-enemy">
+            <div *ngFor="let c of getColumns(col.rows, false)" [ngClass]="['cell','cell-enemy', c.classCss ]">
               {{col.id}}/{{c.position}} # {{c.displayNamePlayer | slice:0:4}}
             </div>
             <div class="cell cell-neutral">{{col.colId}} *** {{col.id}}</div>
-
             <div *ngFor="let card of  getColumns(col.rows, true)" [ngClass]="['cell','cell-allied', card.classCss ]">
-              <div *ngIf="card.id === 0 && card.dragEnable" [ngClass]="['cell','cell-allied', card.classCss ]"
+              <div *ngIf="card.id === 0 && card.dragEnable" [ngClass]="['cell-Drop','cell-allied']"
                 cdkDropList id=boardDropList{{col.id}} (cdkDropListDropped)="onBoardDrop($event,card)">
               </div>
               <div *ngIf="card.id === 0">
@@ -97,7 +96,7 @@
         cdkDropListOrientation="horizontal" (cdkDropListDropped)="onHandDrop($event)">
         <div *ngFor="let card of hand" (window:resize)="onResize($event)" cdkDrag [cdkDragDisabled]="!card.dragEnable"
           [ngClass]="['handCell', card.classCss ]">
-          <div [ngClass]="['handCell-placeholder', card.classCss ]" *cdkDragPlaceholder></div>
+          <div [ngClass]="['handCell-placeholder', card.classCss]" *cdkDragPlaceholder></div>
           <mat-grid-list *ngIf="!card.previousValues" cols="2" rowHeight="1:1" gutterSize="0px" class="gridList2x2">
             <mat-grid-tile><img class="gridTile11" src="../assets/images/n_{{card.description}}.svg" /></mat-grid-tile>
             <mat-grid-tile><img class="gridTile12" src="../assets/images/{{card.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>

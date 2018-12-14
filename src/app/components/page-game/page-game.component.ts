@@ -161,6 +161,7 @@ export class PageGameComponent implements OnInit {
       valuesTo.palo = null;
     }
   }
+
 }
 
 
