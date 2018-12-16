@@ -38,7 +38,7 @@ exports.OnAddNewGame = functions.firestore
         const ConfigGame = {
             Players: {
                 cant: 2,
-                hand: 5
+                hand: 6
             },
             Cards: {
                 valueCards: [1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -48,7 +48,8 @@ exports.OnAddNewGame = functions.firestore
             board: {
                 cols: 9,
                 rows: 4
-            }
+            },
+            displayedCard: false
         };
         // -- Variable Game actual
         const CurrentGame = {
@@ -80,6 +81,7 @@ exports.OnAddNewGame = functions.firestore
                         {
                             idPlayer: '',
                             id: 0,
+                            idCol: 0,
                             position: 0,
                             palo: 's',
                             valor: 0,
@@ -154,31 +156,41 @@ exports.OnAddNewGame = functions.firestore
             positions[indexPlayer] += 1;
         }
         // -- Card on table
-        const cardToDisplay = CurrentGame.Baraja[CurrentGame.Baraja.length - totalForPlayers - 1];
-        CurrentGame.DisplayedCard = {
-            id: cardToDisplay.id,
-            position: cardToDisplay.position,
-            palo: cardToDisplay.palo,
-            valor: cardToDisplay.valor,
-            description: cardToDisplay.description,
-            dragEnable: true,
-            classCss: 'handCell-Default'
-        };
-        cardToDisplay.id = 0;
-        // -- Actualizamos la raiz
-        snap.ref.set({
-            turnCont: 1,
-            timeStart: FieldValue.serverTimestamp(),
-            displayedCard: {
-                id: CurrentGame.DisplayedCard.id,
-                position: CurrentGame.DisplayedCard.position,
-                palo: CurrentGame.DisplayedCard.palo,
-                valor: CurrentGame.DisplayedCard.valor,
-                description: CurrentGame.DisplayedCard.description,
+        if (ConfigGame.displayedCard) {
+            const cardToDisplay = CurrentGame.Baraja[CurrentGame.Baraja.length - totalForPlayers - 1];
+            CurrentGame.DisplayedCard = {
+                id: cardToDisplay.id,
+                position: cardToDisplay.position,
+                palo: cardToDisplay.palo,
+                valor: cardToDisplay.valor,
+                description: cardToDisplay.description,
                 dragEnable: true,
                 classCss: 'handCell-Default'
-            }
-        }, { merge: true });
+            };
+            cardToDisplay.id = 0;
+        }
+        // -- Actualizamos la raiz
+        if (ConfigGame.displayedCard) {
+            snap.ref.set({
+                turnCont: 1,
+                timeStart: FieldValue.serverTimestamp(),
+                displayedCard: {
+                    id: CurrentGame.DisplayedCard.id,
+                    position: CurrentGame.DisplayedCard.position,
+                    palo: CurrentGame.DisplayedCard.palo,
+                    valor: CurrentGame.DisplayedCard.valor,
+                    description: CurrentGame.DisplayedCard.description,
+                    dragEnable: true,
+                    classCss: 'handCell-Default'
+                }
+            }, { merge: true });
+        }
+        else {
+            snap.ref.set({
+                turnCont: 1,
+                timeStart: FieldValue.serverTimestamp(),
+            }, { merge: true });
+        }
         // -- Creamos la baraja
         for (const c of CurrentGame.Baraja) {
             if (c.id > 0) {
@@ -204,7 +216,6 @@ exports.OnAddNewGame = functions.firestore
                 emptyColumna.push({
                     idPlayer: p.id,
                     displayNamePlayer: p.data().displayName,
-                    active: x === 0,
                     id: 0,
                     position: x,
                     palo: '',
@@ -218,6 +229,7 @@ exports.OnAddNewGame = functions.firestore
         // -- Creamos el trablero
         for (let x = 0; x < ConfigGame.board.cols; x++) {
             const colKey = 'col' + (('0' + (x).toString()).slice(-2));
+            emptyColumna.forEach(function (c) { c.idCol = x; });
             yield fdb.doc(pathGame).collection('BoardGame').doc(colKey).set({
                 id: x,
                 idPlayerWin: '',
