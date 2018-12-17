@@ -36,6 +36,7 @@ export interface Game {
     displayedCard?: Card;
     Players?: ColPlayers;
     Board?: Board;
+    turnCont: number;
 }
 
 export interface GameInProgress {

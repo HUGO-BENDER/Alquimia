@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { ActivatedRoute } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { GameService } from 'src/app/services/firestore/game.service';
 import { Game, Card, ColumnGame } from 'src/app/model/game';
@@ -34,10 +35,12 @@ export class PageGameComponent implements OnInit {
   stateButtons = 'outside';
   handCellForceSquare: string;
   boardCellChanged: Array<Card> = [];
+  snackBarVerticalPositionTop: MatSnackBarVerticalPosition = 'top';
 
   constructor(
     public au: AngularFireAuth,
     private route: ActivatedRoute,
+    public snackBar: MatSnackBar,
     private afsGame: GameService
   ) { }
 
@@ -134,8 +137,20 @@ export class PageGameComponent implements OnInit {
     this.stateButtons = 'outside';
   }
   public sendTurn() {
-    alert('Vamos a enviar el turno');
+    const idGame = this.route.snapshot.paramMap.get('id');
+    this.afsGame.senTurn(
+      this.hand, this.boardCellChanged,
+      idGame, this.userlogined.uid, this.currentGame.turnCont
+      )
+      .then(function () {
+        this.openSnackBar('xSe ha enviado el Turno');
+      })
+      .catch(function (error) {
+        this.openSnackBar('xError :-( ');
+        console.error('Error adding document: ', error);
+      });
   }
+
   // -- Auxiliar functions
   public copyValues(valuesFrom: Card, valuesTo: Card, bk: boolean) {
     if (bk) {
@@ -162,6 +177,13 @@ export class PageGameComponent implements OnInit {
       valuesTo.description = null;
       valuesTo.palo = null;
     }
+  }
+
+  openSnackBar(mensaje: string): any {
+    this.snackBar.open(mensaje, 'xClose', {
+      duration: 5000,
+      verticalPosition: this.snackBarVerticalPositionTop
+    });
   }
 
 }
