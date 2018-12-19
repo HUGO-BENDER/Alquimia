@@ -26,12 +26,35 @@ export class GameService {
   public senTurn(hand: Array<Card>, boardChanged: Array<Card>,
                  idGame: string, uid: string, contTurn: number) {
     const keyTurn = ('00' + (contTurn).toString()).slice(-3) + '-' + uid;
+
+    const arrayCardsInHands: Array<any> = [];
+    for (const hc of hand) {
+      arrayCardsInHands.push({
+        id: hc.id,
+        position: hc.position,
+        description: hc.description,
+        palo: hc.palo
+      });
+    }
+
+    const arrayCellInBoard: Array<any> = [];
+    for (const bc of boardChanged) {
+      arrayCellInBoard.push({
+        id: bc.id,
+        idCol: bc.idCol,
+        position: bc.position,
+        description: bc.description,
+        palo: bc.palo
+      });
+    }
+
     return this.afs.collection('Games').doc(idGame)
                     .collection('Turns').doc(keyTurn).set(
                       {
+                        sendAt: new Date(),
                         userId: uid,
-                        hand: 'hand.values',
-                        boardChanged: 'boardChanged.values'
+                        hand: arrayCardsInHands,
+                        boardChanged: arrayCellInBoard
                       }
                     );
   }

@@ -143,11 +143,12 @@ export class PageGameComponent implements OnInit {
       idGame, this.userlogined.uid, this.currentGame.turnCont
       )
       .then(function () {
+        console.log('xSe ha enviado el Turno');
         this.openSnackBar('xSe ha enviado el Turno');
       })
       .catch(function (error) {
         this.openSnackBar('xError :-( ');
-        console.error('Error adding document: ', error);
+        console.log('Error adding document: ', error);
       });
   }
 
@@ -179,7 +180,7 @@ export class PageGameComponent implements OnInit {
     }
   }
 
-  openSnackBar(mensaje: string): any {
+  public openSnackBar(mensaje: string): any {
     this.snackBar.open(mensaje, 'xClose', {
       duration: 5000,
       verticalPosition: this.snackBarVerticalPositionTop
