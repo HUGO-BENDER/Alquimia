@@ -37,10 +37,18 @@ export interface Game {
     Players?: ColPlayers;
     Board?: Board;
     turnCont: number;
+    state?: gameState;
+    playerIdTurn?: string;
 }
 
 export interface GameInProgress {
     id: string;
     isMyTurn: boolean;
     timeLastTurn: any;
+}
+
+export enum gameState {
+    PLAYING,
+    WAITING,
+    FINISHED
 }

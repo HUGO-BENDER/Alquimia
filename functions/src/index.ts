@@ -177,32 +177,6 @@ exports.OnAddNewGame = functions.firestore
                 };
                 cardToDisplay.id = 0;
             }
-            // -- Actualizamos la raiz
-            if (ConfigGame.displayedCard) {
-                snap.ref.set(
-                    {
-                        turnCont: 1,
-                        timeStart: FieldValue.serverTimestamp(),
-                        displayedCard: {
-                            id: CurrentGame.DisplayedCard.id,
-                            position: CurrentGame.DisplayedCard.position,
-                            palo: CurrentGame.DisplayedCard.palo,
-                            valor: CurrentGame.DisplayedCard.valor,
-                            description: CurrentGame.DisplayedCard.description,
-                            dragEnable: true,
-                            classCss: 'handCell-Default'
-                        }
-                    }, { merge: true }
-                )
-            } else {
-                snap.ref.set(
-                    {
-                        turnCont: 1,
-                        timeStart: FieldValue.serverTimestamp(),
-                    }, { merge: true }
-                )
-            }
-
             // -- Creamos la baraja
             for (const c of CurrentGame.Baraja) {
                 if (c.id > 0) {
@@ -223,9 +197,14 @@ exports.OnAddNewGame = functions.firestore
             const snapshotplayers = await fdb.doc(pathGame).collection('Players').get();
             let indPlayer = 0;
             const ramdomFirstTurn = Math.floor(Math.random() * (ConfigGame.Players.cant));
+            let ramdomFirstPlayer = '';
             const emptyColumna = [];
 
             for (const p of snapshotplayers.docs) {
+                if ( ramdomFirstTurn === indPlayer ){
+                    ramdomFirstPlayer = p.id;
+                }
+                indPlayer += 1;
                 for (let x = 0; x < ConfigGame.board.rows; x++) {
                     emptyColumna.push(
                         {
@@ -241,6 +220,34 @@ exports.OnAddNewGame = functions.firestore
                         }
                     );
                 }
+            }
+            indPlayer = 0;
+            // -- Actualizamos la raiz
+            if (ConfigGame.displayedCard) {
+                snap.ref.set(
+                    {
+                        turnCont: 1,
+                        playerIdTurn: ramdomFirstPlayer,
+                        timeStart: FieldValue.serverTimestamp(),
+                        displayedCard: {
+                            id: CurrentGame.DisplayedCard.id,
+                            position: CurrentGame.DisplayedCard.position,
+                            palo: CurrentGame.DisplayedCard.palo,
+                            valor: CurrentGame.DisplayedCard.valor,
+                            description: CurrentGame.DisplayedCard.description,
+                            dragEnable: true,
+                            classCss: 'handCell-Default'
+                        }
+                    }, { merge: true }
+                )
+            } else {
+                snap.ref.set(
+                    {
+                        turnCont: 1,
+                        playerIdTurn: ramdomFirstPlayer,
+                        timeStart: FieldValue.serverTimestamp(),
+                    }, { merge: true }
+                )
             }
 
             // -- Creamos el trablero

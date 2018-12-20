@@ -5,7 +5,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { GameService } from 'src/app/services/firestore/game.service';
-import { Game, Card, ColumnGame } from 'src/app/model/game';
+import { Game, Card, ColumnGame, gameState } from 'src/app/model/game';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import * as firebase from 'firebase';
 
@@ -36,6 +36,7 @@ export class PageGameComponent implements OnInit {
   handCellForceSquare: string;
   boardCellChanged: Array<Card> = [];
   snackBarVerticalPositionTop: MatSnackBarVerticalPosition = 'top';
+  stateGame: gameState = gameState.WAITING;
 
   constructor(
     public au: AngularFireAuth,
@@ -50,6 +51,14 @@ export class PageGameComponent implements OnInit {
     this.au.authState.subscribe(user => {
       if (user) {
         this.userlogined = user;
+
+        this.afsGame.getGame(idGame).get()
+        .then(doc => {
+          this.currentGame = <Game>doc.data();
+          this.stateGame = this.currentGame.playerIdTurn === this.userlogined.uid ? 0 : 1;
+        })
+        .catch(error => { console.log('Error getting document:', error); });
+
         this.afsGame.getHand(idGame, user).get()
           .then(doc => {
             this.hand = doc.data().hand;
@@ -61,9 +70,7 @@ export class PageGameComponent implements OnInit {
       }
     });
 
-    this.afsGame.getGame(idGame).get()
-      .then(doc => { this.currentGame = <Game>doc.data(); })
-      .catch(error => { console.log('Error getting document:', error); });
+
 
     this.boardGame = this.afsGame.getBoard(idGame).map(
       actions => {
@@ -142,11 +149,12 @@ export class PageGameComponent implements OnInit {
       this.hand, this.boardCellChanged,
       idGame, this.userlogined.uid, this.currentGame.turnCont
       )
-      .then(function () {
+      .then( () => {
         console.log('xSe ha enviado el Turno');
+        this.stateButtons = 'outside';
         this.openSnackBar('xSe ha enviado el Turno');
       })
-      .catch(function (error) {
+      .catch( (error) => {
         this.openSnackBar('xError :-( ');
         console.log('Error adding document: ', error);
       });

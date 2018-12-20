@@ -148,6 +148,8 @@ export class PageHomeComponent implements OnInit {
   }
 
 
+
+
   openSnackBar(mensaje: string): any {
     this.snackBar.open(mensaje, 'xClose', {
       duration: 5000,

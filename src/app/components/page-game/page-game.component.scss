@@ -180,6 +180,7 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+// cambiar esto para que se calcule segun la cantidad de cartas !!!
 .handCellSquareVH {
   height: 14vh;
   width: 14vh;
@@ -187,8 +188,8 @@
 }
 
 .handCellSquareVW {
-  height: 18vw;
-  width: 18vw;
+  height: 16vw;
+  width: 16vw;
   background-color: rgb(209, 198, 38);
 }
 
