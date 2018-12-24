@@ -152,6 +152,7 @@ export class PageGameComponent implements OnInit {
       .then( () => {
         console.log('xSe ha enviado el Turno');
         this.stateButtons = 'outside';
+        this.stateGame = gameState.WAITING;
         this.openSnackBar('xSe ha enviado el Turno');
       })
       .catch( (error) => {

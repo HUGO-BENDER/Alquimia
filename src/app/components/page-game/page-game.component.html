@@ -78,7 +78,8 @@
         </button>
       </div>
       <div class="game-controls-center">
-        {{stateGame}}
+        <span *ngIf="stateGame == 0">Es tu turno. Te están esperando</span>
+        <span *ngIf="stateGame == 1">WAITING. Esperando a los otros jugadores</span>
       </div>
       <div class="game-controls-rigth" [@animAppear]='stateButtons'>
         <button mat-raised-button class="btn-send-turn" (click)="resetTurn()">

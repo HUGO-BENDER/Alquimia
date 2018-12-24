@@ -25,7 +25,7 @@ export class GameService {
 
   public senTurn(hand: Array<Card>, boardChanged: Array<Card>,
                  idGame: string, uid: string, contTurn: number) {
-    const keyTurn = ('00' + (contTurn).toString()).slice(-3) + '-' + uid;
+    const keyTurn = ('00' + (contTurn).toString()).slice(-3);
 
     const arrayCardsInHands: Array<any> = [];
     for (const hc of hand) {
@@ -49,10 +49,10 @@ export class GameService {
     }
 
     return this.afs.collection('Games').doc(idGame)
+                    .collection('Players').doc(uid)
                     .collection('Turns').doc(keyTurn).set(
                       {
                         sendAt: new Date(),
-                        userId: uid,
                         hand: arrayCardsInHands,
                         boardChanged: arrayCellInBoard
                       }
