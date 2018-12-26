@@ -37,47 +37,56 @@ exports.OnAddNewTurn = functions.firestore
         //  leer los datos y guardarlos. 1
         const newTurn = snap.data();
         console.log('newTurn es ', newTurn);
-        // console.log('newTurn.boardChanged es ', newTurn.boardChanged);
-        // const newCellBoard = newTurn.boardChanged[0];
-        // console.log('newCellBoard.idCol es ', newCellBoard.idCol);
-        // //-- recuperamos los Id de los jugadores    
-        // const snapshotplayers = await fdb.doc(pathGame).collection('Players').get();
-        // for (const p of snapshotplayers.docs) {
-        //     if (p.id === context.params.uidPlayer) {
-        //         //-- Actualizamos el tablero
-        //         console.log('newCellBoard.idCol es ', newCellBoard.idCol);
-        //         const k = ('col0' + (newCellBoard.idCol).toString()).slice(-2);
-        //         const board = await fdb.doc(pathGame).collection('BoardGame').doc(k).get()
-        //         const newArrayValues = board.rows;
-        //          for (let i = 0; i < 8; i++) {
-        //             if (newArrayValues[i].idPlayer === context.params.uidPlayer && 
-        //                 newArrayValues[i].position ===  newCellBoard.position) {
-        //                     newArrayValues[i].id = newCellBoard.id;
-        //                     newArrayValues[i].description = newCellBoard.description;
-        //                     newArrayValues[i].palo = newCellBoard.palo;
-        //             }
-        //         }
-        //         board.set({
-        //             rows: newArrayValues
-        //         }, { merge: true });
-        //         //-- aumentamos el contador
-        //         const contador = await fdb.doc(pathGame).get();
-        //         const actualCont = contador.turnCont + 0.5;
-        //         console.log('actualCont es ', actualCont);
-        //         const increcont = await fdb.doc(pathGame).set({
-        //             turnCont: actualCont
-        //         }, { merge: true });
-        //         //-- en el general del jugador informamos que ya jugó
-        //         const r = await fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
-        //             timeLastTurn: FieldValue.serverTimestamp(),
-        //             isMyTurn: false
-        //         }, { merge: true });
-        //     } else {
-        //         const r = await fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
-        //             isMyTurn: true
-        //         }, { merge: true });
-        //     }
-        // }
+        console.log('newTurn.boardChanged es ', newTurn.boardChanged);
+        const newCellBoard = newTurn.boardChanged[0];
+        const colKey = 'col' + (('0' + (newCellBoard.idCol).toString()).slice(-2));
+        console.log('colKey es ', colKey);
+        //-- recuperamos los Id de los jugadores    
+        const snapshotplayers = yield fdb.doc(pathGame).collection('Players').get();
+        for (const p of snapshotplayers.docs) {
+            if (p.id === context.params.uidPlayer) {
+                //         //-- Actualizamos el tablero
+                console.log('el jugador que mando el turno es ', p.data().displayName);
+                const board = yield fdb.doc(pathGame).collection('BoardGame').doc(colKey).get();
+                console.log('board.data() es ', board.data());
+                const newArrayValues = board.data().rows;
+                console.log('newArrayValues es ', newArrayValues);
+                for (let i = 0; i < 8; i++) {
+                    if (newArrayValues[i].idPlayer === context.params.uidPlayer &&
+                        newArrayValues[i].position === newCellBoard.position) {
+                        newArrayValues[i].id = newCellBoard.id;
+                        newArrayValues[i].description = newCellBoard.description;
+                        newArrayValues[i].palo = newCellBoard.palo;
+                        newArrayValues[i].valor = newCellBoard.valor;
+                    }
+                }
+                yield fdb.doc(pathGame).collection('BoardGame').doc(colKey).set({
+                    rows: newArrayValues
+                }, { merge: true });
+                //-- aumentamos el contador
+                const contador = yield fdb.doc(pathGame).get();
+                console.log('contador es ', contador.data());
+                const actualCont = contador.data().turnCont + 0.5;
+                console.log('actualCont es ', actualCont);
+                yield fdb.doc(pathGame).set({
+                    turnCont: actualCont
+                }, { merge: true });
+                //-- en el general del jugador informamos que ya jugó
+                const r = yield fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
+                    timeLastTurn: FieldValue.serverTimestamp(),
+                    isMyTurn: false
+                }, { merge: true });
+            }
+            else {
+                console.log('el otro jugador es ', p.data().displayName);
+                yield fdb.doc(pathGame).set({
+                    playerIdTurn: p.id
+                }, { merge: true });
+                yield fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
+                    isMyTurn: true
+                }, { merge: true });
+            }
+        }
         return Promise.resolve('essssssaaaaaa');
     }
     catch (err) {

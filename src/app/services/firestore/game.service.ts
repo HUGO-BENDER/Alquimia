@@ -11,7 +11,7 @@ export class GameService {
   constructor(private afs: AngularFirestore) { }
 
   public getGame(id: string) {
-    return this.afs.collection('Games').doc(id).ref;
+    return this.afs.collection('Games').doc(id).snapshotChanges();
   }
 
   public getHand(id: string, userlogined: firebase.User) {
@@ -44,7 +44,8 @@ export class GameService {
         idCol: bc.idCol,
         position: bc.position,
         description: bc.description,
-        palo: bc.palo
+        palo: bc.palo,
+        valor: bc.valor
       });
     }
 
