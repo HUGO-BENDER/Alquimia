@@ -11,7 +11,7 @@ export class GameService {
   constructor(private afs: AngularFirestore) { }
 
   public getGame(id: string) {
-    return this.afs.collection('Games').doc(id).snapshotChanges();
+    return this.afs.collection('Games').doc(id).ref;
   }
 
   public getHand(id: string, userlogined: firebase.User) {

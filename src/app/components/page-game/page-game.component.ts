@@ -28,7 +28,7 @@ import * as firebase from 'firebase';
   ]
 })
 export class PageGameComponent implements OnInit {
-  currentGame: Observable<Game>;
+  currentGame: Game;
   boardGame: Observable<ColumnGame[]>;
   hand: Array<Card> = [];
   userlogined: firebase.User;
@@ -52,13 +52,12 @@ export class PageGameComponent implements OnInit {
       if (user) {
         this.userlogined = user;
 
-        // this.afsGame.getGame(idGame).get()
-        // .then(doc => {
-        //   this.currentGame = <Game>doc.data();
-        //   this.stateGame = this.currentGame.playerIdTurn === this.userlogined.uid ? 0 : 1;
-        // })
-        // .catch(error => { console.log('Error getting document:', error); });
-
+        this.afsGame.getGame(idGame).get()
+        .then(doc => {
+          this.currentGame = <Game>doc.data();
+          this.stateGame = this.currentGame.playerIdTurn === this.userlogined.uid ? 0 : 1;
+        })
+        .catch(error => { console.log('Error getting document:', error); });
 
         this.afsGame.getHand(idGame, user).get()
           .then(doc => {
@@ -71,7 +70,7 @@ export class PageGameComponent implements OnInit {
       }
     });
 
-// this.currentGame = this.afsGame.getGame(idGame)
+
 
     this.boardGame = this.afsGame.getBoard(idGame).map(
       actions => {
