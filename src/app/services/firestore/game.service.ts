@@ -10,8 +10,8 @@ export class GameService {
 
   constructor(private afs: AngularFirestore) { }
 
-  public getGame(id: string) {
-    return this.afs.collection('Games').doc(id).ref;
+  public getSnapshotGame(id: string) {
+    return this.afs.collection('Games').doc(id).snapshotChanges();
   }
 
   public getHand(id: string, userlogined: firebase.User) {
@@ -20,12 +20,12 @@ export class GameService {
   }
 
   public getBoard(id: string) {
-    return this.afs.collection('Games').doc(id).collection('BoardGame').snapshotChanges();
+    return this.afs.collection('Games').doc(id).collection('BoardGame').ref;
   }
 
   public senTurn(hand: Array<Card>, boardChanged: Array<Card>,
                  idGame: string, uid: string, contTurn: number) {
-    const keyTurn = ('00' + (contTurn).toString()).slice(-3);
+    const keyTurn = ('00' + Math.trunc(contTurn).toString()).slice(-3);
 
     const arrayCardsInHands: Array<any> = [];
     for (const hc of hand) {

@@ -33,8 +33,24 @@
     <div class="game-display">
       <div appFramepanzoom class="boardgamepanzoom">
         <div class="boardgame" cdkDropListGroup>
-          <div *ngFor="let col of boardGame | async" class="boardColumn">
-            <div *ngFor="let c of getColumns(col.rows, false)" [ngClass]="['cell','cell-enemy']">
+          <div *ngFor="let col of boardGame" class="boardColumn">
+            <div *ngFor="let c of col.rows" [ngClass]="['cell', c.classCss ]">
+              <div *ngIf="(c.id === 0 && !c.dragEnable) || (c.id === 0 && c.idPlayer != this.userlogined.uid)">
+                {{col.id}}/{{c.position}} # {{c.displayNamePlayer | slice:0:4}}
+              </div>
+              <div *ngIf="c.id === 0 && c.dragEnable && c.idPlayer === this.userlogined.uid" [ngClass]="['cell-Drop']" cdkDropList id=boardDropList{{col.id}}
+                (cdkDropListDropped)="onBoardDrop($event,c)">
+              </div>
+              <mat-grid-list *ngIf="c.id != 0" cols="2" rowHeight="1:1" gutterSize="0px" class="gridList2x2">
+                <mat-grid-tile><img class="gridTile11" src="../assets/images/n_{{c.description}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile12" src="../assets/images/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile21" src="../assets/images/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile22" src="../assets/images/n_{{c.description}}.svg" /></mat-grid-tile>
+              </mat-grid-list>
+
+            </div>
+
+            <!-- <div *ngFor="let c of getColumns(col.rows, false)" [ngClass]="['cell','cell-enemy']">
               <div *ngIf="c.id === 0">
                 {{col.id}}/{{c.position}} # {{c.displayNamePlayer | slice:0:4}}
               </div>
@@ -60,7 +76,7 @@
                 <mat-grid-tile><img class="gridTile21" src="../assets/images/{{card.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
                 <mat-grid-tile><img class="gridTile22" src="../assets/images/n_{{card.description}}.svg" /></mat-grid-tile>
               </mat-grid-list>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

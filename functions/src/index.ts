@@ -71,15 +71,44 @@ exports.OnAddNewTurn = functions.firestore
                         rows: newArrayValues
                     }, { merge: true });
 
+
+
+                    const dataGame = await fdb.doc(pathGame).get();
+                    
                     //-- aumentamos el contador
-                    const contador = await fdb.doc(pathGame).get();
-                    console.log('contador es ', contador.data());
-                    const actualCont = contador.data().turnCont + 0.5;
+                    console.log('dataGame es ', dataGame.data());
+                    const actualCont = dataGame.data().turnCont + 0.5;
                     console.log('actualCont es ', actualCont);
+                    const actualNextCard =  ('0' + (dataGame.data().idNextCard).toString()).slice(-2) ;
+                    console.log('idNextCard es ', actualNextCard);
+
+
+                    //-- actualizamos la carta jugada con una nueva de la baraja
+                    const nextCard = await fdb.doc(pathGame).collection('Baraja').doc(actualNextCard).get();
+                    console.log('nextCard es ', nextCard.data());
+
+                    const cardsInHand = [];
+                    newTurn.hand.forEach(c => {
+                        if (c.id) {
+                            cardsInHand.push(c);
+                        }
+                    });
+                    cardsInHand.push(nextCard.data());
+
+
 
                     await fdb.doc(pathGame).set({
-                        turnCont: actualCont
+                        turnCont: actualCont,
+                        idNextCard: +actualNextCard - 1
                     }, { merge: true });
+
+                    await fdb.doc(pathGame).collection('Players').doc(p.id).set({
+                        hand: cardsInHand
+                    }, { merge: true });
+
+
+
+
 
                     //-- en el general del jugador informamos que ya jugó
                     const r = await fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
@@ -305,6 +334,7 @@ exports.OnAddNewGame = functions.firestore
                 snap.ref.set(
                     {
                         turnCont: 1,
+                        idNextCard: CurrentGame.Baraja.length - totalForPlayers - 2,
                         playerIdTurn: ramdomFirstPlayer,
                         timeStart: FieldValue.serverTimestamp(),
                         displayedCard: {
@@ -322,6 +352,7 @@ exports.OnAddNewGame = functions.firestore
                 snap.ref.set(
                     {
                         turnCont: 1,
+                        idNextCard: CurrentGame.Baraja.length - totalForPlayers - 1,
                         playerIdTurn: ramdomFirstPlayer,
                         timeStart: FieldValue.serverTimestamp(),
                     }, { merge: true }

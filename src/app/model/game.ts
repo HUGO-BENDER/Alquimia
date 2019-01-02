@@ -7,8 +7,8 @@ export interface ColPlayers {
 export interface ColumnGame {
     colId: string;
     id: number;
-    idUserWin: string;
-    nameUserWin: string;
+    idPlayerWin: string;
+    displayNamePlayerWin: string;
     rows: Array<Card>;
 }
 
@@ -19,7 +19,7 @@ export interface Board {
 export interface Card {
     idPlayer: string;
     displayNamePlayer: string;
-    id: string;
+    id: number;
     idCol?: number;
     position: number;
     palo: string;
