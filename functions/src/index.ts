@@ -65,6 +65,10 @@ exports.OnAddNewTurn = functions.firestore
                             newArrayValues[i].palo = newCellBoard.palo;
                             newArrayValues[i].valor = newCellBoard.valor;
                         }
+                        if (newArrayValues[i].idPlayer === context.params.uidPlayer &&
+                            newArrayValues[i].position === newCellBoard.position + 1) {
+                            newArrayValues[i].dragEnable = true;
+                        }
                     }
 
                     await fdb.doc(pathGame).collection('BoardGame').doc(colKey).set({
@@ -90,6 +94,7 @@ exports.OnAddNewTurn = functions.firestore
                     const cardsInHand = [];
                     newTurn.hand.forEach(c => {
                         if (c.id) {
+                            c.dragEnable = true;
                             cardsInHand.push(c);
                         }
                     });
@@ -294,7 +299,7 @@ exports.OnAddNewGame = functions.firestore
                         palo: c.palo,
                         valor: c.valor,
                         description: c.description,
-                        dragEnable: false,
+                        dragEnable: true,
                         classCss: 'handCell-Default'
                     });
                 }
@@ -334,7 +339,7 @@ exports.OnAddNewGame = functions.firestore
                 snap.ref.set(
                     {
                         turnCont: 1,
-                        idNextCard: CurrentGame.Baraja.length - totalForPlayers - 2,
+                        idNextCard: CurrentGame.Baraja.length - totalForPlayers - 1,
                         playerIdTurn: ramdomFirstPlayer,
                         timeStart: FieldValue.serverTimestamp(),
                         displayedCard: {
@@ -352,7 +357,7 @@ exports.OnAddNewGame = functions.firestore
                 snap.ref.set(
                     {
                         turnCont: 1,
-                        idNextCard: CurrentGame.Baraja.length - totalForPlayers - 1,
+                        idNextCard: CurrentGame.Baraja.length - totalForPlayers,
                         playerIdTurn: ramdomFirstPlayer,
                         timeStart: FieldValue.serverTimestamp(),
                     }, { merge: true }
