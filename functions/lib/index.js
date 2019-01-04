@@ -85,6 +85,11 @@ exports.OnAddNewTurn = functions.firestore
                     }
                 });
                 cardsInHand.push(nextCard.data());
+                let newPos = 0;
+                for (const cardInHand of cardsInHand) {
+                    cardInHand.position = newPos;
+                    newPos += 1;
+                }
                 yield fdb.doc(pathGame).set({
                     turnCont: actualCont,
                     idNextCard: +actualNextCard - 1

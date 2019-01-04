@@ -33,7 +33,8 @@ export class GameService {
         id: hc.id,
         position: hc.position,
         description: hc.description,
-        palo: hc.palo
+        palo: hc.palo,
+        valor: hc.valor
       });
     }
 
