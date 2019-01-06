@@ -95,8 +95,8 @@ export class PageGameComponent implements OnInit, OnDestroy {
             this.getColumns(doc.data().rows, false).forEach(c => {oBoardGame[doc.data().id].rows.push(c); });
             oBoardGame[doc.data().id].rows.push(<Card>{
               idPlayer: '',
-              displayNamePlayer: 'TOTEM',
-              id: 0,
+              displayNamePlayer: 'GOAL',
+              id: -1,
               idCol: doc.data().id,
               position: 0,
               palo: doc.id,
@@ -145,6 +145,7 @@ export class PageGameComponent implements OnInit, OnDestroy {
   // -- Board
   public onBoardDrop(event: CdkDragDrop<Card[]>, c: Card) {
     const ori = event.previousContainer.data[event.previousIndex];
+    this.boardCellChanged = [];
     this.boardCellChanged.push(c);
     this.copyValues(ori, c, true);
     this.copyValues(null, ori, true);

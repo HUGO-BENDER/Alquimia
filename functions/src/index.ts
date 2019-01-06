@@ -78,42 +78,42 @@ exports.OnAddNewTurn = functions.firestore
 
 
                     const dataGame = await fdb.doc(pathGame).get();
-                    
+
                     //-- aumentamos el contador
                     console.log('dataGame es ', dataGame.data());
                     const actualCont = dataGame.data().turnCont + 0.5;
                     console.log('actualCont es ', actualCont);
-                    const actualNextCard =  ('0' + (dataGame.data().idNextCard).toString()).slice(-2) ;
+                    const actualNextCard = ('0' + (dataGame.data().idNextCard).toString()).slice(-2);
                     console.log('idNextCard es ', actualNextCard);
 
+                    if (dataGame.data().idNextCard >= 0) {
+                        //-- actualizamos la carta jugada con una nueva de la baraja
+                        const nextCard = await fdb.doc(pathGame).collection('Baraja').doc(actualNextCard).get();
+                        console.log('nextCard es ', nextCard.data());
 
-                    //-- actualizamos la carta jugada con una nueva de la baraja
-                    const nextCard = await fdb.doc(pathGame).collection('Baraja').doc(actualNextCard).get();
-                    console.log('nextCard es ', nextCard.data());
-
-                    const cardsInHand = [];
-                    newTurn.hand.forEach(c => {
-                        if (c.id) {
-                            c.dragEnable = true;
-                            cardsInHand.push(c);
+                        const cardsInHand = [];
+                        newTurn.hand.forEach(c => {
+                            if (c.id) {
+                                c.dragEnable = true;
+                                cardsInHand.push(c);
+                            }
+                        });
+                        cardsInHand.push(nextCard.data());
+                        let newPos = 0;
+                        for (const cardInHand of cardsInHand) {
+                            cardInHand.position = newPos;
+                            newPos += 1;
                         }
-                    });
-                    cardsInHand.push(nextCard.data());
-                    let newPos = 0;
-                    for (const cardInHand of cardsInHand) {
-                        cardInHand.position = newPos;
-                        newPos += 1;
+
+                        await fdb.doc(pathGame).set({
+                            turnCont: actualCont,
+                            idNextCard: +actualNextCard - 1
+                        }, { merge: true });
+
+                        await fdb.doc(pathGame).collection('Players').doc(p.id).set({
+                            hand: cardsInHand
+                        }, { merge: true });
                     }
-
-                    await fdb.doc(pathGame).set({
-                        turnCont: actualCont,
-                        idNextCard: +actualNextCard - 1
-                    }, { merge: true });
-
-                    await fdb.doc(pathGame).collection('Players').doc(p.id).set({
-                        hand: cardsInHand
-                    }, { merge: true });
-
 
 
 
@@ -125,7 +125,7 @@ exports.OnAddNewTurn = functions.firestore
                     }, { merge: true });
 
                 }
-                else {                   
+                else {
                     console.log('el otro jugador es ', p.data().displayName);
                     await fdb.doc(pathGame).set({
                         playerIdTurn: p.id

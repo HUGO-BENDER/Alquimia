@@ -74,29 +74,31 @@ exports.OnAddNewTurn = functions.firestore
                 console.log('actualCont es ', actualCont);
                 const actualNextCard = ('0' + (dataGame.data().idNextCard).toString()).slice(-2);
                 console.log('idNextCard es ', actualNextCard);
-                //-- actualizamos la carta jugada con una nueva de la baraja
-                const nextCard = yield fdb.doc(pathGame).collection('Baraja').doc(actualNextCard).get();
-                console.log('nextCard es ', nextCard.data());
-                const cardsInHand = [];
-                newTurn.hand.forEach(c => {
-                    if (c.id) {
-                        c.dragEnable = true;
-                        cardsInHand.push(c);
+                if (dataGame.data().idNextCard >= 0) {
+                    //-- actualizamos la carta jugada con una nueva de la baraja
+                    const nextCard = yield fdb.doc(pathGame).collection('Baraja').doc(actualNextCard).get();
+                    console.log('nextCard es ', nextCard.data());
+                    const cardsInHand = [];
+                    newTurn.hand.forEach(c => {
+                        if (c.id) {
+                            c.dragEnable = true;
+                            cardsInHand.push(c);
+                        }
+                    });
+                    cardsInHand.push(nextCard.data());
+                    let newPos = 0;
+                    for (const cardInHand of cardsInHand) {
+                        cardInHand.position = newPos;
+                        newPos += 1;
                     }
-                });
-                cardsInHand.push(nextCard.data());
-                let newPos = 0;
-                for (const cardInHand of cardsInHand) {
-                    cardInHand.position = newPos;
-                    newPos += 1;
+                    yield fdb.doc(pathGame).set({
+                        turnCont: actualCont,
+                        idNextCard: +actualNextCard - 1
+                    }, { merge: true });
+                    yield fdb.doc(pathGame).collection('Players').doc(p.id).set({
+                        hand: cardsInHand
+                    }, { merge: true });
                 }
-                yield fdb.doc(pathGame).set({
-                    turnCont: actualCont,
-                    idNextCard: +actualNextCard - 1
-                }, { merge: true });
-                yield fdb.doc(pathGame).collection('Players').doc(p.id).set({
-                    hand: cardsInHand
-                }, { merge: true });
                 //-- en el general del jugador informamos que ya jugó
                 const r = yield fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
                     timeLastTurn: FieldValue.serverTimestamp(),
