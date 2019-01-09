@@ -9,30 +9,31 @@
   
   .contenedor-logo{
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 10px;
+    left: 5px;
     height: 60px;
     width: 60px;
     z-index: 100;
   }
   
-  .logo-lado-izq {
-    fill: #0273d4;
-  }
-  
-  .logo-lado-der {
-    fill: #0143a3;
-  }
-  .logo-fondo-letra {
-  fill: #fff;
-  }
-  
 .center-title{
-  padding-right: 100px;
+  padding-left: 100px;
 }
 .activated {
   background-color: #00a8ff;
 }
+
+.textlogin {
+  width:80px;
+  margin-left: -80px;
+  margin-top: -3px;
+}
+.iconlogin{
+  font-size: 36px;
+  margin-top: -72px;
+  margin-left: -12px;
+}
+
   .alq-in {
   animation: alq-fadeinApp 1s ease;
   }
