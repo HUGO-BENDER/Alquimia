@@ -27,6 +27,101 @@ const fdb = admin.firestore();
 //         profilePicUrl: `${pathPhoto}`
 //     });
 // });
+exports.OnAddNewTurn = functions.firestore
+    .document('Games/{gameId}/Players/{uidPlayer}/Turns/{turnNumber}')
+    .onCreate((snap, context) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const FieldValue = require('firebase-admin').firestore.FieldValue;
+        const pathGame = '/Games/' + context.params.gameId;
+        // const uidPlayer= context.params.uidPlayer;
+        //  leer los datos y guardarlos. 1
+        const newTurn = snap.data();
+        console.log('newTurn es ', newTurn);
+        console.log('newTurn.boardChanged es ', newTurn.boardChanged);
+        const newCellBoard = newTurn.boardChanged[0];
+        const colKey = 'col' + (('0' + (newCellBoard.idCol).toString()).slice(-2));
+        console.log('colKey es ', colKey);
+        //-- recuperamos los Id de los jugadores    
+        const snapshotplayers = yield fdb.doc(pathGame).collection('Players').get();
+        for (const p of snapshotplayers.docs) {
+            if (p.id === context.params.uidPlayer) {
+                //         //-- Actualizamos el tablero
+                console.log('el jugador que mando el turno es ', p.data().displayName);
+                const board = yield fdb.doc(pathGame).collection('BoardGame').doc(colKey).get();
+                console.log('board.data() es ', board.data());
+                const newArrayValues = board.data().rows;
+                console.log('newArrayValues es ', newArrayValues);
+                for (let i = 0; i < 8; i++) {
+                    if (newArrayValues[i].idPlayer === context.params.uidPlayer &&
+                        newArrayValues[i].position === newCellBoard.position) {
+                        newArrayValues[i].id = newCellBoard.id;
+                        newArrayValues[i].description = newCellBoard.description;
+                        newArrayValues[i].palo = newCellBoard.palo;
+                        newArrayValues[i].valor = newCellBoard.valor;
+                    }
+                    if (newArrayValues[i].idPlayer === context.params.uidPlayer &&
+                        newArrayValues[i].position === newCellBoard.position + 1) {
+                        newArrayValues[i].dragEnable = true;
+                    }
+                }
+                yield fdb.doc(pathGame).collection('BoardGame').doc(colKey).set({
+                    rows: newArrayValues
+                }, { merge: true });
+                const dataGame = yield fdb.doc(pathGame).get();
+                //-- aumentamos el contador
+                console.log('dataGame es ', dataGame.data());
+                const actualCont = dataGame.data().turnCont + 0.5;
+                console.log('actualCont es ', actualCont);
+                const actualNextCard = ('0' + (dataGame.data().idNextCard).toString()).slice(-2);
+                console.log('idNextCard es ', actualNextCard);
+                if (dataGame.data().idNextCard >= 0) {
+                    //-- actualizamos la carta jugada con una nueva de la baraja
+                    const nextCard = yield fdb.doc(pathGame).collection('Baraja').doc(actualNextCard).get();
+                    console.log('nextCard es ', nextCard.data());
+                    const cardsInHand = [];
+                    newTurn.hand.forEach(c => {
+                        if (c.id) {
+                            c.dragEnable = true;
+                            cardsInHand.push(c);
+                        }
+                    });
+                    cardsInHand.push(nextCard.data());
+                    let newPos = 0;
+                    for (const cardInHand of cardsInHand) {
+                        cardInHand.position = newPos;
+                        newPos += 1;
+                    }
+                    yield fdb.doc(pathGame).set({
+                        turnCont: actualCont,
+                        idNextCard: +actualNextCard - 1
+                    }, { merge: true });
+                    yield fdb.doc(pathGame).collection('Players').doc(p.id).set({
+                        hand: cardsInHand
+                    }, { merge: true });
+                }
+                //-- en el general del jugador informamos que ya jugó
+                const r = yield fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
+                    timeLastTurn: FieldValue.serverTimestamp(),
+                    isMyTurn: false
+                }, { merge: true });
+            }
+            else {
+                console.log('el otro jugador es ', p.data().displayName);
+                yield fdb.doc(pathGame).set({
+                    playerIdTurn: p.id
+                }, { merge: true });
+                yield fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
+                    isMyTurn: true
+                }, { merge: true });
+            }
+        }
+        return Promise.resolve('essssssaaaaaa');
+    }
+    catch (err) {
+        console.log('Error en nuevo turno ', err);
+        return Promise.reject(err);
+    }
+}));
 exports.OnAddNewGame = functions.firestore
     .document('Games/{gameId}')
     .onCreate((snap, context) => __awaiter(this, void 0, void 0, function* () {
@@ -38,7 +133,7 @@ exports.OnAddNewGame = functions.firestore
         const ConfigGame = {
             Players: {
                 cant: 2,
-                hand: 5
+                hand: 6
             },
             Cards: {
                 valueCards: [1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -48,7 +143,8 @@ exports.OnAddNewGame = functions.firestore
             board: {
                 cols: 9,
                 rows: 4
-            }
+            },
+            displayedCard: false
         };
         // -- Variable Game actual
         const CurrentGame = {
@@ -80,6 +176,7 @@ exports.OnAddNewGame = functions.firestore
                         {
                             idPlayer: '',
                             id: 0,
+                            idCol: 0,
                             position: 0,
                             palo: 's',
                             valor: 0,
@@ -154,31 +251,19 @@ exports.OnAddNewGame = functions.firestore
             positions[indexPlayer] += 1;
         }
         // -- Card on table
-        const cardToDisplay = CurrentGame.Baraja[CurrentGame.Baraja.length - totalForPlayers - 1];
-        CurrentGame.DisplayedCard = {
-            id: cardToDisplay.id,
-            position: cardToDisplay.position,
-            palo: cardToDisplay.palo,
-            valor: cardToDisplay.valor,
-            description: cardToDisplay.description,
-            dragEnable: true,
-            classCss: 'handCell-Default'
-        };
-        cardToDisplay.id = 0;
-        // -- Actualizamos la raiz
-        snap.ref.set({
-            turnCont: 1,
-            timeStart: FieldValue.serverTimestamp(),
-            displayedCard: {
-                id: CurrentGame.DisplayedCard.id,
-                position: CurrentGame.DisplayedCard.position,
-                palo: CurrentGame.DisplayedCard.palo,
-                valor: CurrentGame.DisplayedCard.valor,
-                description: CurrentGame.DisplayedCard.description,
+        if (ConfigGame.displayedCard) {
+            const cardToDisplay = CurrentGame.Baraja[CurrentGame.Baraja.length - totalForPlayers - 1];
+            CurrentGame.DisplayedCard = {
+                id: cardToDisplay.id,
+                position: cardToDisplay.position,
+                palo: cardToDisplay.palo,
+                valor: cardToDisplay.valor,
+                description: cardToDisplay.description,
                 dragEnable: true,
                 classCss: 'handCell-Default'
-            }
-        }, { merge: true });
+            };
+            cardToDisplay.id = 0;
+        }
         // -- Creamos la baraja
         for (const c of CurrentGame.Baraja) {
             if (c.id > 0) {
@@ -189,7 +274,7 @@ exports.OnAddNewGame = functions.firestore
                     palo: c.palo,
                     valor: c.valor,
                     description: c.description,
-                    dragEnable: false,
+                    dragEnable: true,
                     classCss: 'handCell-Default'
                 });
             }
@@ -198,13 +283,17 @@ exports.OnAddNewGame = functions.firestore
         const snapshotplayers = yield fdb.doc(pathGame).collection('Players').get();
         let indPlayer = 0;
         const ramdomFirstTurn = Math.floor(Math.random() * (ConfigGame.Players.cant));
+        let ramdomFirstPlayer = '';
         const emptyColumna = [];
         for (const p of snapshotplayers.docs) {
+            if (ramdomFirstTurn === indPlayer) {
+                ramdomFirstPlayer = p.id;
+            }
+            indPlayer += 1;
             for (let x = 0; x < ConfigGame.board.rows; x++) {
                 emptyColumna.push({
                     idPlayer: p.id,
                     displayNamePlayer: p.data().displayName,
-                    active: x === 0,
                     id: 0,
                     position: x,
                     palo: '',
@@ -215,9 +304,37 @@ exports.OnAddNewGame = functions.firestore
                 });
             }
         }
+        indPlayer = 0;
+        // -- Actualizamos la raiz
+        if (ConfigGame.displayedCard) {
+            snap.ref.set({
+                turnCont: 1,
+                idNextCard: CurrentGame.Baraja.length - totalForPlayers - 1,
+                playerIdTurn: ramdomFirstPlayer,
+                timeStart: FieldValue.serverTimestamp(),
+                displayedCard: {
+                    id: CurrentGame.DisplayedCard.id,
+                    position: CurrentGame.DisplayedCard.position,
+                    palo: CurrentGame.DisplayedCard.palo,
+                    valor: CurrentGame.DisplayedCard.valor,
+                    description: CurrentGame.DisplayedCard.description,
+                    dragEnable: true,
+                    classCss: 'handCell-Default'
+                }
+            }, { merge: true });
+        }
+        else {
+            snap.ref.set({
+                turnCont: 1,
+                idNextCard: CurrentGame.Baraja.length - totalForPlayers,
+                playerIdTurn: ramdomFirstPlayer,
+                timeStart: FieldValue.serverTimestamp(),
+            }, { merge: true });
+        }
         // -- Creamos el trablero
         for (let x = 0; x < ConfigGame.board.cols; x++) {
             const colKey = 'col' + (('0' + (x).toString()).slice(-2));
+            emptyColumna.forEach(function (c) { c.idCol = x; });
             yield fdb.doc(pathGame).collection('BoardGame').doc(colKey).set({
                 id: x,
                 idPlayerWin: '',

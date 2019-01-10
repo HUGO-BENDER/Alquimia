@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { GameService } from 'src/app/services/firestore/game.service';
-import { Game, Card, ColumnGame } from 'src/app/model/game';
+import { Game, Card, ColumnGame, gameState } from 'src/app/model/game';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import * as firebase from 'firebase';
+import { Subscription } from 'rxjs';
+import { DocumentChangeAction } from 'angularfire2/firestore';
+import { FirebaseApp } from 'angularfire2';
 
 @Component({
   selector: 'app-page-game',
@@ -26,51 +30,85 @@ import * as firebase from 'firebase';
     ])
   ]
 })
-export class PageGameComponent implements OnInit {
+export class PageGameComponent implements OnInit, OnDestroy {
+  idGame: string;
+  gameSubscription: Subscription;
+
   currentGame: Game;
-  boardGame: Observable<ColumnGame[]>;
+  boardGame: ColumnGame[];
   hand: Array<Card> = [];
   userlogined: firebase.User;
-  stateButtons = 'outside';
   handCellForceSquare: string;
   boardCellChanged: Array<Card> = [];
+  // --
+  snackBarVerticalPositionTop: MatSnackBarVerticalPosition = 'top';
+  stateButtons = 'outside';
+  stateGame: gameState = gameState.WAITING;
 
   constructor(
     public au: AngularFireAuth,
+    private router: Router,
     private route: ActivatedRoute,
+    public snackBar: MatSnackBar,
     private afsGame: GameService
   ) { }
 
   ngOnInit() {
-    const idGame = this.route.snapshot.paramMap.get('id');
+    this.idGame = this.route.snapshot.paramMap.get('id');
 
     this.au.authState.subscribe(user => {
       if (user) {
         this.userlogined = user;
-        this.afsGame.getHand(idGame, user).get()
-          .then(doc => {
-            this.hand = doc.data().hand;
-            this.onResize(null);
-          })
-          .catch(error => { console.log('Error getting document:', error); });
+        this.gameSubscription = this.afsGame.getSnapshotGame(this.idGame).subscribe(snapshotgame => {
+          this.startTurn(snapshotgame);
+        });
       } else {
         this.userlogined = null;
+        this.router.navigate(['home']);
       }
     });
+  }
 
-    this.afsGame.getGame(idGame).get()
-      .then(doc => { this.currentGame = <Game>doc.data(); })
-      .catch(error => { console.log('Error getting document:', error); });
+  private startTurn(snapshotgame: any): any {
+    this.currentGame = <Game>snapshotgame.payload.data();
+    this.stateGame = this.currentGame.playerIdTurn === this.userlogined.uid ? 0 : 1;
 
-    this.boardGame = this.afsGame.getBoard(idGame).map(
-      actions => {
-        return actions.map(action => {
-          const data = action.payload.doc.data() as ColumnGame;
-          const colId = action.payload.doc.id;
-          return { colId, ...data };
+    this.afsGame.getHand(this.idGame, this.userlogined).get()
+      .then(doc => {
+        this.hand = doc.data().hand;
+        this.onResize(null);
+      })
+      .catch(error => { console.log('Error getting hand:', error); });
+
+    this.afsGame.getBoard(this.idGame).get()
+      .then( querySnapshot => {
+        const oBoardGame: ColumnGame[] = [];
+        querySnapshot.forEach(doc => {
+          oBoardGame.push(
+            <ColumnGame>{
+              id: doc.data().id,
+              colId: doc.id,
+              rows: [],
+              idPlayerWin: doc.data().idPlayerWin,
+              displayNamePlayerWin: doc.data().displayNamePlayerWin
+            });
+            this.getColumns(doc.data().rows, false).forEach(c => {oBoardGame[doc.data().id].rows.push(c); });
+            oBoardGame[doc.data().id].rows.push(<Card>{
+              idPlayer: '',
+              displayNamePlayer: 'GOAL',
+              id: -1,
+              idCol: doc.data().id,
+              position: 0,
+              palo: doc.id,
+              valor: doc.id,
+              description: 'goal',
+              dragEnable: false
+            });
+            this.getColumns(doc.data().rows, true).forEach(c => {oBoardGame[doc.data().id].rows.push(c); });
         });
-      }
-    );
+        this.boardGame = oBoardGame;
+      })
+      .catch(error => { console.log('Error getting boardGame:', error); });
   }
 
   public getColumns(boardCols: Array<Card>, mySide: boolean): Array<Card> {
@@ -107,6 +145,7 @@ export class PageGameComponent implements OnInit {
   // -- Board
   public onBoardDrop(event: CdkDragDrop<Card[]>, c: Card) {
     const ori = event.previousContainer.data[event.previousIndex];
+    this.boardCellChanged = [];
     this.boardCellChanged.push(c);
     this.copyValues(ori, c, true);
     this.copyValues(null, ori, true);
@@ -133,6 +172,28 @@ export class PageGameComponent implements OnInit {
     this.boardCellChanged = [];
     this.stateButtons = 'outside';
   }
+  public sendTurn() {
+    const idGame = this.route.snapshot.paramMap.get('id');
+    this.afsGame.senTurn(
+      this.hand, this.boardCellChanged,
+      idGame, this.userlogined.uid, this.currentGame.turnCont
+    )
+      .then(() => {
+        console.log('xSe ha enviado el Turno');
+        this.stateButtons = 'outside';
+        this.stateGame = gameState.WAITING;
+        this.openSnackBar('xSe ha enviado el Turno');
+      })
+      .catch((error) => {
+        this.openSnackBar('xError :-( ');
+        console.log('Error adding document: ', error);
+      });
+  }
+
+  ngOnDestroy() {
+    this.gameSubscription.unsubscribe();
+  }
+
 
   // -- Auxiliar functions
   public copyValues(valuesFrom: Card, valuesTo: Card, bk: boolean) {
@@ -160,6 +221,13 @@ export class PageGameComponent implements OnInit {
       valuesTo.description = null;
       valuesTo.palo = null;
     }
+  }
+
+  public openSnackBar(mensaje: string): any {
+    this.snackBar.open(mensaje, 'xClose', {
+      duration: 5000,
+      verticalPosition: this.snackBarVerticalPositionTop
+    });
   }
 
 }

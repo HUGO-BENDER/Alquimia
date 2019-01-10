@@ -33,14 +33,38 @@
     <div class="game-display">
       <div appFramepanzoom class="boardgamepanzoom">
         <div class="boardgame" cdkDropListGroup>
-          <div *ngFor="let col of boardGame | async" class="boardColumn">
-            <div *ngFor="let c of getColumns(col.rows, false)" [ngClass]="['cell','cell-enemy', c.classCss ]">
-              {{col.id}}/{{c.position}} # {{c.displayNamePlayer | slice:0:4}}
+          <div *ngFor="let col of boardGame" class="boardColumn">
+            <div *ngFor="let c of col.rows" [ngClass]="['cell']">
+              <div *ngIf="(c.id === -1) ">
+                {{col.id}}/{{c.position}} # {{c.displayNamePlayer | slice:0:4}}
+              </div>
+              <div *ngIf="c.id === 0 && c.dragEnable && c.idPlayer === this.userlogined.uid" [ngClass]="['cell-Drop']" cdkDropList id=boardDropList{{col.id}}
+                (cdkDropListDropped)="onBoardDrop($event,c)">
+              </div>
+              <mat-grid-list *ngIf="c.id > 0" cols="2" rowHeight="1:1" gutterSize="0px" class="gridList2x2">
+                <mat-grid-tile><img class="gridTile11" src="../assets/images/n_{{c.description}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile12" src="../assets/images/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile21" src="../assets/images/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile22" src="../assets/images/n_{{c.description}}.svg" /></mat-grid-tile>
+              </mat-grid-list>
+
+            </div>
+
+            <!-- <div *ngFor="let c of getColumns(col.rows, false)" [ngClass]="['cell','cell-enemy']">
+              <div *ngIf="c.id === 0">
+                {{col.id}}/{{c.position}} # {{c.displayNamePlayer | slice:0:4}}
+              </div>
+              <mat-grid-list *ngIf="c.id != 0" cols="2" rowHeight="1:1" gutterSize="0px" class="gridList2x2">
+                <mat-grid-tile><img class="gridTile11" src="../assets/images/n_{{c.description}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile12" src="../assets/images/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile21" src="../assets/images/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile22" src="../assets/images/n_{{c.description}}.svg" /></mat-grid-tile>
+              </mat-grid-list>
             </div>
             <div class="cell cell-neutral">{{col.colId}} *** {{col.id}}</div>
             <div *ngFor="let card of  getColumns(col.rows, true)" [ngClass]="['cell','cell-allied', card.classCss ]">
-              <div *ngIf="card.id === 0 && card.dragEnable" [ngClass]="['cell-Drop','cell-allied']"
-                cdkDropList id=boardDropList{{col.id}} (cdkDropListDropped)="onBoardDrop($event,card)">
+              <div *ngIf="card.id === 0 && card.dragEnable" [ngClass]="['cell-Drop','cell-allied']" cdkDropList id=boardDropList{{col.id}}
+                (cdkDropListDropped)="onBoardDrop($event,card)">
               </div>
               <div *ngIf="card.id === 0">
                 {{col.id}}/{{card.position}} # {{card.displayNamePlayer | slice:0:4}}
@@ -52,10 +76,8 @@
                 <mat-grid-tile><img class="gridTile21" src="../assets/images/{{card.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
                 <mat-grid-tile><img class="gridTile22" src="../assets/images/n_{{card.description}}.svg" /></mat-grid-tile>
               </mat-grid-list>
-            </div>
-
+            </div> -->
           </div>
-
         </div>
       </div>
     </div>
@@ -78,7 +100,8 @@
         </button>
       </div>
       <div class="game-controls-center">
-        aca va la carta y el mazo
+        <span *ngIf="stateGame == 0">{{userlogined.displayName}} es tu turno. Te están esperando</span>
+        <span *ngIf="stateGame == 1">WAITING. Esperando a los otros jugadores</span>
       </div>
       <div class="game-controls-rigth" [@animAppear]='stateButtons'>
         <button mat-raised-button class="btn-send-turn" (click)="resetTurn()">
