@@ -26,7 +26,9 @@
         {{ "App.Exit"| translate }}
       </button> -->
 
-    <span fxHide.lt-sm class="example-spacer center-title"> {{ "App.Title"| translate }} </span>
+    <div  class="example-spacer">
+        <span [hidden]="inSmallScreen" class="center-title"> {{ "App.Title"| translate }} </span>  
+    </div>
 
     <div *ngIf="user | async; let user; else loguearse;">
       <h2 class="toolbar-inline">{{user.displayName}}</h2>
@@ -35,11 +37,9 @@
         <mat-icon>cancel</mat-icon>
       </button>
     </div>
-    <ng-template #loguearse>
-      <button mat-mini-fab color="primary" (click)="openDialogLogin()">
-       <!-- matTooltip="login" matTooltipPosition ="left" matTooltipHideDelay="2000" 
-      matTooltipClass="tooltipcss"  -->
-        <h3 class="textlogin">login</h3>
+    <ng-template #loguearse >
+      <h3 class="textlogin" [hidden]="inSmallScreen" (click)="openDialogLogin()">login</h3>
+      <button mat-mini-fab color="primary" (click)="openDialogLogin()" >
         <mat-icon class="iconlogin">account_circle</mat-icon>
       </button>
     </ng-template>

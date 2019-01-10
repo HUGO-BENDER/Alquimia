@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './components/app-routing/app-routing.module';
 import { Http } from '@angular/http';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { LayoutModule } from '@angular/cdk/layout';
 
 // --Material
 import { AppMaterialModule } from './components/app-material/app-material.module';
@@ -102,6 +103,7 @@ export function createTranslateLoader(http: Http) {
     AppRoutingModule,
     AppMaterialModule,
     DragDropModule,
+    LayoutModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,

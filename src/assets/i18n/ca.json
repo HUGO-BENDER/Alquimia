@@ -3,6 +3,7 @@
 		"Title": "Nosaltres"
 	},
 	"App": {
+		"Exit": "Sortir",
 		"Languages": {
 			"Catalan": "Catalá",
 			"English": "Anglès",
@@ -11,10 +12,13 @@
 		},
 		"Select_lang": "Seleccionar idioma",
 		"Title": "Alquímia",
-		"Exit": "Sortir"
+		"messageLogout": "Està segur que desitja tancar la seva sessió?"
 	},
 	"Contact": {
 		"Title": "Contacti amb nosaltres"
+	},
+	"Game": {
+		"Title": "Joc"
 	},
 	"Home": {
 		"Title": "Inici"
@@ -24,8 +28,5 @@
 	},
 	"pag404": {
 		"Title": "404"
-	},
-	"Game": {
-		"Title": "Joc"
 	}
 }

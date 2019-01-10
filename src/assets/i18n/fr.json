@@ -3,6 +3,7 @@
 		"Title": "Nous"
 	},
 	"App": {
+		"Exit": "Sortir",
 		"Languages": {
 			"Catalan": "Catalan",
 			"English": "Anglais",
@@ -11,10 +12,13 @@
 		},
 		"Select_lang": "Sélectionnez la langue",
 		"Title": "Alchimie",
-		"Exit": "Sortir"
+		"messageLogout": "Êtes-vous sûr de vouloir fermer votre session?"
 	},
 	"Contact": {
 		"Title": "Contactez nous"
+	},
+	"Game": {
+		"Title": "Jeu"
 	},
 	"Home": {
 		"Title": "Maison"
@@ -24,8 +28,5 @@
 	},
 	"pag404": {
 		"Title": "404"
-	},
-	"Game": {
-		"Title": "Jeu"
 	}
 }
