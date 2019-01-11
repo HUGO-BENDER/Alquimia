@@ -104,4 +104,4 @@ Step 013
 Step 014
     refactory: 
     import { LayoutModule } from '@angular/cdk/layout'; => for responsive
-    npm install --save sweetalert2  
+    npm install --save sweetalert2 @toverux/ngx-sweetalert2 

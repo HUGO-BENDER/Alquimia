@@ -10,6 +10,9 @@ import { LayoutModule } from '@angular/cdk/layout';
 // --Material
 import { AppMaterialModule } from './components/app-material/app-material.module';
 
+// --SweetAlert2
+import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
+
 // --Translate
 import { TranslateModule, TranslateLoader, TranslateStaticLoader, MissingTranslationHandler } from 'ng2-translate';
 import { MissingTranslation } from './i18n/missing-translation';
@@ -104,6 +107,12 @@ export function createTranslateLoader(http: Http) {
     AppMaterialModule,
     DragDropModule,
     LayoutModule,
+    SweetAlert2Module.forRoot({
+      buttonsStyling: false,
+      confirmButtonClass: 'mat-raised-button mat-primary',
+      cancelButtonClass: 'mat-raised-button',
+      reverseButtons: true
+  }),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,

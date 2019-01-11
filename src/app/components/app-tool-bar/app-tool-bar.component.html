@@ -33,7 +33,14 @@
     <div *ngIf="user | async; let user; else loguearse;">
       <h2 class="toolbar-inline">{{user.displayName}}</h2>
       <img class="toolbar-inline toolbar-user-img" [src]=user.photoURL>
-      <button mat-button (click)="logout()">
+      <button mat-button [swal]="{
+         title: 'logout', 
+         text: 'adios', 
+         imageUrl: '../favicon.ico',
+         showCancelButton: true,   
+         confirmButtonText: 'Salir',   
+         cancelButtonText: 'Cancelar'}"
+      (confirm)="logout()">
         <mat-icon>cancel</mat-icon>
       </button>
     </div>
