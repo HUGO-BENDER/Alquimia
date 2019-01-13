@@ -1,7 +1,7 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { TranslateService } from 'ng2-translate';
 import { SidenavService } from './services/components/sidenav.service';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav, MatListOption } from '@angular/material';
 import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
@@ -11,14 +11,24 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class AppComponent implements OnInit {
   @ViewChild('appsidenav') public sidenav: MatSidenav;
-  currentUrl: string;
 
-  constructor( private router: Router, private translate: TranslateService, private sidenavService: SidenavService) {
-    this.translate.addLangs(['en', 'fr', 'ca', 'es']);
+  currentUrl: string;
+  showMenuLanguage = false;
+  actualLang: string;
+  listLanguages = [
+    { id: 'en', name: 'English' },
+    { id: 'fr', name: 'French' },
+    { id: 'ca', name: 'Catalan' },
+    { id: 'es', name: 'Spanish' }
+  ];
+
+  constructor(router: Router, private translate: TranslateService, private sidenavService: SidenavService) {
+    this.translate.addLangs(this.listLanguages.map(l => l.id));
     this.translate.setDefaultLang('es');
 
     const browserLang = this.translate.getBrowserLang();
-    this.translate.use(browserLang.match(/en|fr|ca|es/) ? browserLang : 'en');
+    this.actualLang = browserLang.match(/en|fr|ca|es/) ? browserLang : 'en';
+    this.translate.use(this.actualLang);
 
     router.events.subscribe((_: NavigationEnd) => {
       if (_.url) {
@@ -27,7 +37,6 @@ export class AppComponent implements OnInit {
         } else {
           this.currentUrl = _.url;
         }
-        console.log('this.currentUrl = ', this.currentUrl);
       }
     });
   }
@@ -37,4 +46,13 @@ export class AppComponent implements OnInit {
     this.sidenavService.setPositionLeft();
   }
 
+  changeLanguage(lang: string) {
+    this.actualLang = lang;
+    this.translate.use(lang);
+  }
+
+  toggleMenu() {
+    this.showMenuLanguage = !this.showMenuLanguage;
+    // setTimeout(() => this.navcontainer._updateContentMargins());
+  }
 }

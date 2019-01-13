@@ -7,6 +7,7 @@ import { AppLoginComponent } from './../app-login/app-login.component';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tool-bar',
@@ -30,26 +31,23 @@ export class AppToolBarComponent implements OnInit {
       .observe(['(min-width: 600px)'])
       .subscribe((state: BreakpointState) => {
         this.inSmallScreen = !state.matches;
-        if (state.matches) {
-          console.log('Viewport is 600px or over!');
-        } else {
-          console.log('Viewport is getting smaller!');
-        }
       });
   }
-
-  // changeLanguage(lang) {
-  //   this.translate.use(lang);
-  // }
 
   openDialogLogin(): void {
     this.dialogRef = this.dialog.open(AppLoginComponent);
   }
 
   logout() {
-    if (confirm(this.translate.instant('App.messageLogout'))) {
-      this.au.auth.signOut();
-    }
+    this.au.auth.signOut().then( () =>
+    Swal({
+      position: 'top',
+      type: 'success',
+      title: this.translate.instant('App.Msg.CloseSession'),
+      showConfirmButton: false,
+      timer: 1000
+    }));
+
   }
 
   toggleAppSidenav() {

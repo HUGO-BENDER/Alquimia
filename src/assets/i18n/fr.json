@@ -3,16 +3,24 @@
 		"Title": "Nous"
 	},
 	"App": {
-		"Exit": "Sortir",
 		"Languages": {
 			"Catalan": "Catalan",
 			"English": "Anglais",
 			"French": "Français",
 			"Spanish": "Espagnol"
 		},
+		"MenuUser": {
+			"AlertDisable": "Désactiver les alertes",
+			"AlertEnable": "Activer les alertes"
+		},
+		"Msg": {
+			"Cancel": "Annuler",
+			"CloseSession": "Fermer la session",
+			"Exit": "Sortir",
+			"messageLogout": "Êtes-vous sûr de vouloir fermer votre session?"
+		},
 		"Select_lang": "Sélectionnez la langue",
-		"Title": "Alchimie",
-		"messageLogout": "Êtes-vous sûr de vouloir fermer votre session?"
+		"Title": "Alchimie"
 	},
 	"Contact": {
 		"Title": "Contactez nous"

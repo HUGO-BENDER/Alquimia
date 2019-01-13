@@ -8,46 +8,37 @@
         <img src="../assets/logo/letraLogo.svg" />
       </div>
     </button>
-
-
-    <!-- <button mat-icon-button [matMenuTriggerFor]="rootMenu" matTooltip="{{ 'App.Select_lang'| translate }}">
-      <mat-icon>translate</mat-icon>
-    </button>
-    <mat-menu #rootMenu="matMenu">
-      <h6 matSubheader> {{ 'App.Select_lang'| translate }} </h6>
-      <button mat-menu-item (click)="changeLanguage('en')">{{ 'App.Languages.English' | translate }}</button>
-      <button mat-menu-item (click)="changeLanguage('es')">{{ 'App.Languages.Spanish' | translate }}</button>
-      <button mat-menu-item (click)="changeLanguage('ca')">{{ 'App.Languages.Catalan' | translate }}</button>
-      <button mat-menu-item (click)="changeLanguage('fr')">{{ 'App.Languages.French' | translate }}</button>
-    </mat-menu> -->
-
-    <!-- <button mat-menu-item (click)="logout()">
-        <mat-icon matListIcon>exit_to_app</mat-icon>
-        {{ "App.Exit"| translate }}
-      </button> -->
-
-    <div  class="example-spacer">
-        <span [hidden]="inSmallScreen" class="center-title"> {{ "App.Title"| translate }} </span>  
+    <div class="example-spacer">
+      <span [hidden]="inSmallScreen" class="center-title"> {{ translate.instant('App.Title') }} </span>
     </div>
 
     <div *ngIf="user | async; let user; else loguearse;">
-      <h2 class="toolbar-inline">{{user.displayName}}</h2>
-      <img class="toolbar-inline toolbar-user-img" [src]=user.photoURL>
-      <button mat-button [swal]="{
-         title: 'logout', 
-         text: 'adios', 
-         imageUrl: '../favicon.ico',
-         showCancelButton: true,   
-         confirmButtonText: 'Salir',   
-         cancelButtonText: 'Cancelar'}"
-      (confirm)="logout()">
-        <mat-icon>cancel</mat-icon>
+      <button  mat-mini-fab color="primary" [matMenuTriggerFor]="userMenu">
+        <img class="toolbar-inline toolbar-user-img" [src]=user.photoURL>
       </button>
+      <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
+        <h6 matSubheader> {{ user.displayName }} </h6>
+        <button mat-menu-item>
+          <mat-icon>notifications_off</mat-icon>
+          <span>{{ translate.instant('App.MenuUser.AlertDisable')}} </span>
+        </button>
+        <button mat-menu-item [swal]="{
+            text: translate.instant('App.Msg.messageLogout'), 
+            imageUrl: '../favicon.ico',
+            showCancelButton: true,   
+            confirmButtonText: translate.instant('App.Msg.CloseSession'),   
+            cancelButtonText: translate.instant('App.Msg.Cancel')}"
+            (confirm)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span> {{ translate.instant('App.Msg.CloseSession')}} </span>
+        </button>
+      </mat-menu>
+
     </div>
-    <ng-template #loguearse >
+    <ng-template #loguearse>
       <h3 class="textlogin" [hidden]="inSmallScreen" (click)="openDialogLogin()">login</h3>
-      <button mat-mini-fab color="primary" (click)="openDialogLogin()" >
-        <mat-icon class="iconlogin">account_circle</mat-icon>
+      <button mat-mini-fab color="primary" (click)="openDialogLogin()">
+        <mat-icon class="iconlogin">how_to_reg</mat-icon>
       </button>
     </ng-template>
 

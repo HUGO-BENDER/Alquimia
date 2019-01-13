@@ -3,6 +3,10 @@
   .activated {
       background-color: #00a8ff;
   }
+  .example-spacer {
+    flex: 1 1 auto;
+    text-align: center;
+  }
 }
 
 .app-container {
@@ -20,6 +24,11 @@
       background-color: #ccc;
       flex:  0 0 auto;
   }
+}
+
+
+::ng-deep .swal-margin-rigth{
+    margin-right: 30px !important;
 }
 
 // easy way for change de color. not the good way

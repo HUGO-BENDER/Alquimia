@@ -3,16 +3,24 @@
 		"Title": "About"
 	},
 	"App": {
-		"Exit": "Exit",
 		"Languages": {
 			"Catalan": "Catalán",
 			"English": "English",
 			"French": "French",
 			"Spanish": "Spanish"
 		},
+		"MenuUser": {
+			"AlertDisable": "Disable alerts",
+			"AlertEnable": "Enable alerts"
+		},
+		"Msg": {
+			"Cancel": "Cancel",
+			"CloseSession": "Close session",
+			"Exit": "Exit",
+			"messageLogout": "Are you sure you want to close your session?"
+		},
 		"Select_lang": "Select language",
-		"Title": "Alchemy",
-		"messageLogout": "Are you sure you want to close your session?"
+		"Title": "Alchemy"
 	},
 	"Contact": {
 		"Title": "Contact us"

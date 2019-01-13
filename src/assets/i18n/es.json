@@ -3,16 +3,24 @@
 		"Title": "Sobre nosotros"
 	},
 	"App": {
-		"Exit": "Salir",
 		"Languages": {
 			"Catalan": "Catalán",
 			"English": "Inglés",
 			"French": "Francés",
 			"Spanish": "Español"
 		},
+		"MenuUser": {
+			"AlertDisable": "Deshabilitar alertas",
+			"AlertEnable": "Habilitar alertas"
+		},
+		"Msg": {
+			"Cancel": "Cancelar",
+			"CloseSession": "Cerrar sesión",
+			"Exit": "Salir",
+			"messageLogout": "¿Está seguro que desea cerrar su sesión?"
+		},
 		"Select_lang": "Seleccionar idioma",
-		"Title": "Alquimia",
-		"messageLogout": "¿Está seguro que desea cerrar su sesión?"
+		"Title": "Alquimia"
 	},
 	"Contact": {
 		"Title": "Contáctenos"

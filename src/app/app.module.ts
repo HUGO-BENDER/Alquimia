@@ -110,7 +110,7 @@ export function createTranslateLoader(http: Http) {
     SweetAlert2Module.forRoot({
       buttonsStyling: false,
       confirmButtonClass: 'mat-raised-button mat-primary',
-      cancelButtonClass: 'mat-raised-button',
+      cancelButtonClass: 'mat-raised-button swal-margin-rigth',
       reverseButtons: true
   }),
     AngularFireModule.initializeApp(environment.firebaseConfig),
