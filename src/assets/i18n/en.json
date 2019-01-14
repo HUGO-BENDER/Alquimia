@@ -19,7 +19,11 @@
 			"Exit": "Exit",
 			"messageLogout": "Are you sure you want to close your session?"
 		},
-		"Select_lang": "Select language",
+		"SideNav": {
+			"Actions": "Actions",
+			"Menu": "Menu",
+			"Select_lang": "Select language"
+		},
 		"Title": "Alchemy"
 	},
 	"Contact": {

@@ -19,7 +19,11 @@
 			"Exit": "Sortir",
 			"messageLogout": "Està segur que desitja tancar la seva sessió?"
 		},
-		"Select_lang": "Seleccionar idioma",
+		"SideNav": {
+			"Actions": "Accions",
+			"Menu": "Menú",
+			"Select_lang": "Seleccionar idioma"
+		},
 		"Title": "Alquímia"
 	},
 	"Contact": {

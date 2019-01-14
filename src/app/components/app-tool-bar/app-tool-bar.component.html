@@ -1,13 +1,13 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <button class="contenedor-logo" type="button" aria-label="Toggle sidenav" mat-icon-button (click)="toggleAppSidenav()">
-      <div class="contenedor-logo">
+    <div class="contenedor-logo" aria-label="Toggle sidenav" (click)="toggleAppSidenav()">
+      <div class="contenedor-logo" [ngClass]="{'contenedor-logo-mini': inSmallScreen}">
         <img src="../assets/logo/fondoLogo.svg" />
       </div>
-      <div class="contenedor-logo alq-in alq-hover">
+      <div class="contenedor-logo alq-in alq-hover"  [ngClass]="{'contenedor-logo-mini': inSmallScreen}" >
         <img src="../assets/logo/letraLogo.svg" />
       </div>
-    </button>
+    </div>
     <div class="example-spacer">
       <span [hidden]="inSmallScreen" class="center-title"> {{ translate.instant('App.Title') }} </span>
     </div>
@@ -24,7 +24,9 @@
         </button>
         <button mat-menu-item [swal]="{
             text: translate.instant('App.Msg.messageLogout'), 
-            imageUrl: '../favicon.ico',
+            imageUrl: '../assets/logo/Alq.png',
+            imageHeight: 50,
+            imageWidth: 50,
             showCancelButton: true,   
             confirmButtonText: translate.instant('App.Msg.CloseSession'),   
             cancelButtonText: translate.instant('App.Msg.Cancel')}"
