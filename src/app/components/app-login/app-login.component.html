@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>Login</h1>
 <mat-dialog-content>
-<div style="width:400px">
-    <firebase-ui (signInSuccessWithAuthResult)="successCallback($event)"
-    (signInFailure)="errorCallback($event)" ></firebase-ui>   
-</div>
+  <div>
+    <firebase-ui (signInSuccessWithAuthResult)="successCallback($event)" (signInFailure)="errorCallback($event)">
+    </firebase-ui>
+  </div>
 </mat-dialog-content>

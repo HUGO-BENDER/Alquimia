@@ -105,3 +105,6 @@ Step 014
     refactory: 
     import { LayoutModule } from '@angular/cdk/layout'; => for responsive
     npm install --save sweetalert2 @toverux/ngx-sweetalert2 
+    for IE - edit src\polyfills.ts file
+    for IE - npm install --save classlist.js
+    for IE - npm install --save web-animations-js
