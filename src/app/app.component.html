@@ -21,11 +21,11 @@
     <mat-nav-list>
       <a mat-list-item routerLink="/home" [class.activated]="currentUrl == '/' || currentUrl == '/home'" (click)='appsidenav.toggle()'>
         <mat-icon matListIcon>home</mat-icon>
-        {{ translate.instant('Home.Title')}}
+        {{ translate.instant('pagHome.Title')}}
       </a>
       <a mat-list-item routerLink="/about" [class.activated]="currentUrl == '/about'" (click)='appsidenav.toggle()'>
         <mat-icon matListIcon>persons</mat-icon>
-        {{ translate.instant('About.Title') }}
+        {{ translate.instant('pagAbout.Title') }}
       </a>
     </mat-nav-list>
   </mat-sidenav>

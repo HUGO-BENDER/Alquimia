@@ -1,8 +1,8 @@
 {
-	"About": {
-		"Title": "Nous"
-	},
 	"App": {
+		"Footer": {
+			"Version": "version"
+		},
 		"Languages": {
 			"Catalan": "Catalan",
 			"English": "Anglais",
@@ -11,7 +11,8 @@
 		},
 		"MenuUser": {
 			"AlertDisable": "Désactiver les alertes",
-			"AlertEnable": "Activer les alertes"
+			"AlertEnable": "Activer les alertes",
+			"Login": "s'identifier"
 		},
 		"Msg": {
 			"Cancel": "Annuler",
@@ -26,19 +27,23 @@
 		},
 		"Title": "Alchimie"
 	},
-	"Contact": {
-		"Title": "Contactez nous"
-	},
-	"Game": {
-		"Title": "Jeu"
-	},
-	"Home": {
-		"Title": "Maison"
-	},
-	"User": {
-		"Title": "Utilisateur"
-	},
 	"pag404": {
 		"Title": "404"
+	},
+	"pagAbout": {
+		"Title": "Nous"
+	},
+	"pagChinker": {
+		"Title": "Jeu"
+	},
+	"pagContact": {
+		"Title": "Contactez nous"
+	},
+	"pagHome": {
+		"GamesInProgress": "Jeux en cours",
+		"Title": "Maison"
+	},
+	"pagUser": {
+		"Title": "Utilisateur"
 	}
 }

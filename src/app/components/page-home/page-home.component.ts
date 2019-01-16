@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { TranslateService } from 'ng2-translate';
 import { Observable } from 'rxjs/Observable';
 import { RecruitmentService } from 'src/app/services/firestore/Recruitment.service';
 import { PlayerService } from 'src/app/services/firestore/player.service';
@@ -23,15 +25,28 @@ export class PageHomeComponent implements OnInit {
     { title: 'Card 4', cols: 1, rows: 1 }
   ];
 
+  inSmallScreen: boolean;
+  inMediumScreen: boolean;
   gamesInProgress: Observable<GameInProgress[]>;
   recruitments: Observable<Recruitment[]>;
   userlogined: firebase.User;
   snackBarVerticalPositionTop: MatSnackBarVerticalPosition = 'top';
 
   constructor(public au: AngularFireAuth, private afsRecruitments: RecruitmentService,
-              public afsPlayer: PlayerService, public snackBar: MatSnackBar) { }
+              public afsPlayer: PlayerService, public snackBar: MatSnackBar,
+              public breakpointObserver: BreakpointObserver, private translate: TranslateService) { }
 
   ngOnInit() {
+    this.breakpointObserver
+    .observe(['(max-width: 600px)'])
+    .subscribe((state: BreakpointState) => {
+      this.inSmallScreen = state.matches;
+    });
+    this.breakpointObserver
+    .observe(['(max-width: 900px)'])
+    .subscribe((state: BreakpointState) => {
+      this.inMediumScreen = state.matches;
+    });
 
     this.au.authState.subscribe(user => {
       if (user) {

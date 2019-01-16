@@ -5,6 +5,14 @@
       <h5>subtitle about anything you like</h5>
     </div>
   </div>
+
+  <div> inSmallScreen {{inSmallScreen}}</div>
+  <br>
+
+  <div> inMediumScreen {{inMediumScreen}}</div>
+  <br>
+
+
   <div class="grid-container">
     <mat-grid-list cols="2" rowHeight="350px">
 
@@ -12,7 +20,7 @@
         <mat-card class="dashboard-card">
           <mat-card-header>
             <mat-card-title>
-              xGames
+              {{ translate.instant('pagHome.GamesInProgress') }} 
               <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
                 <mat-icon>more_vert</mat-icon>
               </button>
@@ -85,13 +93,6 @@
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
-
-
-
-
-
-
-
 
 
       <mat-grid-tile *ngFor="let card of cards" [colspan]="card.cols" [rowspan]="card.rows">

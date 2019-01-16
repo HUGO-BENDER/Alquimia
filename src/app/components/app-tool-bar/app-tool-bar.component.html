@@ -38,7 +38,7 @@
 
     </div>
     <ng-template #loguearse>
-      <h3 class="textlogin" [hidden]="inSmallScreen" (click)="openDialogLogin()">login</h3>
+      <h3 class="textlogin" [hidden]="inSmallScreen" (click)="openDialogLogin()">{{ translate.instant('App.MenuUser.Login')}}</h3>
       <button mat-mini-fab color="primary" (click)="openDialogLogin()">
         <mat-icon class="iconlogin">how_to_reg</mat-icon>
       </button>

@@ -1,8 +1,8 @@
 {
-	"About": {
-		"Title": "About"
-	},
 	"App": {
+		"Footer": {
+			"Version": "version"
+		},
 		"Languages": {
 			"Catalan": "Catalán",
 			"English": "English",
@@ -11,7 +11,8 @@
 		},
 		"MenuUser": {
 			"AlertDisable": "Disable alerts",
-			"AlertEnable": "Enable alerts"
+			"AlertEnable": "Enable alerts",
+			"Login": "Log in"
 		},
 		"Msg": {
 			"Cancel": "Cancel",
@@ -26,19 +27,23 @@
 		},
 		"Title": "Alchemy"
 	},
-	"Contact": {
-		"Title": "Contact us"
-	},
-	"Game": {
-		"Title": "Game"
-	},
-	"Home": {
-		"Title": "Home"
-	},
-	"User": {
-		"Title": "User"
-	},
 	"pag404": {
 		"Title": "404"
+	},
+	"pagAbout": {
+		"Title": "About"
+	},
+	"pagChinker": {
+		"Title": "Game"
+	},
+	"pagContact": {
+		"Title": "Contact us"
+	},
+	"pagHome": {
+		"GamesInProgress": "Games in progress",
+		"Title": "Home"
+	},
+	"pagUser": {
+		"Title": "User"
 	}
 }
