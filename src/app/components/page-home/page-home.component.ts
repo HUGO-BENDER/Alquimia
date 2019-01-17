@@ -18,11 +18,25 @@ import * as firebase from 'firebase';
 })
 export class PageHomeComponent implements OnInit {
 
+  matGridSetup = {
+    cols: 3,
+    rowHeight: '350px',
+    gutterSize: '0px',
+    GamesInProgress: {
+      cols: 3,
+      rows: 1
+    },
+    JoinOrCreateGame: {
+      cols: 3,
+      rows: 1
+    }
+  };
+
   cards = [
-    // { title: 'Card 1', cols: 2, rows: 1 },
-    // { title: 'Card 2', cols: 1, rows: 2 },
+    { title: 'Card 1', cols: 1, rows: 1 },
+    { title: 'Card 2', cols: 1, rows: 1 },
     { title: 'Card 3', cols: 1, rows: 1 },
-    { title: 'Card 4', cols: 1, rows: 1 }
+    { title: 'Card 4', cols: 3, rows: 1 }
   ];
 
   inSmallScreen: boolean;
@@ -41,11 +55,13 @@ export class PageHomeComponent implements OnInit {
     .observe(['(max-width: 600px)'])
     .subscribe((state: BreakpointState) => {
       this.inSmallScreen = state.matches;
+      this.makeResponsive();
     });
     this.breakpointObserver
     .observe(['(max-width: 900px)'])
     .subscribe((state: BreakpointState) => {
       this.inMediumScreen = state.matches;
+      this.makeResponsive();
     });
 
     this.au.authState.subscribe(user => {
@@ -75,6 +91,39 @@ export class PageHomeComponent implements OnInit {
         });
       }
     );
+  }
+
+  makeResponsive(): void {
+    if (this.inSmallScreen) {
+      this.cards = [
+        { title: 'Card 1', cols: 3, rows: 1 },
+        { title: 'Card 2', cols: 3, rows: 1 },
+        { title: 'Card 3', cols: 3, rows: 1 },
+        { title: 'Card 4', cols: 3, rows: 1 }
+      ];
+    } else {
+      if ( this.inMediumScreen) {
+        this.cards = [
+          { title: 'Card 1', cols: 1, rows: 1 },
+          { title: 'Card 2', cols: 2, rows: 1 },
+          { title: 'Card 3', cols: 2, rows: 1 },
+          { title: 'Card 4', cols: 1, rows: 1 }
+        ];
+      } else {
+        this.cards = [
+          { title: 'Card 1', cols: 1, rows: 1 },
+          { title: 'Card 2', cols: 1, rows: 1 },
+          { title: 'Card 3', cols: 1, rows: 2 },
+          { title: 'Card 4', cols: 2, rows: 1 }
+        ];
+      }
+
+
+
+
+    }
+
+
   }
 
   createRecruitment(idGame: string) {

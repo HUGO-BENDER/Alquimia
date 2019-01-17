@@ -6,21 +6,13 @@
     </div>
   </div>
 
-  <div> inSmallScreen {{inSmallScreen}}</div>
-  <br>
-
-  <div> inMediumScreen {{inMediumScreen}}</div>
-  <br>
-
-
   <div class="grid-container">
-    <mat-grid-list cols="2" rowHeight="350px">
-
-      <mat-grid-tile [colspan]="2" [rowspan]="1">
+    <mat-grid-list [cols]="matGridSetup.cols" [rowHeight]="matGridSetup.rowHeight" [gutterSize]="matGridSetup.gutterSize">
+      <mat-grid-tile [colspan]="matGridSetup.GamesInProgress.cols" [rowspan]="matGridSetup.GamesInProgress.rows">
         <mat-card class="dashboard-card">
           <mat-card-header>
             <mat-card-title>
-              {{ translate.instant('pagHome.GamesInProgress') }} 
+              {{ translate.instant('pagHome.GamesInProgress') }}
               <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
                 <mat-icon>more_vert</mat-icon>
               </button>
@@ -38,7 +30,8 @@
                   </mat-panel-title>
                   <mat-panel-description>
                     {{gameInProgress.timeLastTurn.toDate() | date : 'medium' }}
-                    <a *ngIf="gameInProgress.isMyTurn" [routerLink]="['/game', gameInProgress.id]"><button mat-button color="primary"> Go </button></a>
+                    <a *ngIf="gameInProgress.isMyTurn" [routerLink]="['/game', gameInProgress.id]"><button mat-button
+                        color="primary"> Go </button></a>
                   </mat-panel-description>
                 </mat-expansion-panel-header>
                 es mi turno: {{gameInProgress.isMyTurn}}
@@ -53,8 +46,33 @@
       </mat-grid-tile>
 
 
-      <mat-grid-tile [colspan]="1" [rowspan]="2">
+      <mat-grid-tile [colspan]="matGridSetup.JoinOrCreateGame.cols" [rowspan]="matGridSetup.JoinOrCreateGame.rows">
         <mat-card class="dashboard-card">
+          <mat-card-content class="dashboard-card-content">
+
+            <mat-tab-group mat-align-tabs="center">
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  The <em>best</em> pasta
+                </ng-template>
+                <h1>Best pasta restaurants</h1>
+                <p>...</p>
+              </mat-tab>
+              
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon>thumb_down</mat-icon> The worst sushi
+                </ng-template>
+                <h1>Terrible sushi restaurants</h1>
+                <p>...</p>
+              </mat-tab>
+            </mat-tab-group>
+          </mat-card-content>
+        </mat-card>
+
+
+
+        <!-- <mat-card class="dashboard-card">
           <mat-card-header>
             <mat-card-title>
               Join a game
@@ -91,8 +109,9 @@
               </mat-expansion-panel>
             </mat-accordion>
           </mat-card-content>
-        </mat-card>
+        </mat-card> -->
       </mat-grid-tile>
+
 
 
       <mat-grid-tile *ngFor="let card of cards" [colspan]="card.cols" [rowspan]="card.rows">
