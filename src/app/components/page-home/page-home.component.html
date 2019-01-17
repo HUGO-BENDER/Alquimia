@@ -21,7 +21,7 @@
               </mat-menu>
             </mat-card-title>
           </mat-card-header>
-          <mat-card-content class="dashboard-card-content">
+          <mat-card-content class="dashboard-card-content content-card-scroll-vert">
             <mat-accordion class="example-headers-align">
               <mat-expansion-panel *ngFor="let gameInProgress of gamesInProgress  | async">
                 <mat-expansion-panel-header>
@@ -49,20 +49,34 @@
       <mat-grid-tile [colspan]="matGridSetup.JoinOrCreateGame.cols" [rowspan]="matGridSetup.JoinOrCreateGame.rows">
         <mat-card class="dashboard-card">
           <mat-card-content class="dashboard-card-content">
-
-            <mat-tab-group mat-align-tabs="center">
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  The <em>best</em> pasta
-                </ng-template>
-                <h1>Best pasta restaurants</h1>
-                <p>...</p>
+            <mat-tab-group mat-stretch-tabs >
+              <mat-tab [label]="translate.instant('pagHome.JoinGame')">
+                <div  class="content-tab-scroll-vert" >
+                    <mat-accordion class="example-headers-align">
+                      <mat-expansion-panel *ngFor="let recruitment of recruitments | async">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            {{recruitment.gameId}}
+                          </mat-panel-title>
+                          <mat-panel-description>
+                            {{recruitment.dateCreation.toDate() | date : 'medium' }}
+                          </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <span>
+                          <mat-icon>account_circle</mat-icon> {{recruitment.creator.displayName}}
+                        </span>
+                        Id: {{recruitment.id}}
+                        state: {{recruitment.state}}
+                        <mat-action-row>
+                          <button mat-button *ngIf="canDelete(recruitment)" color="warn" (click)="deleteRecruitment(recruitment)">Delete</button>
+                          <button mat-button [disabled]="!canJoin(recruitment)" color="primary" (click)="joinRecruitment(recruitment)">Join</button>
+                        </mat-action-row>
+                      </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
               </mat-tab>
-              
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <mat-icon>thumb_down</mat-icon> The worst sushi
-                </ng-template>
+              <mat-tab [label]="translate.instant('pagHome.CreateGame')">
+
                 <h1>Terrible sushi restaurants</h1>
                 <p>...</p>
               </mat-tab>
