@@ -40,11 +40,10 @@
 		"Title": "Contacti amb nosaltres"
 	},
 	"pagHome": {
-		"CreateGame": "Crear un nou joc",
+		"CreateGame": "Nou joc",
 		"GamesInProgress": "Jocs en curs",
-		"JoinGame": "Uneix-te a un joc",
-		"Title": "Inici",
-		"separadorO": "o"
+		"JoinGame": "Uneix-te",
+		"Title": "Inici"
 	},
 	"pagUser": {
 		"Title": "Usuari"

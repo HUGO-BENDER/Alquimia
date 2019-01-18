@@ -13,17 +13,18 @@
           <mat-card-header>
             <mat-card-title>
               {{ translate.instant('pagHome.GamesInProgress') }}
-              <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <!-- <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu" xPosition="before">
                 <button mat-menu-item (click)="createRecruitment('xxxxx')">xCreate xxxxxx</button>
-              </mat-menu>
+              </mat-menu> -->
             </mat-card-title>
           </mat-card-header>
           <mat-card-content class="dashboard-card-content content-card-scroll-vert">
+            <div *ngIf="(gamesInProgress | async)==null">No records found.</div>
             <mat-accordion class="example-headers-align">
-              <mat-expansion-panel *ngFor="let gameInProgress of gamesInProgress  | async">
+              <mat-expansion-panel *ngFor="let gameInProgress of (gamesInProgress | async)">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
                     {{gameInProgress.id}}

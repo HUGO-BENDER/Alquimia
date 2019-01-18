@@ -40,11 +40,10 @@
 		"Title": "Contact us"
 	},
 	"pagHome": {
-		"CreateGame": "Create a new game",
+		"CreateGame": "New game",
 		"GamesInProgress": "Games in progress",
-		"JoinGame": "Join a game",
-		"Title": "Home",
-		"separadorO": "o"
+		"JoinGame": "Join",
+		"Title": "Home"
 	},
 	"pagUser": {
 		"Title": "User"
