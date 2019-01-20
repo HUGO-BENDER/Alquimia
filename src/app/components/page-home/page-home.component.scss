@@ -4,7 +4,7 @@
 }
 
 .hero-section {
-    background: url("/assets/bg-heading-85.jpg") 50% no-repeat;
+    background: url("/assets/img/bg-heading-85.jpg") 50% no-repeat;
     background-size: cover;
     height: 50vh;
     text-align: center;
@@ -36,13 +36,7 @@
     right: 10px;
     bottom: 10px;
   }
-
-    .more-button {
-    position: absolute;
-    top: 15px;
-    right: 10px;
-  }
-  
+ 
   .dashboard-card-content {
     text-align: center;
   }  
@@ -55,6 +49,20 @@
 
   .content-tab-scroll-vert {
     height: 230px;
+    width: 100%;
+  }
+
+  .container-games-avatar {
+    display: flex;
+    flex-direction: row ;
+    flex-wrap: wrap;
+    
+    .game-avatar{
+      padding: 15px;
+      height: 200px;
+      max-width: 120px;
+      border: 1px solid green;
+    }
   }
 
   .example-headers-align .mat-expansion-panel-header-title, 
