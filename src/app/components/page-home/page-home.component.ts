@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
+import { MatSnackBar, MatSnackBarVerticalPosition, MatDialog } from '@angular/material';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { TranslateService } from 'ng2-translate';
 import { Observable } from 'rxjs/Observable';
@@ -10,12 +10,14 @@ import { Recruitment, recruitmentState } from 'src/app/model/recruitment';
 import { MinInfoPlayer } from 'src/app/model/player';
 import { GameInProgress } from 'src/app/model/game';
 import * as firebase from 'firebase';
+import { ChinKerDialogCreateNewComponent } from 'src/app/components-chinker/dialog-create-new/dialog-create-new.component';
 
 @Component({
   selector: 'app-page-home',
   templateUrl: './page-home.component.html',
   styleUrls: ['./page-home.component.scss']
 })
+
 export class PageHomeComponent implements OnInit {
 
   matGridSetup = {
@@ -48,7 +50,8 @@ export class PageHomeComponent implements OnInit {
 
   constructor(public au: AngularFireAuth, private afsRecruitments: RecruitmentService,
               public afsPlayer: PlayerService, public snackBar: MatSnackBar,
-              public breakpointObserver: BreakpointObserver, private translate: TranslateService) { }
+              public breakpointObserver: BreakpointObserver, private translate: TranslateService,
+              public dialog: MatDialog ) { }
 
   ngOnInit() {
     this.breakpointObserver
@@ -122,6 +125,18 @@ export class PageHomeComponent implements OnInit {
 
 
     }
+
+
+  }
+
+  showInfo(idGame: string) {
+    const dialogRef = this.dialog.open(ChinKerDialogCreateNewComponent, {
+      data: { action: 'Info', idGame: idGame },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
 
 
   }

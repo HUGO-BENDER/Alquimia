@@ -81,16 +81,18 @@
               <mat-tab [label]="translate.instant('pagHome.CreateGame')">
                 <div class="content-tab-scroll-vert container-games-avatar">
                   <mat-card *ngFor="let recruitment of recruitments | async" class="game-avatar">
-                    <mat-card-subtitle> Chinker </mat-card-subtitle>
+                    <!-- <mat-card-title> Chinker </mat-card-title> -->
                     <img src="../../../assets/chinker/chinker_48.png">
                     <mat-card-content>
-                      <p>Something pretty...</p>
+                      <mat-card-title> Chinker </mat-card-title>
+                      <!-- <p><mat-icon *ngFor="let i of [0,1,2,3,4]">star_rate</mat-icon></p>                    
+                      <p><mat-icon *ngFor="let i of [0,1]">person_outline</mat-icon></p> -->
                     </mat-card-content>
-                    <mat-card-actions>
-                        <button mat-icon-button class="more-button" >
-                            <mat-icon>info</mat-icon>
+                    <mat-card-actions align='end'>
+                        <button mat-icon-button (click)="showInfo('Chinker')">
+                            <mat-icon >info</mat-icon>
                           </button>
-                      <button mat-icon-button class="more-button" >
+                      <button mat-icon-button color="primary" (click)="createRecruitment('Chinker')">
                           <mat-icon>add_circle</mat-icon>
                         </button>
                     </mat-card-actions>

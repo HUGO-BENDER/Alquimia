@@ -38,11 +38,14 @@ import { AppToolBarComponent } from './components/app-tool-bar/app-tool-bar.comp
 import { PageHomeComponent } from './components/page-home/page-home.component';
 import { PageAboutComponent } from './components/page-about/page-about.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { PageGameComponent } from './components/page-game/page-game.component';
 import { AppFooterComponent } from './components/app-footer/app-footer.component';
 import { AppLoginComponent } from './components/app-login/app-login.component';
 import { PagePolicyPrivacyComponent } from './components/page-policy-privacy/page-policy-privacy.component';
 import { PageServiceConditionsComponent } from './components/page-service-conditions/page-service-conditions.component';
+
+// --Chinker-components
+import { PageGameComponent } from './components/page-game/page-game.component';
+import { ChinKerDialogCreateNewComponent } from './components-chinker/dialog-create-new/dialog-create-new.component';
 
 // -- directives
 import { FramepanzoomDirective } from './components/app-framepanzoom/framepanzoom.directive';
@@ -98,7 +101,8 @@ export function createTranslateLoader(http: Http) {
     AppLoginComponent,
     PagePolicyPrivacyComponent,
     PageServiceConditionsComponent,
-    FramepanzoomDirective
+    FramepanzoomDirective,
+    ChinKerDialogCreateNewComponent
   ],
   imports: [
     BrowserModule,
@@ -124,7 +128,8 @@ export function createTranslateLoader(http: Http) {
     })
   ],
   entryComponents: [
-    AppLoginComponent
+    AppLoginComponent,
+    ChinKerDialogCreateNewComponent
   ],
   providers:  [ MetadataService, SidenavService,
     { provide: MissingTranslationHandler, useClass: MissingTranslation}
