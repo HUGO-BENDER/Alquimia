@@ -44,7 +44,8 @@ import { PagePolicyPrivacyComponent } from './components/page-policy-privacy/pag
 import { PageServiceConditionsComponent } from './components/page-service-conditions/page-service-conditions.component';
 
 // --Chinker-components
-import { PageGameComponent } from './components/page-game/page-game.component';
+import { ChinkerGameComponent } from './components-chinker/chinker-game/chinker-game.component';
+import { ChinkerDialogManualComponent } from './components-chinker/dialog-manual/dialog-manual.component';
 import { ChinKerDialogCreateNewComponent } from './components-chinker/dialog-create-new/dialog-create-new.component';
 
 // -- directives
@@ -96,13 +97,14 @@ export function createTranslateLoader(http: Http) {
     PageHomeComponent,
     PageAboutComponent,
     PageNotFoundComponent,
-    PageGameComponent,
     AppFooterComponent,
     AppLoginComponent,
     PagePolicyPrivacyComponent,
     PageServiceConditionsComponent,
     FramepanzoomDirective,
-    ChinKerDialogCreateNewComponent
+    ChinkerGameComponent,
+    ChinKerDialogCreateNewComponent,
+    ChinkerDialogManualComponent
   ],
   imports: [
     BrowserModule,
@@ -129,7 +131,8 @@ export function createTranslateLoader(http: Http) {
   ],
   entryComponents: [
     AppLoginComponent,
-    ChinKerDialogCreateNewComponent
+    ChinKerDialogCreateNewComponent,
+    ChinkerDialogManualComponent
   ],
   providers:  [ MetadataService, SidenavService,
     { provide: MissingTranslationHandler, useClass: MissingTranslation}

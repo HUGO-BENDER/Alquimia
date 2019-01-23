@@ -109,4 +109,6 @@ Step 014
     for IE - npm install --save classlist.js
     for IE - npm install --save web-animations-js
     Separate App-component and ChinKer-component
+    migrate page-game -> ng g c components-chinker/chinkerGame
+    ng g c components-chinker/dialogManual
     ng g c components-chinker/dialogCreateNew

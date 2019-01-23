@@ -42,10 +42,10 @@
                 (cdkDropListDropped)="onBoardDrop($event,c)">
               </div>
               <mat-grid-list *ngIf="c.id > 0" cols="2" rowHeight="1:1" gutterSize="0px" class="gridList2x2">
-                <mat-grid-tile><img class="gridTile11" src="../assets/img/n_{{c.description}}.svg" /></mat-grid-tile>
-                <mat-grid-tile><img class="gridTile12" src="../assets/img/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
-                <mat-grid-tile><img class="gridTile21" src="../assets/img/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
-                <mat-grid-tile><img class="gridTile22" src="../assets/img/n_{{c.description}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile11" src="../assets/chinker/n_{{c.description}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile12" src="../assets/chinker/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile21" src="../assets/chinker/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile22" src="../assets/chinker/n_{{c.description}}.svg" /></mat-grid-tile>
               </mat-grid-list>
 
             </div>
@@ -55,10 +55,10 @@
                 {{col.id}}/{{c.position}} # {{c.displayNamePlayer | slice:0:4}}
               </div>
               <mat-grid-list *ngIf="c.id != 0" cols="2" rowHeight="1:1" gutterSize="0px" class="gridList2x2">
-                <mat-grid-tile><img class="gridTile11" src="../assets/img/n_{{c.description}}.svg" /></mat-grid-tile>
-                <mat-grid-tile><img class="gridTile12" src="../assets/img/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
-                <mat-grid-tile><img class="gridTile21" src="../assets/img/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
-                <mat-grid-tile><img class="gridTile22" src="../assets/img/n_{{c.description}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile11" src="../assets/chinker/n_{{c.description}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile12" src="../assets/chinker/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile21" src="../assets/chinker/{{c.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile22" src="../assets/chinker/n_{{c.description}}.svg" /></mat-grid-tile>
               </mat-grid-list>
             </div>
             <div class="cell cell-neutral">{{col.colId}} *** {{col.id}}</div>
@@ -71,10 +71,10 @@
                 {{card.id}}
               </div>
               <mat-grid-list *ngIf="card.id != 0" cols="2" rowHeight="1:1" gutterSize="0px" class="gridList2x2">
-                <mat-grid-tile><img class="gridTile11" src="../assets/img/n_{{card.description}}.svg" /></mat-grid-tile>
-                <mat-grid-tile><img class="gridTile12" src="../assets/img/{{card.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
-                <mat-grid-tile><img class="gridTile21" src="../assets/img/{{card.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
-                <mat-grid-tile><img class="gridTile22" src="../assets/img/n_{{card.description}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile11" src="../assets/chinker/n_{{card.description}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile12" src="../assets/chinker/{{card.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile21" src="../assets/chinker/{{card.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+                <mat-grid-tile><img class="gridTile22" src="../assets/chinker/n_{{card.description}}.svg" /></mat-grid-tile>
               </mat-grid-list>
             </div> -->
           </div>
@@ -121,16 +121,16 @@
           [ngClass]="['handCell', card.classCss ]">
           <div [ngClass]="['handCell-placeholder', card.classCss]" *cdkDragPlaceholder></div>
           <mat-grid-list *ngIf="!card.previousValues" cols="2" rowHeight="1:1" gutterSize="0px" class="gridList2x2">
-            <mat-grid-tile><img class="gridTile11" src="../assets/img/n_{{card.description}}.svg" /></mat-grid-tile>
-            <mat-grid-tile><img class="gridTile12" src="../assets/img/{{card.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
-            <mat-grid-tile><img class="gridTile21" src="../assets/img/{{card.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
-            <mat-grid-tile><img class="gridTile22" src="../assets/img/n_{{card.description}}.svg" /></mat-grid-tile>
+            <mat-grid-tile><img class="gridTile11" src="../assets/chinker/n_{{card.description}}.svg" /></mat-grid-tile>
+            <mat-grid-tile><img class="gridTile12" src="../assets/chinker/{{card.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+            <mat-grid-tile><img class="gridTile21" src="../assets/chinker/{{card.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+            <mat-grid-tile><img class="gridTile22" src="../assets/chinker/n_{{card.description}}.svg" /></mat-grid-tile>
           </mat-grid-list>
           <mat-grid-list *ngIf="card.previousValues" cols="2" rowHeight="1:1" gutterSize="0px" class="gridList2x2 gridTileDisabled">
-            <mat-grid-tile><img class="gridTile11 gridTileDisabled" src="../assets/img/n_{{card.previousValues.description}}.svg" /></mat-grid-tile>
-            <mat-grid-tile><img class="gridTile12 gridTileDisabled" src="../assets/img/{{card.previousValues.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
-            <mat-grid-tile><img class="gridTile21 gridTileDisabled" src="../assets/img/{{card.previousValues.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
-            <mat-grid-tile><img class="gridTile22 gridTileDisabled" src="../assets/img/n_{{card.previousValues.description}}.svg" /></mat-grid-tile>
+            <mat-grid-tile><img class="gridTile11 gridTileDisabled" src="../assets/chinker/n_{{card.previousValues.description}}.svg" /></mat-grid-tile>
+            <mat-grid-tile><img class="gridTile12 gridTileDisabled" src="../assets/chinker/{{card.previousValues.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+            <mat-grid-tile><img class="gridTile21 gridTileDisabled" src="../assets/chinker/{{card.previousValues.palo | slice:0:3 | lowercase}}.svg" /></mat-grid-tile>
+            <mat-grid-tile><img class="gridTile22 gridTileDisabled" src="../assets/chinker/n_{{card.previousValues.description}}.svg" /></mat-grid-tile>
           </mat-grid-list>
         </div>
       </div>

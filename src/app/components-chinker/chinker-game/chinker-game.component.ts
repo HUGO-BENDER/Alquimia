@@ -3,19 +3,20 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+// import { Observable } from 'rxjs/Observable';
 import { GameService } from 'src/app/services/firestore/game.service';
 import { Game, Card, ColumnGame, gameState } from 'src/app/model/game';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import * as firebase from 'firebase';
 import { Subscription } from 'rxjs';
-import { DocumentChangeAction } from 'angularfire2/firestore';
-import { FirebaseApp } from 'angularfire2';
+// import { DocumentChangeAction } from 'angularfire2/firestore';
+// import { FirebaseApp } from 'angularfire2';
 
 @Component({
-  selector: 'app-page-game',
-  templateUrl: './page-game.component.html',
-  styleUrls: ['./page-game.component.scss'],
+  // tslint:disable-next-line:component-selector
+  selector: 'chinker-game',
+  templateUrl: './chinker-game.component.html',
+  styleUrls: ['./chinker-game.component.scss'],
   animations: [
     trigger('animAppear', [
       state('outside', style({
@@ -30,7 +31,7 @@ import { FirebaseApp } from 'angularfire2';
     ])
   ]
 })
-export class PageGameComponent implements OnInit, OnDestroy {
+export class ChinkerGameComponent implements OnInit, OnDestroy {
   idGame: string;
   gameSubscription: Subscription;
 

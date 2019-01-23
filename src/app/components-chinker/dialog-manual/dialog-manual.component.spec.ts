@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PageGameComponent } from './page-game.component';
+import { ChinkerDialogManualComponent } from './dialog-manual.component';
 
-describe('PageGameComponent', () => {
-  let component: PageGameComponent;
-  let fixture: ComponentFixture<PageGameComponent>;
+describe('DialogManualComponent', () => {
+  let component: ChinkerDialogManualComponent;
+  let fixture: ComponentFixture<ChinkerDialogManualComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PageGameComponent ]
+      declarations: [ ChinkerDialogManualComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PageGameComponent);
+    fixture = TestBed.createComponent(ChinkerDialogManualComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -11,6 +11,7 @@ import { MinInfoPlayer } from 'src/app/model/player';
 import { GameInProgress } from 'src/app/model/game';
 import * as firebase from 'firebase';
 import { ChinKerDialogCreateNewComponent } from 'src/app/components-chinker/dialog-create-new/dialog-create-new.component';
+import { ChinkerDialogManualComponent } from 'src/app/components-chinker/dialog-manual/dialog-manual.component';
 
 @Component({
   selector: 'app-page-home',
@@ -49,23 +50,23 @@ export class PageHomeComponent implements OnInit {
   snackBarVerticalPositionTop: MatSnackBarVerticalPosition = 'top';
 
   constructor(public au: AngularFireAuth, private afsRecruitments: RecruitmentService,
-              public afsPlayer: PlayerService, public snackBar: MatSnackBar,
-              public breakpointObserver: BreakpointObserver, private translate: TranslateService,
-              public dialog: MatDialog ) { }
+    public afsPlayer: PlayerService, public snackBar: MatSnackBar,
+    public breakpointObserver: BreakpointObserver, private translate: TranslateService,
+    public dialog: MatDialog) { }
 
   ngOnInit() {
     this.breakpointObserver
-    .observe(['(max-width: 600px)'])
-    .subscribe((state: BreakpointState) => {
-      this.inSmallScreen = state.matches;
-      this.makeResponsive();
-    });
+      .observe(['(max-width: 600px)'])
+      .subscribe((state: BreakpointState) => {
+        this.inSmallScreen = state.matches;
+        this.makeResponsive();
+      });
     this.breakpointObserver
-    .observe(['(max-width: 900px)'])
-    .subscribe((state: BreakpointState) => {
-      this.inMediumScreen = state.matches;
-      this.makeResponsive();
-    });
+      .observe(['(max-width: 900px)'])
+      .subscribe((state: BreakpointState) => {
+        this.inMediumScreen = state.matches;
+        this.makeResponsive();
+      });
 
     this.au.authState.subscribe(user => {
       if (user) {
@@ -105,7 +106,7 @@ export class PageHomeComponent implements OnInit {
         { title: 'Card 4', cols: 3, rows: 1 }
       ];
     } else {
-      if ( this.inMediumScreen) {
+      if (this.inMediumScreen) {
         this.cards = [
           { title: 'Card 1', cols: 1, rows: 1 },
           { title: 'Card 2', cols: 2, rows: 1 },
@@ -130,39 +131,49 @@ export class PageHomeComponent implements OnInit {
   }
 
   showInfo(idGame: string) {
-    const dialogRef = this.dialog.open(ChinKerDialogCreateNewComponent, {
-      data: { action: 'Info', idGame: idGame },
-    });
+    const dialogRef = this.dialog.open(ChinkerDialogManualComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
-
-
   }
 
   createRecruitment(idGame: string) {
     if (this.userlogined) {
-      const player1: MinInfoPlayer = { uid: this.userlogined.uid, displayName: this.userlogined.displayName };
-      const arrayPlayers: Array<MinInfoPlayer> = [];
-      arrayPlayers.push(player1);
+      const dialogRef = this.dialog.open(ChinKerDialogCreateNewComponent, {
+        data: { action: 'Info', idGame: idGame },
+      });
 
-      const newRecruitment: Recruitment = {
-        gameType: idGame,
-        dateCreation: firebase.firestore.FieldValue.serverTimestamp(),
-        state: recruitmentState.OPEN,
-        creator: player1,
-        players: arrayPlayers,
-        countPlayers: 1,
-        maxPlayers: 2
-      };
-      this.afsRecruitments.createRecruitment(newRecruitment)
-        .then(function (docRef) {
-          console.log('Document written with ID: ', docRef.id);
-        })
-        .catch(function (error) {
-          console.error('Error adding document: ', error);
-        });
+      dialogRef.afterClosed().subscribe(result => {
+
+
+
+        this.openSnackBar('xhas creado un juego con ' + result);
+
+      });
+
+
+
+      // const player1: MinInfoPlayer = { uid: this.userlogined.uid, displayName: this.userlogined.displayName };
+      // const arrayPlayers: Array<MinInfoPlayer> = [];
+      // arrayPlayers.push(player1);
+
+      // const newRecruitment: Recruitment = {
+      //   gameType: idGame,
+      //   dateCreation: firebase.firestore.FieldValue.serverTimestamp(),
+      //   state: recruitmentState.OPEN,
+      //   creator: player1,
+      //   players: arrayPlayers,
+      //   countPlayers: 1,
+      //   maxPlayers: 2
+      // };
+      // this.afsRecruitments.createRecruitment(newRecruitment)
+      //   .then(function (docRef) {
+      //     console.log('Document written with ID: ', docRef.id);
+      //   })
+      //   .catch(function (error) {
+      //     console.error('Error adding document: ', error);
+      //   });
     } else {
       this.openSnackBar('xNo se puede ejecutar esta acción sin estar loginado');
     }
