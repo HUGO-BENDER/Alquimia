@@ -6,7 +6,7 @@ import { AppRoutingModule } from './components/app-routing/app-routing.module';
 import { Http } from '@angular/http';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LayoutModule } from '@angular/cdk/layout';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 // --Material
 import { AppMaterialModule } from './components/app-material/app-material.module';
@@ -114,7 +114,7 @@ export function createTranslateLoader(http: Http) {
     AppMaterialModule,
     DragDropModule,
     LayoutModule,
-    FormsModule,
+    ReactiveFormsModule,
     SweetAlert2Module.forRoot({
       buttonsStyling: false,
       confirmButtonClass: 'mat-raised-button mat-primary',

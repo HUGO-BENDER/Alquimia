@@ -1,17 +1,44 @@
 <h2 mat-dialog-title>Create new recruitment</h2>
 <mat-dialog-content>
-  <mat-vertical-stepper #stepper>
-      <mat-step [stepControl]="form1.control">
-         <form #form1="ngForm">
-            <input [(ngModel)]="name" name="name" required />
+   <mat-vertical-stepper #stepper>
+      <mat-step [stepControl]="firstFormGroup">
+         <form [formGroup]="firstFormGroup">
+            <!-- <ng-template matStepLabel>chosse a name for this game</ng-template> -->
+            <mat-form-field>
+               <input matInput placeholder="1x1 H vs B" formControlName="name" required>
+               <mat-error *ngIf="firstFormGroup.controls['name'].hasError('required')">
+                  name is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+            <div>
+               <button mat-button matStepperNext>Next</button>
+            </div>
          </form>
       </mat-step>
-      <mat-step [stepControl]="form2.control">
-         <form #form2="ngForm">
-            <input [(ngModel)]="address" name="address" required />
+      <mat-step [stepControl]="secondFormGroup">
+         <form [formGroup]="secondFormGroup">
+            <!-- <ng-template matStepLabel>Fill out your address</ng-template> -->
+            <mat-form-field>
+               <input matInput placeholder="Address" formControlName="secondCtrl" required>
+               <mat-error *ngIf="secondFormGroup.controls['secondCtrl'].hasError('required')">
+                  First name is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+            <div>
+               <button mat-button matStepperPrevious>Back</button>
+               <button mat-button matStepperNext>Next</button>
+            </div>
          </form>
       </mat-step>
-    </mat-vertical-stepper>
+      <!-- <mat-step>
+         <ng-template matStepLabel>Done</ng-template>
+         You are now done.
+         <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+         </div>
+      </mat-step> -->
+   </mat-vertical-stepper>
 
 
 
