@@ -1,9 +1,16 @@
 .new-chinker{
-    width: 80ch;
+    // width: 80ch;
 }
 
 .full-width {
     width: 100%;
+  }
+
+.table-width {
+ width: 80%;
+}
+  .formTextArea {
+    min-height: 150px;
   }
 
   .row {
@@ -20,3 +27,14 @@
     margin-right: 0;
   }
   
+  .buttonBar{
+    margin-top: 10px;
+  }
+  
+  .alignRight{
+    text-align: right;
+  }
+  
+  .spacer{
+    flex: 1 1 auto;
+  }

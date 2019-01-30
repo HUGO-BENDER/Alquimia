@@ -31,7 +31,10 @@ export class ChinKerDialogCreateNewComponent {
   });
 
   secondFormGroup = this.fb.group({
-    secondCtrl: [null, Validators.required]
+    numPlayers: [2, Validators.compose([Validators.required, Validators.min(2), Validators.max(2)])],
+    numCardsInHand: [6, Validators.compose([Validators.required, Validators.min(5), Validators.max(7)])],
+    numGamesOnTable: [9, Validators.compose([Validators.required, Validators.min(5), Validators.max(9)])],
+    isBetsAllowed: [true]
   });
 
 
@@ -48,6 +51,7 @@ export class ChinKerDialogCreateNewComponent {
   }
 
   close() {
+    alert('cerramos!');
     this.dialogRef.close();
   }
 }

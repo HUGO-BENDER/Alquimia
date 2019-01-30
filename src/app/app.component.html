@@ -30,11 +30,11 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content class="app-container">
-    <header *ngIf="currentUrl != '/game'">
+    <header *ngIf="currentUrl != '/chinker'" class="mat-elevation-z10">
       <app-tool-bar></app-tool-bar>
     </header>
     <router-outlet class="router-outlet"></router-outlet>
-    <footer *ngIf="currentUrl != '/game'">
+    <footer *ngIf="currentUrl != '/chinker'">
       <app-footer></app-footer>
     </footer>
   </mat-sidenav-content>

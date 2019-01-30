@@ -1,16 +1,18 @@
 <h2 mat-dialog-title>Create new recruitment</h2>
-<mat-dialog-content  class="new-chinker">
+<mat-dialog-content class="new-chinker">
    <mat-vertical-stepper linear #stepper>
-      <mat-step [stepControl]="firstFormGroup">
+      <mat-step>
          <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>chosse a name for this game</ng-template>
             <div class="row">
                <div class="col">
-                  <mat-form-field class="full-width">
-                     <input matInput placeholder="Name game" value="game001" formControlName="name" maxlength="30" required>
+                  <mat-form-field hintLabel="Max 15 characters" class="full-width">
+                     <input matInput placeholder="Name game" value="game001" formControlName="name" maxlength="15"
+                        required>
+                     <mat-hint align="end">{{firstFormGroup.get('name').value?.length || 0}}/15</mat-hint>
                      <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="firstFormGroup.controls['name'].setValue(null)">
-                           <mat-icon>close</mat-icon>
-                         </button>
+                        <mat-icon>close</mat-icon>
+                     </button>
                      <mat-error *ngIf="firstFormGroup.controls['name'].hasError('required')">
                         name is <strong>required</strong>
                      </mat-error>
@@ -21,28 +23,50 @@
             <div class="row">
                <div class="col">
                   <mat-form-field class="full-width">
-                     <textarea matInput placeholder="Optional: enter a description." formControlName="description"></textarea>
+                     <textarea class="formTextArea" matInput placeholder="Optional: enter a description."
+                        formControlName="description"></textarea>
                   </mat-form-field>
                </div>
             </div>
-            <div>
+            <div class="buttonBar">
                <button mat-button matStepperNext>Next</button>
             </div>
          </form>
       </mat-step>
-      <mat-step [stepControl]="secondFormGroup">
+      <mat-step>
          <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Config game</ng-template>
-            <mat-form-field>
-               <input matInput placeholder="Address" formControlName="secondCtrl" required>
-               <mat-error *ngIf="secondFormGroup.controls['secondCtrl'].hasError('required')">
-                  First name is <strong>required</strong>
-               </mat-error>
-            </mat-form-field>
-
-
-            
-            <div>
+            <div class="row">
+               <div class="col">
+                  <mat-form-field class="alignRight">
+                     <input matInput type="number" disabled placeholder="number of players" formControlName="numPlayers"
+                        required min="2" max="2">
+                     <mat-error *ngIf="!secondFormGroup.controls['numPlayers'].valid">
+                        Chinker alone and multiplayer are in development
+                     </mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="alignRight">
+                     <input matInput type="number" placeholder="cards in hand" formControlName="numCardsInHand"
+                        required min="5" max="7">
+                     <mat-error *ngIf="!secondFormGroup.controls['numCardsInHand'].valid">
+                        invalid
+                     </mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="alignRight">
+                     <input matInput type="number" placeholder="games on table" formControlName="numGamesOnTable"
+                        required min="5" max="9">
+                     <mat-error *ngIf="!secondFormGroup.controls['numGamesOnTable'].valid">
+                        invalid
+                     </mat-error>
+                  </mat-form-field>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col">
+                  <mat-slide-toggle formControlName="isBetsAllowed" color="primary">Bets are alowed</mat-slide-toggle>
+               </div>
+            </div>
+            <div class="buttonBar">
                <button mat-button matStepperPrevious>Back</button>
                <button mat-button matStepperNext>Next</button>
             </div>
@@ -50,18 +74,31 @@
       </mat-step>
       <mat-step>
          <ng-template matStepLabel>Done</ng-template>
-         You are now done.
-         <div>
+         <!-- <table cellspacing="0" class="table-width">
+            <tr>
+               <td>
+                  name
+               </td>
+               <td>
+                     {{firstFormGroup.get('name').value}}
+               </td>
+            </tr>
+            <tr>
+                  <td>
+                     Number of players
+                  </td>
+                  <td>
+                        {{secondFormGroup.get('numPlayers').value}}
+                  </td>
+               </tr>
+         </table> -->
+
+         <!-- <div class="buttonBar row">
             <button mat-button matStepperPrevious>Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>
-         </div>
+            <div class="spacer"></div>
+            <button mat-button color="primary" (click)="onSubmit()">Create game</button>
+         </div> -->
       </mat-step>
    </mat-vertical-stepper>
-
-
-
 </mat-dialog-content>
-<!-- <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
-</mat-dialog-actions> -->
