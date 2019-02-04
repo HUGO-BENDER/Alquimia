@@ -11,20 +11,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 export class ChinKerDialogCreateNewComponent {
 
-  // newChinkerRecruitment = this.fb.group({
-  //   company: null,
-  //   firstName: [null, Validators.required],
-  //   lastName: [null, Validators.required],
-  //   address: [null, Validators.required],
-  //   address2: null,
-  //   city: [null, Validators.required],
-  //   state: [null, Validators.required],
-  //   postalCode: [null, Validators.compose([
-  //     Validators.required, Validators.minLength(5), Validators.maxLength(5)])
-  //   ],
-  //   shipping: ['free', Validators.required]
-  // });
-
   firstFormGroup = this.fb.group({
     name: [null, Validators.required],
     description: null
@@ -36,9 +22,6 @@ export class ChinKerDialogCreateNewComponent {
     numGamesOnTable: [9, Validators.compose([Validators.required, Validators.min(5), Validators.max(9)])],
     isBetsAllowed: [true]
   });
-
-
-
 
   constructor(
     private dialogRef: MatDialogRef<ChinKerDialogCreateNewComponent>,

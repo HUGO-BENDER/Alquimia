@@ -20,6 +20,7 @@
     height: 60px !important;
     width: 60px !important;
   }
+
 .center-title{
   padding-left: 100px;
 }
@@ -44,6 +45,12 @@
   animation: alq-icon-on-over 1s ease;
   }
   
+.shadow10 {
+      -webkit-filter: drop-shadow(10px 10px 7px rgba(0,0,0,0.5));      
+      filter: drop-shadow(10px 10px 7px rgba(0,0,0,0.5));  
+  
+    }
+
   .toolbar-inline{
   display: inline-block;
   }

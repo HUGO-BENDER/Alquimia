@@ -7,7 +7,7 @@
             <div class="row">
                <div class="col">
                   <mat-form-field hintLabel="Max 15 characters" class="full-width">
-                     <input matInput placeholder="Name game" value="game001" formControlName="name" maxlength="15"
+                     <input matInput placeholder="Name game" formControlName="name" maxlength="15"
                         required>
                      <mat-hint align="end">{{firstFormGroup.get('name').value?.length || 0}}/15</mat-hint>
                      <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="firstFormGroup.controls['name'].setValue(null)">
@@ -74,31 +74,65 @@
       </mat-step>
       <mat-step>
          <ng-template matStepLabel>Done</ng-template>
-         <!-- <table cellspacing="0" class="table-width">
-            <tr>
-               <td>
-                  name
-               </td>
-               <td>
-                     {{firstFormGroup.get('name').value}}
-               </td>
-            </tr>
-            <tr>
-                  <td>
-                     Number of players
-                  </td>
-                  <td>
-                        {{secondFormGroup.get('numPlayers').value}}
-                  </td>
-               </tr>
-         </table> -->
+         <div class="row">
+            <div class="col">
+               <label class="alignRight">name: </label>
+            </div>
+            <div class="col">
+               <label>{{firstFormGroup.get('name').value}}</label>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col">
+               <label class="alignRight">Number of players: </label>
+            </div>
+            <div class="col">
+               <label>{{secondFormGroup.get('numPlayers').value}}</label>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col">
+               <label class="alignRight">Number of players: </label>
+            </div>
+            <div class="col">
+               <label>{{secondFormGroup.get('numPlayers').value}}</label>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col">
+               <label class="alignRight">Number of players: </label>
+            </div>
+            <div class="col">
+               <label>{{secondFormGroup.get('numPlayers').value}}</label>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col">
+               <label class="alignRight">Number of players: </label>
+            </div>
+            <div class="col">
+               <label>{{secondFormGroup.get('numPlayers').value}}</label>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col">
+               <label class="alignRight">Number of players: </label>
+            </div>
+            <div class="col">
+               <label>{{secondFormGroup.get('numPlayers').value}}</label>
+            </div>
+         </div>
 
-         <!-- <div class="buttonBar row">
+
+
+
+
+         <div class="buttonBar row">
             <button mat-button matStepperPrevious>Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>
             <div class="spacer"></div>
             <button mat-button color="primary" (click)="onSubmit()">Create game</button>
-         </div> -->
+         </div>
       </mat-step>
    </mat-vertical-stepper>
 </mat-dialog-content>
