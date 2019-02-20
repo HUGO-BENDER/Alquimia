@@ -7,7 +7,8 @@
   </div>
 
   <div class="grid-container">
-    <mat-grid-list [cols]="matGridSetup.cols" [rowHeight]="matGridSetup.rowHeight" [gutterSize]="matGridSetup.gutterSize">
+    <mat-grid-list [cols]="matGridSetup.cols" [rowHeight]="matGridSetup.rowHeight"
+      [gutterSize]="matGridSetup.gutterSize">
       <mat-grid-tile [colspan]="matGridSetup.GamesInProgress.cols" [rowspan]="matGridSetup.GamesInProgress.rows">
         <mat-card class="dashboard-card">
           <mat-card-header>
@@ -59,20 +60,22 @@
                     <mat-expansion-panel *ngFor="let recruitment of recruitments | async">
                       <mat-expansion-panel-header>
                         <mat-panel-title>
-                          {{recruitment.gameId}}
+                          {{recruitment.gameType}} {{recruitment.dateCreation.toDate() | date : 'dd/MM/yy' }}
                         </mat-panel-title>
                         <mat-panel-description>
-                          {{recruitment.dateCreation.toDate() | date : 'medium' }}
+                          {{recruitment.name}}
                         </mat-panel-description>
                       </mat-expansion-panel-header>
                       <span>
                         <mat-icon>account_circle</mat-icon> {{recruitment.creator.displayName}}
                       </span>
-                      Id: {{recruitment.id}}
-                      state: {{recruitment.state}}
+                      <div>{{recruitment.description}} </div>
+                      <div>state: {{recruitment.state}} </div>
                       <mat-action-row>
-                        <button mat-button *ngIf="canDelete(recruitment)" color="warn" (click)="deleteRecruitment(recruitment)">Delete</button>
-                        <button mat-button [disabled]="!canJoin(recruitment)" color="primary" (click)="joinRecruitment(recruitment)">Join</button>
+                        <button mat-button *ngIf="canDelete(recruitment)" color="warn"
+                          (click)="deleteRecruitment(recruitment)">Delete</button>
+                        <button mat-button [disabled]="!canJoin(recruitment)" color="primary"
+                          (click)="joinRecruitment(recruitment)">Join</button>
                       </mat-action-row>
                     </mat-expansion-panel>
                   </mat-accordion>
@@ -80,7 +83,8 @@
               </mat-tab>
               <mat-tab [label]="translate.instant('pagHome.CreateGame')">
                 <div class="content-tab-scroll-vert container-games-avatar">
-                  <mat-card *ngFor="let recruitment of recruitments | async" class="game-avatar">
+                  <!-- <mat-card *ngFor="let recruitment of recruitments | async" class="game-avatar"> -->
+                  <mat-card class="game-avatar">
                     <!-- <mat-card-title> Chinker </mat-card-title> -->
                     <img src="../../../assets/chinker/chinker_48.png">
                     <mat-card-content>
@@ -89,12 +93,12 @@
                       <p><mat-icon *ngFor="let i of [0,1]">person_outline</mat-icon></p> -->
                     </mat-card-content>
                     <mat-card-actions align='end'>
-                        <button mat-icon-button (click)="showInfo('Chinker')">
-                            <mat-icon >info</mat-icon>
-                          </button>
-                      <button mat-icon-button color="primary" (click)="createRecruitment('Chinker')">
-                          <mat-icon>add_circle</mat-icon>
-                        </button>
+                      <button mat-icon-button (click)="showInfo('chinker')">
+                        <mat-icon>info</mat-icon>
+                      </button>
+                      <button mat-icon-button color="primary" (click)="createRecruitment('chinker')">
+                        <mat-icon>add_circle</mat-icon>
+                      </button>
                     </mat-card-actions>
                   </mat-card>
                 </div>

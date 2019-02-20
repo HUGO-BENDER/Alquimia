@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 import { FirebaseUISignInSuccessWithAuthResult, FirebaseUISignInFailure } from 'firebaseui-angular';
 
 
@@ -15,11 +15,13 @@ export class AppLoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  errorCallback(errorData: FirebaseUISignInFailure): void {
+  errorCallback(errorData: FirebaseUISignInFailure) {
+    console.log('login con errorCallback', errorData);
     this.dialogRef.close();
   }
 
   successCallback(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
+    console.log('login con exito successCallback', signInSuccessData);
     this.dialogRef.close();
   }
 

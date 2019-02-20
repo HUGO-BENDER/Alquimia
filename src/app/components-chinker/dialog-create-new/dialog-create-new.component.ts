@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ChinkerSetup } from '../model/chinker-setup';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -30,7 +31,15 @@ export class ChinKerDialogCreateNewComponent {
 
   onSubmit() {
     alert('Thanks!');
-    this.dialogRef.close();
+    const ret: ChinkerSetup = {
+      name: this.firstFormGroup.get('name').value,
+      description: this.firstFormGroup.get('description').value,
+      numPlayers: this.secondFormGroup.get('numPlayers').value,
+      numCardsInHand: this.secondFormGroup.get('numCardsInHand').value,
+      numGamesOnTable: this.secondFormGroup.get('numGamesOnTable').value,
+      isBetsAllowed: this.secondFormGroup.get('isBetsAllowed').value
+    };
+    this.dialogRef.close(ret);
   }
 
   close() {

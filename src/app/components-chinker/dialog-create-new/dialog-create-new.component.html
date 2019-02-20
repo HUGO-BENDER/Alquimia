@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Create new recruitment</h2>
 <mat-dialog-content class="new-chinker">
    <mat-vertical-stepper linear #stepper>
-      <mat-step>
+      <mat-step [stepControl]="firstFormGroup">
          <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>chosse a name for this game</ng-template>
             <div class="row">
@@ -33,7 +33,7 @@
             </div>
          </form>
       </mat-step>
-      <mat-step>
+      <mat-step [stepControl]="secondFormGroup">
          <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Config game</ng-template>
             <div class="row">
@@ -73,7 +73,7 @@
          </form>
       </mat-step>
       <mat-step>
-         <ng-template matStepLabel>Done</ng-template>
+         <ng-template matStepLabel>Resumen</ng-template>
          <div class="row">
             <div class="col">
                <label class="alignRight">name: </label>
@@ -92,40 +92,28 @@
          </div>
          <div class="row">
             <div class="col">
-               <label class="alignRight">Number of players: </label>
+               <label class="alignRight">Number of cards in hand: </label>
             </div>
             <div class="col">
-               <label>{{secondFormGroup.get('numPlayers').value}}</label>
+               <label>{{secondFormGroup.get('numCardsInHand').value}}</label>
             </div>
          </div>
          <div class="row">
             <div class="col">
-               <label class="alignRight">Number of players: </label>
+               <label class="alignRight">Games on table: </label>
             </div>
             <div class="col">
-               <label>{{secondFormGroup.get('numPlayers').value}}</label>
+               <label>{{secondFormGroup.get('numGamesOnTable').value}}</label>
             </div>
          </div>
          <div class="row">
             <div class="col">
-               <label class="alignRight">Number of players: </label>
+               <label class="alignRight">Is bets allowed: </label>
             </div>
             <div class="col">
-               <label>{{secondFormGroup.get('numPlayers').value}}</label>
+               <label>{{secondFormGroup.get('isBetsAllowed').value}}</label>
             </div>
          </div>
-         <div class="row">
-            <div class="col">
-               <label class="alignRight">Number of players: </label>
-            </div>
-            <div class="col">
-               <label>{{secondFormGroup.get('numPlayers').value}}</label>
-            </div>
-         </div>
-
-
-
-
 
          <div class="buttonBar row">
             <button mat-button matStepperPrevious>Back</button>

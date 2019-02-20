@@ -10,8 +10,10 @@ import { Recruitment, recruitmentState } from 'src/app/model/recruitment';
 import { MinInfoPlayer } from 'src/app/model/player';
 import { GameInProgress } from 'src/app/model/game';
 import * as firebase from 'firebase';
+import Swal from 'sweetalert2';
 import { ChinKerDialogCreateNewComponent } from 'src/app/components-chinker/dialog-create-new/dialog-create-new.component';
 import { ChinkerDialogManualComponent } from 'src/app/components-chinker/dialog-manual/dialog-manual.component';
+import { ChinkerSetup } from 'src/app/components-chinker/model/chinker-setup';
 
 @Component({
   selector: 'app-page-home',
@@ -131,51 +133,77 @@ export class PageHomeComponent implements OnInit {
   }
 
   showInfo(idGame: string) {
-    const dialogRef = this.dialog.open(ChinkerDialogManualComponent);
+    switch (idGame) {
+      case 'chinker':
+        const dialogRef = this.dialog.open(ChinkerDialogManualComponent);
+        break;
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+      default:
+        break;
+    }
+
   }
 
   createRecruitment(idGame: string) {
     if (this.userlogined) {
-      const dialogRef = this.dialog.open(ChinKerDialogCreateNewComponent, {
-        data: { action: 'Info', idGame: idGame },
-      });
+      const dialogRef = this.dialog.open(ChinKerDialogCreateNewComponent);
 
       dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          const setup = <ChinkerSetup>result;
+          const player1: MinInfoPlayer = { uid: this.userlogined.uid, displayName: this.userlogined.displayName };
+          const arrayPlayers: Array<MinInfoPlayer> = [];
+          arrayPlayers.push(player1);
 
+          const newRecruitment: Recruitment = {
+            gameType: idGame,
+            name: setup.name,
+            description: setup.description,
+            dateCreation: firebase.firestore.FieldValue.serverTimestamp(),
+            state: recruitmentState.OPEN,
+            creator: player1,
+            players: arrayPlayers,
+            countPlayers: 1,
+            maxPlayers: setup.numPlayers,
+            config: {
+              numCardsInHand: setup.numCardsInHand,
+              numGamesOnTable: setup.numGamesOnTable,
+              isBetsAllowed: setup.isBetsAllowed,
+            }
+          };
 
-
-        this.openSnackBar('xhas creado un juego con ' + result);
-
+          this.afsRecruitments.createRecruitment(newRecruitment)
+            .then( (docRef) => {
+              Swal({
+                position: 'top',
+                type: 'success',
+                title: this.translate.instant('xHas creado un juego'),
+                text: setup.name + ' ' + setup.description,
+                showConfirmButton: false,
+                timer: 1000
+              });
+              console.log('Document written with ID: ', docRef.id);
+            })
+            .catch(function (error) {
+              Swal({
+                position: 'top',
+                type: 'error',
+                title: 'Error adding document: ',
+                text: error,
+                showConfirmButton: false,
+                timer: 1000
+              });
+              console.error('Error adding document: ', error);
+            });
+        }
       });
-
-
-
-      // const player1: MinInfoPlayer = { uid: this.userlogined.uid, displayName: this.userlogined.displayName };
-      // const arrayPlayers: Array<MinInfoPlayer> = [];
-      // arrayPlayers.push(player1);
-
-      // const newRecruitment: Recruitment = {
-      //   gameType: idGame,
-      //   dateCreation: firebase.firestore.FieldValue.serverTimestamp(),
-      //   state: recruitmentState.OPEN,
-      //   creator: player1,
-      //   players: arrayPlayers,
-      //   countPlayers: 1,
-      //   maxPlayers: 2
-      // };
-      // this.afsRecruitments.createRecruitment(newRecruitment)
-      //   .then(function (docRef) {
-      //     console.log('Document written with ID: ', docRef.id);
-      //   })
-      //   .catch(function (error) {
-      //     console.error('Error adding document: ', error);
-      //   });
     } else {
-      this.openSnackBar('xNo se puede ejecutar esta acción sin estar loginado');
+      Swal({
+        type: 'error',
+        title: this.translate.instant('Error'),
+        text: 'xNo se puede ejecutar esta acción sin estar loginado',
+        showConfirmButton: true
+      });
     }
   }
 

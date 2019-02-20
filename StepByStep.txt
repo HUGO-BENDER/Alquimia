@@ -112,3 +112,4 @@ Step 014
     migrate page-game -> ng g c components-chinker/chinkerGame
     ng g c components-chinker/dialogManual
     ng g c components-chinker/dialogCreateNew
+    ng g interface components-chinker/model/modelChinker
