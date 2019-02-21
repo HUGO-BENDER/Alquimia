@@ -27,6 +27,12 @@ export class AppToolBarComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.au.authState;
+    this.au.authState.subscribe(user => {
+      if (user && this.dialogRef) {
+        this.dialogRef.close();
+        console.log('Por las dudas cerramos 2 veces');
+      }
+    });
     this.breakpointObserver
       .observe(['(min-width: 600px)'])
       .subscribe((state: BreakpointState) => {
@@ -41,6 +47,7 @@ export class AppToolBarComponent implements OnInit {
   logout() {
     this.au.auth.signOut().then( () =>
     Swal({
+      toast: true,
       position: 'top',
       type: 'success',
       title: this.translate.instant('App.Msg.CloseSession'),

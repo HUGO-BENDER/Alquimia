@@ -70,7 +70,10 @@
                         <mat-icon>account_circle</mat-icon> {{recruitment.creator.displayName}}
                       </span>
                       <div>{{recruitment.description}} </div>
-                      <div>state: {{recruitment.state}} </div>
+                      <div>state: 
+                        <span *ngIf="recruitment.state==0" >waiting</span>
+                        <span *ngIf="recruitment.state==1" >completed</span>
+                      </div>
                       <mat-action-row>
                         <button mat-button *ngIf="canDelete(recruitment)" color="warn"
                           (click)="deleteRecruitment(recruitment)">Delete</button>
