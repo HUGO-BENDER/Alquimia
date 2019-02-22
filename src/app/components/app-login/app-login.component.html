@@ -1,7 +1,6 @@
 <h2 mat-dialog-title>
-  Login
+  {{ translate.instant('App.MenuUser.Login')}}
 </h2>
-
 <mat-dialog-content>
   <div>
     <firebase-ui (signInSuccessWithAuthResult)="successCallback($event)" (signInFailure)="errorCallback($event)">

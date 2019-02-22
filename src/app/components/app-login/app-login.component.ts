@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
+import { TranslateService } from 'ng2-translate';
 import { FirebaseUISignInSuccessWithAuthResult, FirebaseUISignInFailure } from 'firebaseui-angular';
 
 
@@ -10,7 +11,7 @@ import { FirebaseUISignInSuccessWithAuthResult, FirebaseUISignInFailure } from '
 })
 export class AppLoginComponent implements OnInit {
 
-  constructor(public dialogRef: MatDialogRef<AppLoginComponent>) { }
+  constructor(private translate: TranslateService, public dialogRef: MatDialogRef<AppLoginComponent>) { }
 
   ngOnInit() {
   }
