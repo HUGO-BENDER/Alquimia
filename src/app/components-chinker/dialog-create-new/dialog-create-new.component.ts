@@ -30,7 +30,6 @@ export class ChinKerDialogCreateNewComponent {
 
 
   onSubmit() {
-    alert('Thanks!');
     const ret: ChinkerSetup = {
       name: this.firstFormGroup.get('name').value,
       description: this.firstFormGroup.get('description').value,
@@ -43,7 +42,6 @@ export class ChinKerDialogCreateNewComponent {
   }
 
   close() {
-    alert('cerramos!');
     this.dialogRef.close();
   }
 }

@@ -49,10 +49,9 @@ export class PageHomeComponent implements OnInit {
   gamesInProgress: Observable<GameInProgress[]>;
   recruitments: Observable<Recruitment[]>;
   userlogined: firebase.User;
-  snackBarVerticalPositionTop: MatSnackBarVerticalPosition = 'top';
 
   constructor(public au: AngularFireAuth, private afsRecruitments: RecruitmentService,
-    public afsPlayer: PlayerService, public snackBar: MatSnackBar,
+    public afsPlayer: PlayerService,
     public breakpointObserver: BreakpointObserver, private translate: TranslateService,
     public dialog: MatDialog) { }
 
@@ -146,65 +145,61 @@ export class PageHomeComponent implements OnInit {
 
   createRecruitment(idGame: string) {
     if (this.userlogined) {
-      const dialogRef = this.dialog.open(ChinKerDialogCreateNewComponent);
+      switch (idGame) {
+        case 'chinker':
+          this.RecruitForChinker();
+          break;
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          const setup = <ChinkerSetup>result;
-          const player1: MinInfoPlayer = { uid: this.userlogined.uid, displayName: this.userlogined.displayName };
-          const arrayPlayers: Array<MinInfoPlayer> = [];
-          arrayPlayers.push(player1);
-
-          const newRecruitment: Recruitment = {
-            gameType: idGame,
-            name: setup.name,
-            description: setup.description,
-            dateCreation: firebase.firestore.FieldValue.serverTimestamp(),
-            state: recruitmentState.OPEN,
-            creator: player1,
-            players: arrayPlayers,
-            countPlayers: 1,
-            maxPlayers: setup.numPlayers,
-            config: {
-              numCardsInHand: setup.numCardsInHand,
-              numGamesOnTable: setup.numGamesOnTable,
-              isBetsAllowed: setup.isBetsAllowed,
-            }
-          };
-
-          this.afsRecruitments.createRecruitment(newRecruitment)
-            .then( (docRef) => {
-              Swal({
-                position: 'top',
-                type: 'success',
-                title: this.translate.instant('xHas creado un juego'),
-                text: setup.name + ' ' + setup.description,
-                showConfirmButton: false,
-                timer: 1000
-              });
-              console.log('Document written with ID: ', docRef.id);
-            })
-            .catch(function (error) {
-              Swal({
-                position: 'top',
-                type: 'error',
-                title: 'Error adding document: ',
-                text: error,
-                showConfirmButton: false,
-                timer: 1000
-              });
-              console.error('Error adding document: ', error);
-            });
-        }
-      });
+        default:
+          break;
+      }
     } else {
-      Swal({
-        type: 'error',
-        title: this.translate.instant('Error'),
-        text: 'xNo se puede ejecutar esta acción sin estar loginado',
-        showConfirmButton: true
-      });
+      this.ShowErrorMessage('xNo se puede ejecutar esta acción sin estar loginado');
     }
+  }
+
+  private RecruitForChinker() {
+    const dialogRef = this.dialog.open(ChinKerDialogCreateNewComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const setup = <ChinkerSetup>result;
+        const player1: MinInfoPlayer = { uid: this.userlogined.uid, displayName: this.userlogined.displayName };
+        const arrayPlayers: Array<MinInfoPlayer> = [];
+        arrayPlayers.push(player1);
+        const newRecruitment: Recruitment = {
+          gameType: 'chinker',
+          name: setup.name,
+          description: setup.description,
+          dateCreation: firebase.firestore.FieldValue.serverTimestamp(),
+          state: recruitmentState.OPEN,
+          creator: player1,
+          players: arrayPlayers,
+          countPlayers: 1,
+          maxPlayers: setup.numPlayers,
+          config: {
+            numCardsInHand: setup.numCardsInHand,
+            numGamesOnTable: setup.numGamesOnTable,
+            isBetsAllowed: setup.isBetsAllowed,
+          }
+        };
+        this.afsRecruitments.createRecruitment(newRecruitment)
+          .then((docRef) => {
+            Swal({
+              position: 'top',
+              type: 'success',
+              title: this.translate.instant('xHas creado un juego'),
+              text: setup.name + ' ' + setup.description,
+              showConfirmButton: false,
+              timer: 2000
+            });
+            console.log('Document written with ID: ', docRef.id);
+          })
+          .catch(function (error) {
+            this.ShowErrorMessage(error);
+            console.error('Error adding document: ', error);
+          });
+      }
+    });
   }
 
   canDelete(r: Recruitment): boolean {
@@ -219,10 +214,10 @@ export class PageHomeComponent implements OnInit {
   deleteRecruitment(r: Recruitment) {
     this.afsRecruitments.deleteRecruitment(r)
       .then(function () {
-        this.openSnackBar('xGame delete.');
+        this.ShowToastMessage('xGame delete.');
       })
       .catch(function (error) {
-        this.openSnackBar('xError deleting game.');
+        this.ShowErrorMessage('xError deleting game.');
       });
   }
 
@@ -242,13 +237,13 @@ export class PageHomeComponent implements OnInit {
       this.afsRecruitments.joinRecruitment(r, this.userlogined)
         .then(
           () => this.checkIfRoomReady(r),
-          err => this.openSnackBar(err)
+          err => this.ShowToastMessage(err)
         )
         .catch(function (error) {
           console.error('Error editing document: ', error);
         });
     } else {
-      this.openSnackBar('xNo se puede ejecutar esta acción sin estar loginado');
+      this.ShowErrorMessage('xNo se puede ejecutar esta acción sin estar loginado');
     }
   }
 
@@ -256,7 +251,7 @@ export class PageHomeComponent implements OnInit {
     console.log('r.state = ' + r.state);
 
 
-    this.openSnackBar('xHeeeeyyy ' + this.userlogined.displayName + ' te has unido al juego');
+    this.ShowToastMessage('xHeeeeyyy ' + this.userlogined.displayName + ' te has unido al juego');
     // Conditions for start the game. Simple. There are only 2 players.
     // Then... go. Start the game
 
@@ -266,13 +261,22 @@ export class PageHomeComponent implements OnInit {
   }
 
 
-
-
-  openSnackBar(mensaje: string): any {
-    this.snackBar.open(mensaje, 'xClose', {
-      duration: 5000,
-      verticalPosition: this.snackBarVerticalPositionTop
+  private ShowToastMessage(msg: string): void {
+    Swal({
+      toast: true,
+      position: 'top',
+      type: 'success',
+      title: msg,
+      showConfirmButton: false,
+      timer: 2000
     });
   }
-
+  private ShowErrorMessage(msg: string): void {
+    Swal({
+      type: 'error',
+      title: this.translate.instant('Error'),
+      text: msg,
+      showConfirmButton: true
+    });
+  }
 }

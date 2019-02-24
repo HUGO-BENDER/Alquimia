@@ -54,7 +54,7 @@ export class RecruitmentService {
 
     const NewId = this.createId();
     const newGameRef = this.afs.collection('Games').doc(NewId).ref;
-    const newGame: Game = { gameType: r.gameType, turnCont: 1 };
+    const newGame: Game = { gameType: r.gameType, turnCont: 1, config: r.config };
     batch.set(newGameRef, newGame);
 
     r.players.forEach(p => {

@@ -45,7 +45,10 @@ export class AppToolBarComponent implements OnInit {
   }
 
   logout() {
-    this.au.auth.signOut().then( () =>
+    this.au.auth.signOut().then( () => this.CloseSessionMessage());
+  }
+
+  private CloseSessionMessage(): void {
     Swal({
       toast: true,
       position: 'top',
@@ -53,8 +56,7 @@ export class AppToolBarComponent implements OnInit {
       title: this.translate.instant('App.Msg.CloseSession'),
       showConfirmButton: false,
       timer: 1000
-    }));
-
+    });
   }
 
   toggleAppSidenav() {

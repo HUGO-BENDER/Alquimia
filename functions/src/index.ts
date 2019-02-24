@@ -154,6 +154,12 @@ exports.OnAddNewGame = functions.firestore
             const FieldValue = require('firebase-admin').firestore.FieldValue;
             const pathGame = '/Games/' + context.params.gameId;
 
+            const newGame = snap.data();
+
+            console.log('newGame es ', newGame);
+            
+            console.log('newGame es.config ', newGame.config);
+
             // -- Fake for GetSettingGame.  2 to 4 players. 
             // -- For development only 2 players.
             const ConfigGame = {

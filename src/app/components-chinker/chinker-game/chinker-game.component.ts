@@ -2,15 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material';
-// import { Observable } from 'rxjs/Observable';
 import { GameService } from 'src/app/services/firestore/game.service';
 import { Game, Card, ColumnGame, gameState } from 'src/app/model/game';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import Swal from 'sweetalert2';
 import * as firebase from 'firebase';
 import { Subscription } from 'rxjs';
-// import { DocumentChangeAction } from 'angularfire2/firestore';
-// import { FirebaseApp } from 'angularfire2';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -41,8 +38,6 @@ export class ChinkerGameComponent implements OnInit, OnDestroy {
   userlogined: firebase.User;
   handCellForceSquare: string;
   boardCellChanged: Array<Card> = [];
-  // --
-  snackBarVerticalPositionTop: MatSnackBarVerticalPosition = 'top';
   stateButtons = 'outside';
   stateGame: gameState = gameState.WAITING;
 
@@ -50,7 +45,6 @@ export class ChinkerGameComponent implements OnInit, OnDestroy {
     public au: AngularFireAuth,
     private router: Router,
     private route: ActivatedRoute,
-    public snackBar: MatSnackBar,
     private afsGame: GameService
   ) { }
 
@@ -183,10 +177,10 @@ export class ChinkerGameComponent implements OnInit, OnDestroy {
         console.log('xSe ha enviado el Turno');
         this.stateButtons = 'outside';
         this.stateGame = gameState.WAITING;
-        this.openSnackBar('xSe ha enviado el Turno');
+        this.ShowToastMessage('xSe ha enviado el Turno');
       })
       .catch((error) => {
-        this.openSnackBar('xError :-( ');
+        this.ShowToastMessage('xError :-( ');
         console.log('Error adding document: ', error);
       });
   }
@@ -224,13 +218,16 @@ export class ChinkerGameComponent implements OnInit, OnDestroy {
     }
   }
 
-  public openSnackBar(mensaje: string): any {
-    this.snackBar.open(mensaje, 'xClose', {
-      duration: 5000,
-      verticalPosition: this.snackBarVerticalPositionTop
+  private ShowToastMessage(msg: string): void {
+    Swal({
+      toast: true,
+      position: 'top',
+      type: 'success',
+      title: msg,
+      showConfirmButton: false,
+      timer: 2000
     });
   }
-
 }
 
 

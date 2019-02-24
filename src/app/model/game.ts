@@ -32,6 +32,7 @@ export interface Card {
 
 export interface Game {
     gameType: string;
+    config?: any;
     timeStart?: any;
     displayedCard?: Card;
     Players?: ColPlayers;

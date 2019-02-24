@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { TranslateService } from 'ng2-translate';
+import Swal from 'sweetalert2';
 import { FirebaseUISignInSuccessWithAuthResult, FirebaseUISignInFailure } from 'firebaseui-angular';
 
 
@@ -23,8 +24,19 @@ export class AppLoginComponent implements OnInit {
 
   successCallback(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
     console.log('login con exito successCallback', signInSuccessData);
+    this.ShowToastMessage(this.translate.instant('Bienvenido ') + signInSuccessData.authResult.user.displayName);
     this.dialogRef.close();
   }
 
+  private ShowToastMessage(msg: string): void {
+    Swal({
+      toast: true,
+      position: 'top',
+      type: 'success',
+      title: msg,
+      showConfirmButton: false,
+      timer: 2000
+    });
+  }
 
 }
