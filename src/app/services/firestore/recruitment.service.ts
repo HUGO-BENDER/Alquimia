@@ -50,11 +50,18 @@ export class RecruitmentService {
   }
 
   createGameFromThisRecruitment(r: Recruitment): any {
-    const batch = this.afs.firestore.batch();
+    console.log('Vamos a crear un juego: description ', r.description);
 
+    const batch = this.afs.firestore.batch();
     const NewId = this.createId();
     const newGameRef = this.afs.collection('Games').doc(NewId).ref;
-    const newGame: Game = { gameType: r.gameType, turnCont: 1, config: r.config };
+    const newGame: Game = {
+      gameType: r.gameType,
+      name: r.name,
+      description: r.description,
+      turnCont: 1,
+      config: r.config
+    };
     batch.set(newGameRef, newGame);
 
     r.players.forEach(p => {

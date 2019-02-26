@@ -153,19 +153,16 @@ exports.OnAddNewGame = functions.firestore
         try {
             const FieldValue = require('firebase-admin').firestore.FieldValue;
             const pathGame = '/Games/' + context.params.gameId;
-
             const newGame = snap.data();
 
             console.log('newGame es ', newGame);
-            
-            console.log('newGame es.config ', newGame.config);
 
             // -- Fake for GetSettingGame.  2 to 4 players. 
             // -- For development only 2 players.
             const ConfigGame = {
                 Players: {
                     cant: 2,
-                    hand: 6
+                    hand: newGame.config.numCardsInHand
                 },
                 Cards: {
                     valueCards: [1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -173,7 +170,7 @@ exports.OnAddNewGame = functions.firestore
                     suitsCards: ['ESPADA', 'ORO', 'COPA', 'BASTO', 'TREBOL', 'CORAZON', 'DIAMANTE', 'PICA']
                 },
                 board: {
-                    cols: 9,
+                    cols: newGame.config.numGamesOnTable,
                     rows: 4
                 },
                 displayedCard: false
@@ -397,10 +394,15 @@ exports.OnAddNewGame = functions.firestore
                         hand: CurrentGame.Players[indPlayer].hand
                     }, { merge: true }
                 );
+
+                console.log('Dentro del bucle ',p.id, ' - ', newGame);
+
                 const r = await fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
                     timeStartGame: FieldValue.serverTimestamp(),
                     timeLastTurn: FieldValue.serverTimestamp(),
-                    name: 'Chinker',
+                    gameType: newGame.gameType,
+                    // name: newGame.name,
+                    // description: newGame.description,
                     isMyTurn: ramdomFirstTurn === indPlayer
                 });
 

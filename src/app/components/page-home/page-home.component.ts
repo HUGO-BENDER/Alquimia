@@ -248,13 +248,11 @@ export class PageHomeComponent implements OnInit {
   }
 
   checkIfRoomReady(r: Recruitment) {
-    console.log('r.state = ' + r.state);
-
+    console.log('hay un join game to r.name = ' + r.name);
 
     this.ShowToastMessage('xHeeeeyyy ' + this.userlogined.displayName + ' te has unido al juego');
     // Conditions for start the game. Simple. There are only 2 players.
     // Then... go. Start the game
-
 
     this.afsRecruitments.createGameFromThisRecruitment(r);
 
