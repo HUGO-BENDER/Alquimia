@@ -121,12 +121,9 @@ export class ChinkerGameComponent implements OnInit, OnDestroy {
   // -- layout
   public onResize(event: any) {
     if (window.innerWidth * 0.96 / this.hand.length < window.innerHeight * 0.15) {
-      this.handCellForceSquare = 'handCellSquareVW';
+      this.handCellForceSquare = (Math.round(window.innerWidth * 0.96 / this.hand.length)).toString() + 'px';
     } else {
-      this.handCellForceSquare = 'handCellSquareVH';
-    }
-    for (const hc of this.hand) {
-      hc.classCss = this.handCellForceSquare;
+      this.handCellForceSquare = (Math.round(window.innerHeight * 0.15)).toString() + 'px';
     }
   }
 

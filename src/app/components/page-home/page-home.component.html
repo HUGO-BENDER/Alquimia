@@ -24,16 +24,20 @@
               <mat-expansion-panel *ngFor="let gameInProgress of (gamesInProgress | async)">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                    {{gameInProgress.gameType}}: {{gameInProgress.name}}
+                    {{gameInProgress.gameType}}
                   </mat-panel-title>
                   <mat-panel-description>
-                    <div>{{gameInProgress.description}}</div>
-                    <div>{{ translate.instant('xUltimo turno') }}: {{gameInProgress.timeLastTurn.toDate() | date : 'medium' }}</div>
+                    <span>{{gameInProgress.name}}</span>
+                    <div *ngIf="!inSmallScreen">{{gameInProgress.description}}</div>
+                    <div *ngIf="!inSmallScreen">{{ translate.instant('xUltimo turno') }}: {{gameInProgress.timeLastTurn.toDate() | date : 'dd/MM/yy HH:MM' }}</div>
                     <a *ngIf="gameInProgress.isMyTurn" [routerLink]="['/chinker', gameInProgress.id]"><button mat-button
                         color="primary"> Go </button></a>
                   </mat-panel-description>
                 </mat-expansion-panel-header>
-                es mi turno: {{gameInProgress.isMyTurn}}
+                <!-- es mi turno: {{gameInProgress.isMyTurn}} -->
+                <div *ngIf="inSmallScreen">{{gameInProgress.description}}</div>
+                <div *ngIf="inSmallScreen">{{ translate.instant('xUltimo turno') }}: {{gameInProgress.timeLastTurn.toDate() | date : 'dd/MM/yy HH:MM' }}</div>
+                
                 <mat-action-row>
                   <button mat-button color="warn" (click)="surrender(gameInProgress)">Surrender</button>
                   <button mat-button color="primary" [routerLink]="['/chinker', gameInProgress.id]">Open</button>
@@ -104,47 +108,6 @@
             </mat-tab-group>
           </mat-card-content>
         </mat-card>
-
-
-
-        <!-- <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>
-              Join a game
-              <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-                <mat-icon>add_circle</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item (click)="createRecruitment('Chinker')">xCreate new Chinker</button>
-                <button mat-menu-item (click)="createRecruitment('Chinker')">xCreate new Chinker</button>
-                <button mat-menu-item (click)="createRecruitment('Chinker')">xCreate new Chinker</button>
-              </mat-menu>
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="dashboard-card-content">
-            <mat-accordion class="example-headers-align">
-              <mat-expansion-panel *ngFor="let recruitment of recruitments | async">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    {{recruitment.gameId}}
-                  </mat-panel-title>
-                  <mat-panel-description>
-                    {{recruitment.dateCreation.toDate() | date : 'medium' }}
-                  </mat-panel-description>
-                </mat-expansion-panel-header>
-                <span>
-                  <mat-icon>account_circle</mat-icon> {{recruitment.creator.displayName}}
-                </span>
-                Id: {{recruitment.id}}
-                state: {{recruitment.state}}
-                <mat-action-row>
-                  <button mat-button *ngIf="canDelete(recruitment)" color="warn" (click)="deleteRecruitment(recruitment)">Delete</button>
-                  <button mat-button [disabled]="!canJoin(recruitment)" color="primary" (click)="joinRecruitment(recruitment)">Join</button>
-                </mat-action-row>
-              </mat-expansion-panel>
-            </mat-accordion>
-          </mat-card-content>
-        </mat-card> -->
       </mat-grid-tile>
 
 

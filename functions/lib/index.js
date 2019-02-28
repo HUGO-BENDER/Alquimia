@@ -354,13 +354,12 @@ exports.OnAddNewGame = functions.firestore
             const x = yield fdb.doc(pathGame).collection('Players').doc(p.id).set({
                 hand: CurrentGame.Players[indPlayer].hand
             }, { merge: true });
-            console.log('Dentro del bucle ', p.id, ' - ', newGame);
             const r = yield fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
                 timeStartGame: FieldValue.serverTimestamp(),
                 timeLastTurn: FieldValue.serverTimestamp(),
-                // gameType: newGame.gameType,
-                // name: newGame.name,
-                // description: newGame.description,
+                gameType: newGame.gameType,
+                name: newGame.name,
+                description: newGame.description,
                 isMyTurn: ramdomFirstTurn === indPlayer
             });
             indPlayer += 1;

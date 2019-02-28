@@ -394,15 +394,12 @@ exports.OnAddNewGame = functions.firestore
                         hand: CurrentGame.Players[indPlayer].hand
                     }, { merge: true }
                 );
-
-                console.log('Dentro del bucle ',p.id, ' - ', newGame);
-
                 const r = await fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
                     timeStartGame: FieldValue.serverTimestamp(),
                     timeLastTurn: FieldValue.serverTimestamp(),
                     gameType: newGame.gameType,
-                    // name: newGame.name,
-                    // description: newGame.description,
+                    name: newGame.name,
+                    description: newGame.description,
                     isMyTurn: ramdomFirstTurn === indPlayer
                 });
 
