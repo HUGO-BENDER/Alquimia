@@ -20,24 +20,34 @@
             <div *ngIf="(gamesInProgress | async)==null">
               No records found.
             </div>
-            <mat-accordion class="example-headers-align">
+            <mat-accordion class="headers-align">
               <mat-expansion-panel *ngFor="let gameInProgress of (gamesInProgress | async)">
                 <mat-expansion-panel-header>
-                  <mat-panel-title>
+                  <mat-panel-title >
                     {{gameInProgress.gameType}}
                   </mat-panel-title>
-                  <mat-panel-description>
-                    <span>{{gameInProgress.name}}</span>
-                    <div *ngIf="!inSmallScreen">{{gameInProgress.description}}</div>
-                    <div *ngIf="!inSmallScreen">{{ translate.instant('xUltimo turno') }}: {{gameInProgress.timeLastTurn.toDate() | date : 'dd/MM/yy HH:MM' }}</div>
-                    <a *ngIf="gameInProgress.isMyTurn" [routerLink]="['/chinker', gameInProgress.id]"><button mat-button
-                        color="primary"> Go </button></a>
+                  <mat-panel-description *ngIf="inSmallScreen">
+                    <div *ngIf="gameInProgress.isMyTurn">
+                      <a [routerLink]="['/chinker', gameInProgress.id]">
+                        {{gameInProgress.name}} 
+                      </a>
+                    </div>
+                    <div *ngIf="!gameInProgress.isMyTurn">
+                      {{gameInProgress.name}}
+                    </div>
+                  </mat-panel-description>
+                  <mat-panel-description *ngIf="!inSmallScreen">
+                    <div>{{gameInProgress.name}}</div>
+                    <div>{{gameInProgress.description}}</div>
+                    <div *ngIf="!inSmallScreen">{{ translate.instant('xUltimo turno') }}:
+                      {{gameInProgress.timeLastTurn.toDate() | date : 'dd/MM/yy HH:MM' }}</div>
+                    <a *ngIf="gameInProgress.isMyTurn" [routerLink]="['/chinker', gameInProgress.id]">
+                      <button mat-button color="primary"> Go </button></a>
                   </mat-panel-description>
                 </mat-expansion-panel-header>
-                <!-- es mi turno: {{gameInProgress.isMyTurn}} -->
                 <div *ngIf="inSmallScreen">{{gameInProgress.description}}</div>
-                <div *ngIf="inSmallScreen">{{ translate.instant('xUltimo turno') }}: {{gameInProgress.timeLastTurn.toDate() | date : 'dd/MM/yy HH:MM' }}</div>
-                
+                <div *ngIf="inSmallScreen">{{ translate.instant('xUltimo turno') }}:
+                  {{gameInProgress.timeLastTurn.toDate() | date : 'dd/MM/yy HH:MM' }}</div>
                 <mat-action-row>
                   <button mat-button color="warn" (click)="surrender(gameInProgress)">Surrender</button>
                   <button mat-button color="primary" [routerLink]="['/chinker', gameInProgress.id]">Open</button>
@@ -55,7 +65,7 @@
             <mat-tab-group mat-stretch-tabs>
               <mat-tab [label]="translate.instant('pagHome.JoinGame')">
                 <div class="content-tab-scroll-vert">
-                  <mat-accordion class="example-headers-align">
+                  <mat-accordion class="headers-align">
                     <mat-expansion-panel *ngFor="let recruitment of recruitments | async">
                       <mat-expansion-panel-header>
                         <mat-panel-title>
@@ -69,9 +79,9 @@
                         <mat-icon>account_circle</mat-icon> {{recruitment.creator.displayName}}
                       </span>
                       <div>{{recruitment.description}} </div>
-                      <div>state: 
-                        <span *ngIf="recruitment.state==0" >waiting</span>
-                        <span *ngIf="recruitment.state==1" >completed</span>
+                      <div>state:
+                        <span *ngIf="recruitment.state==0">waiting</span>
+                        <span *ngIf="recruitment.state==1">completed</span>
                       </div>
                       <mat-action-row>
                         <button mat-button *ngIf="canDelete(recruitment)" color="warn"

@@ -69,13 +69,13 @@
 
 
   }
-
-  .example-headers-align .mat-expansion-panel-header-title, 
-  .example-headers-align .mat-expansion-panel-header-description {
+  
+  .headers-align .mat-expansion-panel-header-title, 
+  .headers-align .mat-expansion-panel-header-description {
     flex-basis: 0;
   }
   
-  .example-headers-align .mat-expansion-panel-header-description {
+  .headers-align .mat-expansion-panel-header-description {
     justify-content: space-between;
     align-items: center;
   } 
