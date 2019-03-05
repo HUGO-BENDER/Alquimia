@@ -3,6 +3,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { GameService } from 'src/app/services/firestore/game.service';
+import { TranslateService } from 'ng2-translate';
 import { Game, Card, ColumnGame, gameState } from 'src/app/model/game';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import Swal from 'sweetalert2';
@@ -45,7 +46,8 @@ export class ChinkerGameComponent implements OnInit, OnDestroy {
     public au: AngularFireAuth,
     private router: Router,
     private route: ActivatedRoute,
-    private afsGame: GameService
+    private afsGame: GameService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit() {
