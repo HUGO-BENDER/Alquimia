@@ -11,7 +11,7 @@
       <mat-nav-list *ngIf="showMenuLanguage">
         <mat-list-item *ngFor="let lang of listLanguages" [class.activated]="lang.id == actualLang" (click)="changeLanguage(lang.id)">
           {{ translate.instant('App.Languages.'+lang.name) }}
-          <p class="example-spacer">&nbsp;</p>
+          <p class="spacer">&nbsp;</p>
           <mat-icon *ngIf="lang.id == actualLang">radio_button_checked</mat-icon>
           <mat-icon *ngIf="lang.id != actualLang">radio_button_unchecked</mat-icon>
         </mat-list-item>
