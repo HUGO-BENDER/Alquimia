@@ -23,34 +23,33 @@
             <mat-accordion class="headers-align">
               <mat-expansion-panel *ngFor="let gameInProgress of (gamesInProgress | async)">
                 <mat-expansion-panel-header>
-                  <mat-panel-title >
+                  <mat-panel-title>
                     {{gameInProgress.gameType}}
                   </mat-panel-title>
-                  <mat-panel-description *ngIf="inSmallScreen">
+                  <mat-panel-description>
                     <div *ngIf="gameInProgress.isMyTurn">
                       <a [routerLink]="['/chinker', gameInProgress.id]">
-                        {{gameInProgress.name}} 
+                        {{gameInProgress.name}}
                       </a>
                     </div>
                     <div *ngIf="!gameInProgress.isMyTurn">
                       {{gameInProgress.name}}
                     </div>
                   </mat-panel-description>
-                  <mat-panel-description *ngIf="!inSmallScreen">
-                    <div>{{gameInProgress.name}}</div>
-                    <div>{{gameInProgress.description}}</div>
-                    <div *ngIf="!inSmallScreen">{{ translate.instant('xUltimo turno') }}:
-                      {{gameInProgress.timeLastTurn.toDate() | date : 'dd/MM/yy HH:MM' }}</div>
-                    <a *ngIf="gameInProgress.isMyTurn" [routerLink]="['/chinker', gameInProgress.id]">
-                      <button mat-button color="primary"> Go </button></a>
-                  </mat-panel-description>
                 </mat-expansion-panel-header>
-                <div *ngIf="inSmallScreen">{{gameInProgress.description}}</div>
-                <div *ngIf="inSmallScreen">{{ translate.instant('xUltimo turno') }}:
+                <div>{{gameInProgress.description}}</div>
+                <div>{{ translate.instant('xUltimo turno') }}:
                   {{gameInProgress.timeLastTurn.toDate() | date : 'dd/MM/yy HH:MM' }}</div>
                 <mat-action-row>
                   <button mat-button color="warn" (click)="surrender(gameInProgress)">Surrender</button>
-                  <button mat-button color="primary" [routerLink]="['/chinker', gameInProgress.id]">Open</button>
+                  <button mat-button color="primary" [routerLink]="['/chinker', gameInProgress.id]">
+                    <div *ngIf="gameInProgress.isMyTurn">
+                      Go
+                    </div>
+                    <div *ngIf="!gameInProgress.isMyTurn">
+                      Open
+                    </div>
+                  </button>
                 </mat-action-row>
               </mat-expansion-panel>
             </mat-accordion>

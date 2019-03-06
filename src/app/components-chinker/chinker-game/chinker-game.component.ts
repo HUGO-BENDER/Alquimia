@@ -67,18 +67,27 @@ export class ChinkerGameComponent implements OnInit, OnDestroy {
   }
 
   private startTurn(snapshotgame: any): any {
+    // if (this.currentGame && this.currentGame.turnCont === snapshotgame.payload.data().turnCont) {
+    //   console.log('salir');
+    //    return;
+    // }
     this.currentGame = <Game>snapshotgame.payload.data();
     this.stateGame = this.currentGame.playerIdTurn === this.userlogined.uid ? 0 : 1;
+    // if (this.stateGame === gameState.PLAYING) {
+    //   this.ShowToastMessage('xTe toca jugar');
+    // }
 
-    this.afsGame.getHand(this.idGame, this.userlogined).get()
-      .then(doc => {
-        this.hand = doc.data().hand;
-        this.onResize(null);
-      })
-      .catch(error => { console.log('Error getting hand:', error); });
+    // if (this.hand.length === 0 || this.stateGame === gameState.PLAYING) {
+      this.afsGame.getHand(this.idGame, this.userlogined).get()
+        .then(doc => {
+          this.hand = doc.data().hand;
+          this.onResize(null);
+        })
+        .catch(error => { console.log('Error getting hand:', error); });
+    // }
 
     this.afsGame.getBoard(this.idGame).get()
-      .then( querySnapshot => {
+      .then(querySnapshot => {
         const oBoardGame: ColumnGame[] = [];
         querySnapshot.forEach(doc => {
           oBoardGame.push(
@@ -89,19 +98,19 @@ export class ChinkerGameComponent implements OnInit, OnDestroy {
               idPlayerWin: doc.data().idPlayerWin,
               displayNamePlayerWin: doc.data().displayNamePlayerWin
             });
-            this.getColumns(doc.data().rows, false).forEach(c => {oBoardGame[doc.data().id].rows.push(c); });
-            oBoardGame[doc.data().id].rows.push(<Card>{
-              idPlayer: '',
-              displayNamePlayer: 'GOAL',
-              id: -1,
-              idCol: doc.data().id,
-              position: 0,
-              palo: doc.id,
-              valor: doc.id,
-              description: 'goal',
-              dragEnable: false
-            });
-            this.getColumns(doc.data().rows, true).forEach(c => {oBoardGame[doc.data().id].rows.push(c); });
+          this.getColumns(doc.data().rows, false).forEach(c => { oBoardGame[doc.data().id].rows.push(c); });
+          oBoardGame[doc.data().id].rows.push(<Card>{
+            idPlayer: '',
+            displayNamePlayer: 'GOAL',
+            id: -1,
+            idCol: doc.data().id,
+            position: 0,
+            palo: doc.id,
+            valor: doc.id,
+            description: 'goal',
+            dragEnable: false
+          });
+          this.getColumns(doc.data().rows, true).forEach(c => { oBoardGame[doc.data().id].rows.push(c); });
         });
         this.boardGame = oBoardGame;
       })

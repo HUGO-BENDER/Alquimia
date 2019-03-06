@@ -71,34 +71,38 @@ exports.OnAddNewTurn = functions.firestore
                 //-- aumentamos el contador
                 console.log('dataGame es ', dataGame.data());
                 const actualCont = dataGame.data().turnCont + 0.5;
-                console.log('actualCont es ', actualCont);
+                console.log('111 . actualCont es ', actualCont);
                 const actualNextCard = ('0' + (dataGame.data().idNextCard).toString()).slice(-2);
                 console.log('idNextCard es ', actualNextCard);
-                if (dataGame.data().idNextCard >= 0) {
+                const cardsInHand = [];
+                newTurn.hand.forEach(c => {
+                    if (c.id) {
+                        c.dragEnable = true;
+                        cardsInHand.push(c);
+                        console.log('c es ', c);
+                    }
+                });
+                if (Number(dataGame.data().idNextCard) > 0) {
                     //-- actualizamos la carta jugada con una nueva de la baraja
                     const nextCard = yield fdb.doc(pathGame).collection('Baraja').doc(actualNextCard).get();
                     console.log('nextCard es ', nextCard.data());
-                    const cardsInHand = [];
-                    newTurn.hand.forEach(c => {
-                        if (c.id) {
-                            c.dragEnable = true;
-                            cardsInHand.push(c);
-                        }
-                    });
                     cardsInHand.push(nextCard.data());
-                    let newPos = 0;
-                    for (const cardInHand of cardsInHand) {
-                        cardInHand.position = newPos;
-                        newPos += 1;
-                    }
-                    yield fdb.doc(pathGame).set({
-                        turnCont: actualCont,
-                        idNextCard: +actualNextCard - 1
-                    }, { merge: true });
-                    yield fdb.doc(pathGame).collection('Players').doc(p.id).set({
-                        hand: cardsInHand
-                    }, { merge: true });
                 }
+                else {
+                    console.log('No agregamos carta por que idNextCard es ', Number(dataGame.data().idNextCard));
+                }
+                let newPos = 0;
+                for (const cardInHand of cardsInHand) {
+                    cardInHand.position = newPos;
+                    newPos += 1;
+                }
+                yield fdb.doc(pathGame).set({
+                    turnCont: actualCont,
+                    idNextCard: +actualNextCard - 1
+                }, { merge: true });
+                yield fdb.doc(pathGame).collection('Players').doc(p.id).set({
+                    hand: cardsInHand
+                }, { merge: true });
                 //-- en el general del jugador informamos que ya jugó
                 const r = yield fdb.collection('Players').doc(p.id).collection('Playing').doc(context.params.gameId).set({
                     timeLastTurn: FieldValue.serverTimestamp(),
@@ -130,8 +134,6 @@ exports.OnAddNewGame = functions.firestore
         const pathGame = '/Games/' + context.params.gameId;
         const newGame = snap.data();
         console.log('newGame es ', newGame);
-        // -- Fake for GetSettingGame.  2 to 4 players. 
-        // -- For development only 2 players.
         const ConfigGame = {
             Players: {
                 cant: 2,
@@ -205,12 +207,12 @@ exports.OnAddNewGame = functions.firestore
         CurrentGame.Baraja = [];
         for (const s of ConfigGame.Cards.suitsCards) {
             let contValue = 0;
-            for (const v of ConfigGame.Cards.valueCards) {
+            for (let i = newGame.config.numGamesOnTable - 1; i >= 0; i--) {
                 CurrentGame.Baraja.push({
                     id: cont,
                     position: cont,
                     palo: s,
-                    valor: v,
+                    valor: ConfigGame.Cards.valueCards[i],
                     description: ConfigGame.Cards.descCards[contValue],
                     dragEnable: true,
                     classCss: 'handCell-Default'
