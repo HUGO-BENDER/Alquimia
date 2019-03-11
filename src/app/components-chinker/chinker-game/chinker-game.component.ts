@@ -41,6 +41,7 @@ export class ChinkerGameComponent implements OnInit, OnDestroy {
   boardCellChanged: Array<Card> = [];
   stateButtons = 'outside';
   stateGame: gameState = gameState.WAITING;
+  flagReload: boolean;
 
   constructor(
     public au: AngularFireAuth,
@@ -67,24 +68,24 @@ export class ChinkerGameComponent implements OnInit, OnDestroy {
   }
 
   private startTurn(snapshotgame: any): any {
-    // if (this.currentGame && this.currentGame.turnCont === snapshotgame.payload.data().turnCont) {
-    //   console.log('salir');
-    //    return;
-    // }
-    this.currentGame = <Game>snapshotgame.payload.data();
-    this.stateGame = this.currentGame.playerIdTurn === this.userlogined.uid ? 0 : 1;
-    // if (this.stateGame === gameState.PLAYING) {
-    //   this.ShowToastMessage('xTe toca jugar');
-    // }
+    this.flagReload = !this.flagReload;
+    if (this.currentGame && !this.flagReload ) {
+      return;
+    }
 
-    // if (this.hand.length === 0 || this.stateGame === gameState.PLAYING) {
-      this.afsGame.getHand(this.idGame, this.userlogined).get()
-        .then(doc => {
-          this.hand = doc.data().hand;
-          this.onResize(null);
-        })
-        .catch(error => { console.log('Error getting hand:', error); });
-    // }
+    this.currentGame = <Game>snapshotgame.payload.data();
+    console.log(' startTurn: actualizamos los datos', this.currentGame);
+    this.stateGame = this.currentGame.playerIdTurn === this.userlogined.uid ? 0 : 1;
+    if (this.stateGame === gameState.PLAYING) {
+      this.ShowToastMessage('xTe toca jugar');
+    }
+
+    this.afsGame.getHand(this.idGame, this.userlogined).get()
+      .then(doc => {
+        this.hand = doc.data().hand;
+        this.onResize(null);
+      })
+      .catch(error => { console.log('Error getting hand:', error); });
 
     this.afsGame.getBoard(this.idGame).get()
       .then(querySnapshot => {
