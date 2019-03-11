@@ -1,0 +1,21 @@
+[debug] [2019-03-11T22:11:14.438Z] ----------------------------------------------------------------------
+[debug] [2019-03-11T22:11:14.447Z] Command:       C:\Program Files (x86)\nodejs\node.exe C:\Users\Hugo\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2019-03-11T22:11:14.448Z] CLI Version:   6.4.0
+[debug] [2019-03-11T22:11:14.448Z] Platform:      win32
+[debug] [2019-03-11T22:11:14.449Z] Node Version:  v8.11.3
+[debug] [2019-03-11T22:11:14.452Z] Time:          Mon Mar 11 2019 23:11:14 GMT+0100 (Hora estándar romance)
+[debug] [2019-03-11T22:11:14.452Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-03-11T22:11:14.698Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-03-11T22:11:14.700Z] > authorizing via signed-in user
+[debug] [2019-03-11T22:11:14.701Z] [iam] checking project alquimia-160618 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]
+[debug] [2019-03-11T22:11:14.734Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-03-11T22:11:14.736Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-03-11T22:11:15.173Z] <<< HTTP RESPONSE 200
+[debug] [2019-03-11T22:11:15.250Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/alquimia-160618:testIamPermissions  
+
+[debug] [2019-03-11T22:11:16.438Z] <<< HTTP RESPONSE 200
+[debug] [2019-03-11T22:11:16.443Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/alquimia-160618  
+ 
+[debug] [2019-03-11T22:11:16.757Z] <<< HTTP RESPONSE 200

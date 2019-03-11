@@ -64,6 +64,12 @@ exports.OnAddNewTurn = functions.firestore
                         newArrayValues[i].dragEnable = true;
                     }
                 }
+                // console.log
+                // if (newArrayValues[0].idPlayer < newArrayValues[4].idPlayer){
+                //     newArrayValues.sort(function (a, b) { return a.idPlayer - b.idPlayer || a.valor - b.valor ; });
+                // } else {
+                //     newArrayValues.sort(function (a, b) { return b.idPlayer - a.idPlayer ||  a.valor - b.valor; });
+                // }
                 yield fdb.doc(pathGame).collection('BoardGame').doc(colKey).set({
                     rows: newArrayValues
                 }, { merge: true });

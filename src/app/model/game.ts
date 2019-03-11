@@ -42,7 +42,6 @@ export interface Game {
     turnCont: number;
     state?: gameState;
     playerIdTurn?: string;
-    IsUpdatedFinish: boolean;
 }
 
 export interface GameInProgress {
